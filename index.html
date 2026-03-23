@@ -394,41 +394,48 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
   <script>
-    // =========================================================================
+
+// =========================================================================
     // WAJIB: GANTI TULISAN DI BAWAH DENGAN URL WEB APP GOOGLE APPS SCRIPT ANDA
+    // Pastikan ujungnya /exec
     // =========================================================================
-    const API_URL = "https://script.google.com/a/macros/admin.sma.belajar.id/s/AKfycbz7lqGIXWXU_k1Uj-nsL_lQZQ_eQEjWHqGksNOG0k8Fh_Ra1xtUw4MDdj6ZUfr4Ru3zcQ/exec"; 
+    const API_URL = "https://script.google.com/a/macros/admin.sma.belajar.id/s/AKfycbziqEupVkp4C3IKmwUFAxkxuBWUCjlX5xz32zLwQ3mDf_wDOkINRq_9SE6TVATgqpc-Wg/exec"; 
 
 
+    // FUNGSI KOMUNIKASI ANTI-BADAI
     function callAPI(actionName, payloadData) {
       return fetch(API_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'text/plain;charset=utf-8' },
         body: JSON.stringify({ action: actionName, ...payloadData })
-      }).then(response => response.json()).then(data => {
-        if (data.status === 'success') return data.data;
-        else throw new Error(data.message);
+      })
+      .then(async response => {
+        const text = await response.text(); // Ambil teks mentah dari Google
+        try {
+          const data = JSON.parse(text); // Coba terjemahkan jadi JSON
+          if (data.status === 'success') return data.data;
+          else throw new Error(data.message);
+        } catch (e) {
+          // JIKA ERROR, BERARTI GOOGLE MENGIRIM HALAMAN HTML/ERROR
+          console.error("Respon Google:", text);
+          throw new Error("Server Google menolak koneksi. Pastikan Script sudah di-otorisasi dan URL berakhiran /exec.");
+        }
       });
     }
 
-    let cropper, croppedBase64 = null; let dataSemua = [], dataTampil = [], listTarifGlobal = [], dataPiutang = []; let currentPage = 1; const rowsPerPage = 10; let chartInstance = null;
-    function formatInputUang(e) { let val = e.target.value.replace(/[^0-9]/g, ''); if(val !== '') { e.target.value = parseInt(val, 10).toLocaleString('id-ID'); } else { e.target.value = ''; } if(e.target.id === 'trans-nominal' || e.target.id === 'trans-jenis') cekAutoTarif(); }
-    function unformatUang(val) { if(!val) return 0; return parseFloat(String(val).replace(/\./g, '')) || 0; }
-    const formatRp = (angka) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(angka);
-    const formatTglPendek = (tglStr) => { const d = new Date(tglStr); return `${d.getDate().toString().padStart(2,'0')}/${(d.getMonth()+1).toString().padStart(2,'0')}/${d.getFullYear()}`; };
-    function togglePassword(inputId, iconId) { const input = document.getElementById(inputId); const icon = document.getElementById(iconId); if (input.type === "password") { input.type = "text"; icon.classList.remove("fa-eye"); icon.classList.add("fa-eye-slash"); } else { input.type = "password"; icon.classList.remove("fa-eye-slash"); icon.classList.add("fa-eye"); } }
-    function bersihkanOverlay() { document.querySelectorAll('.modal-backdrop').forEach(el => el.remove()); document.body.classList.remove('modal-open', 'swal2-shown', 'swal2-height-auto'); document.body.style.overflow = 'auto'; document.body.style.paddingRight = ''; Swal.close(); }
-
+    // BACA SISTEM DAN PAKSA MATIKAN LOADING JIKA ERROR
     window.onload = function() {
       if(API_URL.includes("ISI_DENGAN_URL")) {
-        document.getElementById('loading-screen').innerHTML = '<h5 class="text-danger p-4 text-center">ERROR: URL API belum dimasukkan di kode HTML baris 627.</h5>'; return;
+        document.getElementById('loading-screen').innerHTML = '<h5 class="text-danger p-4 text-center">ERROR: URL API belum dimasukkan di kode HTML.</h5>'; return;
       }
+      
       callAPI('getProfilApp', {}).then(data => {
         document.getElementById('login-nama-toko').innerText = data.namaToko; document.getElementById('login-footer-toko').innerText = data.namaToko; document.getElementById('login-logo').src = data.urlLogo;
         if(data.linkWindows) { document.getElementById('btn-dl-win').href = data.linkWindows; document.getElementById('btn-dl-win').style.display = 'inline-block'; document.getElementById('area-download').style.display = 'block'; }
         if(data.linkAndroid) { document.getElementById('btn-dl-and').href = data.linkAndroid; document.getElementById('btn-dl-and').style.display = 'inline-block'; document.getElementById('area-download').style.display = 'block'; }
         
-        document.getElementById('loading-screen').style.display = 'none'; 
+        document.getElementById('loading-screen').style.display = 'none'; // Matikan loading jika sukses
+        
         if(localStorage.getItem('bukuLinkLoggedIn') === 'true') { 
             document.getElementById('view-login').style.display = 'none'; document.getElementById('app-wrapper').style.display = 'flex'; document.getElementById('mobile-bottom-nav').style.display = ''; 
             terapkanRoleAkses(); pindahMenu('view-dashboard'); muatDashboard(false); 
@@ -436,8 +443,9 @@
             document.getElementById('view-login').style.display = 'flex'; document.getElementById('mobile-bottom-nav').style.display = 'none'; 
         }
       }).catch(err => { 
-          document.getElementById('loading-screen').style.display = 'none'; 
-          Swal.fire('Koneksi Terputus', 'Gagal terhubung ke database. Pastikan URL Web App benar dan akses Deploy diset ke "Siapa saja". Detail: ' + err.message, 'error'); 
+        // PAKSA LOADING BERHENTI LALU MUNCULKAN ERROR
+        document.getElementById('loading-screen').style.display = 'none';
+        Swal.fire('Koneksi Terputus!', err.message, 'error'); 
       });
     };
 
