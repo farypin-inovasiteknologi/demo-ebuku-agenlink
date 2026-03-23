@@ -32,7 +32,6 @@
     
     #mobile-header { background: #00529C; display: none; position: sticky; top: 0; z-index: 1030; width: 100%;}
     
-    /* CSS HP: Sistem Hide & Show Otomatis */
     .bottom-nav { display: none; position: fixed; bottom: 0; width: 100%; background: #00529C; box-shadow: 0 -4px 15px rgba(0,0,0,0.2); z-index: 1040; justify-content: space-around; align-items: center; padding: 5px 0 10px 0; border-top-left-radius: 20px; border-top-right-radius: 20px;}
     .bottom-nav-item { flex: 1; text-align: center; color: rgba(255,255,255,0.6); font-size: 11px; cursor: pointer; font-weight: 600; transition: 0.3s; }
     .bottom-nav-item.active { color: white; }
@@ -54,6 +53,11 @@
       .rekap-hp { font-size: 11px !important; }
       .rekap-hp span { font-size: 13px !important; }
       .rekap-hp-cuan { font-size: 15px !important; }
+      
+      /* PENYESUAIAN KOTAK DASHBOARD KHUSUS HP (Ukuran dan Spasi) */
+      .stat-card { padding: 12px !important; border-radius: 8px; }
+      .stat-card h3, .stat-card h4, .stat-card h5 { font-size: 1.15rem !important; margin-top: 4px; }
+      .stat-card .small { font-size: 0.75rem !important; }
     }
 
     .table-responsive { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
@@ -144,13 +148,16 @@
         
         <div id="view-dashboard" class="view-section" style="display: block;">
           <h4 class="fw-bold mb-4 text-dark" style="color: #00529C !important;"><i class="fa-solid fa-chart-pie"></i> Rekapitulasi <span id="label-role" class="badge bg-secondary ms-2" style="font-size: 12px;"></span></h4>
-          <div class="row mb-4">
-            <div class="col-6 col-md-6 mb-3"><div class="stat-card bg-gradient-primary h-100 p-3"><div class="small mb-1"><i class="fa-solid fa-receipt"></i> Trx (Hari Ini)</div><h3 class="fw-bold mb-0" id="dash-trx">0</h3></div></div>
-            <div class="col-6 col-md-6 mb-3"><div class="stat-card bg-gradient-success h-100 p-3"><div class="small mb-1"><i class="fa-solid fa-sack-dollar"></i> Cuan (Hari Ini)</div><h4 class="fw-bold mb-0" id="dash-cuan">Rp 0</h4></div></div>
-            <div class="col-4 col-md-4 mb-3"><div class="stat-card bg-gradient-warning text-dark h-100 p-3"><div class="small mb-1"><i class="fa-solid fa-hand-holding-dollar"></i> Pelanggan</div><h5 class="fw-bold mb-0" id="dash-pel">Rp 0</h5></div></div>
-            <div class="col-4 col-md-4 mb-3"><div class="stat-card bg-gradient-danger h-100 p-3"><div class="small mb-1"><i class="fa-solid fa-building-columns"></i> Adm Bank</div><h5 class="fw-bold mb-0" id="dash-bank">Rp 0</h5></div></div>
-            <div class="col-4 col-md-4 mb-3"><div class="stat-card bg-gradient-secondary h-100 p-3"><div class="small mb-1"><i class="fa-solid fa-piggy-bank"></i> Fee Bank</div><h5 class="fw-bold mb-0" id="dash-fee">Rp 0</h5></div></div>
+          
+          <div class="row g-2 mb-4">
+            <div class="col-6 col-md-6"><div class="stat-card bg-gradient-primary h-100 p-3"><div class="small mb-1"><i class="fa-solid fa-receipt"></i> Trx (Hari Ini)</div><h3 class="fw-bold mb-0" id="dash-trx">0</h3></div></div>
+            <div class="col-6 col-md-6"><div class="stat-card bg-gradient-success h-100 p-3"><div class="small mb-1"><i class="fa-solid fa-sack-dollar"></i> Cuan (Hari Ini)</div><h4 class="fw-bold mb-0" id="dash-cuan">Rp 0</h4></div></div>
+            
+            <div class="col-12 col-md-4"><div class="stat-card bg-gradient-warning text-dark h-100 p-3"><div class="small mb-1"><i class="fa-solid fa-hand-holding-dollar"></i> Pelanggan</div><h5 class="fw-bold mb-0" id="dash-pel">Rp 0</h5></div></div>
+            <div class="col-12 col-md-4"><div class="stat-card bg-gradient-danger h-100 p-3"><div class="small mb-1"><i class="fa-solid fa-building-columns"></i> Adm Bank</div><h5 class="fw-bold mb-0" id="dash-bank">Rp 0</h5></div></div>
+            <div class="col-12 col-md-4"><div class="stat-card bg-gradient-secondary h-100 p-3"><div class="small mb-1"><i class="fa-solid fa-piggy-bank"></i> Fee Bank</div><h5 class="fw-bold mb-0" id="dash-fee">Rp 0</h5></div></div>
           </div>
+
           <div class="card border-0 shadow-sm rounded-3 mb-4 w-100"><div class="card-header bg-white fw-bold py-3" style="color: #00529C;"><i class="fa-solid fa-chart-line"></i> Grafik Tren Keuntungan</div><div class="card-body"><canvas id="chartKeuntungan" height="100"></canvas></div></div>
         </div>
 
@@ -198,7 +205,7 @@
                   <option value="Bayar Tagihan/Briva">Bayar Tagihan/Briva</option>
                   <option value="Top Up E-Wallet">Top Up E-Wallet</option>
                   <option value="Jasa Transfer Sesama">Jasa Transfer (Rek. Pelanggan) Sesama BRI</option>
-                <option value="Jasa Transfer Bank Lain">Jasa Transfer (Rek. Pelanggan) Bank Lain</option>
+                  <option value="Jasa Transfer Bank Lain">Jasa Transfer (Rek. Pelanggan) Bank Lain</option>
                 </select>
               </div>
               <div class="bg-light p-3 rounded mb-3 border">
@@ -241,7 +248,7 @@
                     <option value="Bayar Tagihan/Briva">Bayar Tagihan/Briva</option>
                     <option value="Top Up E-Wallet">Top Up E-Wallet</option>
                     <option value="Jasa Transfer Sesama">Jasa Transfer (Rek. Pelanggan) Sesama BRI</option>
-                <option value="Jasa Transfer Bank Lain">Jasa Transfer (Rek. Pelanggan) Bank Lain</option>
+                  <option value="Jasa Transfer Bank Lain">Jasa Transfer (Rek. Pelanggan) Bank Lain</option>
                   </select>
                 </div>
                 <div class="col-md-2 col-6"><label class="small fw-bold">Dari Tgl</label><input type="date" id="filter-start" class="form-control form-control-sm"></div>
@@ -267,6 +274,7 @@
                 <div class="col-4 col-md text-center border-end p-1 pt-2">Bank<br><span id="sum-adm" class="text-danger">Rp 0</span></div>
                 <div class="col-4 col-md text-center border-end p-1 pt-2">Fee Bank<br><span id="sum-fee-bank" class="text-secondary" style="color: #764ba2 !important;">Rp 0</span></div>
                 <div class="col-4 col-md text-center p-1 pt-2">Pelanggan<br><span id="sum-biaya-pel" class="text-success">Rp 0</span></div>
+                <div id="sum-nom" style="display:none;"></div>
               </div>
             </div>
           </div>
@@ -305,7 +313,7 @@
                     <option value="Bayar Tagihan/Briva">Bayar Tagihan/Briva</option>
                     <option value="Top Up E-Wallet">Top Up E-Wallet</option>
                     <option value="Jasa Transfer Sesama">Jasa Transfer (Rek. Pelanggan) Sesama BRI</option>
-                <option value="Jasa Transfer Bank Lain">Jasa Transfer (Rek. Pelanggan) Bank Lain</option>
+                   <option value="Jasa Transfer Bank Lain">Jasa Transfer (Rek. Pelanggan) Bank Lain</option>
                   </select>
                 </div>
                 <div class="col-md-2 col-6"><label class="small fw-bold">Dari Tgl</label><input type="date" id="lap-start" class="form-control form-control-sm"></div>
@@ -407,7 +415,7 @@
                 <option value="Bayar Tagihan/Briva">Bayar Tagihan/Briva</option>
                 <option value="Top Up E-Wallet">Top Up E-Wallet</option>
                 <option value="Jasa Transfer Sesama">Jasa Transfer (Rek. Pelanggan) Sesama BRI</option>
-                <option value="Jasa Transfer Bank Lain">Jasa Transfer (Rek. Pelanggan) Bank Lain</option>
+                  <option value="Jasa Transfer Bank Lain">Jasa Transfer (Rek. Pelanggan) Bank Lain</option>
               </select>
             </div>
             <div class="mb-3"><label class="form-label small fw-bold">Nominal Transaksi (Rp)</label><input type="text" inputmode="numeric" id="trans-nominal" class="form-control border-primary form-control-lg fw-bold" style="color:#00529C;" required oninput="formatInputUang(event)"></div>
@@ -438,6 +446,14 @@
         </div>
       </div>
     </div>
+  </div>
+
+  <div id="area-cetak-bon" style="background: white; padding: 15px; width: 100%; display: none;">
+    <div class="text-center mb-4"><h5 class="fw-bold mb-1 text-dark" style="text-decoration: underline;">LAPORAN CATATAN BON (PIUTANG)</h5><small class="fw-bold" style="color:#F37021;" id="pdf-bon-toko">NAMA TOKO</small></div>
+    <table class="table table-bordered table-sm mb-4" style="color: black; border-color: #000 !important;"><thead class="table-light text-center"><tr><th>Tgl/Cabang</th><th>Nama Pelanggan</th><th>Nominal</th><th>Status</th><th>Tgl Lunas</th></tr></thead>
+      <tbody id="tabel-laporan-bon" class="text-center"></tbody>
+      <tfoot class="table-light fw-bold text-center"><tr><td colspan="2" class="text-end">TOTAL BELUM LUNAS:</td><td id="bon-sum-belum" class="text-danger">Rp 0</td><td colspan="2"></td></tr></tfoot>
+    </table>
   </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
@@ -500,7 +516,7 @@
         
         if(localStorage.getItem('bukuLinkLoggedIn') === 'true') { 
             document.getElementById('view-login').style.display = 'none'; document.getElementById('app-wrapper').style.display = 'flex'; 
-            document.body.classList.add('is-logged-in'); // Mengatur menu HP otomatis via CSS
+            document.body.classList.add('is-logged-in'); 
             terapkanRoleAkses(); pindahMenu('view-dashboard'); muatDashboard(false); 
         } else { document.getElementById('view-login').style.display = 'flex'; document.body.classList.remove('is-logged-in'); }
       }).catch(err => { document.getElementById('loading-screen').style.display = 'none'; Swal.fire('Koneksi Terputus', err.message, 'error'); });
@@ -545,7 +561,10 @@
       
       tampilkanLoading('Memuat Data Terbaru...');
       callAPI('getDashboardData', { muatArsip: statusArsip, role: role, cabang: cabang }).then(data => { 
-        icon.classList.remove('fa-spin'); Swal.close(); prosesTampilDashboard(data); Swal.fire({ title: 'Data Diperbarui!', icon: 'success', toast: true, position: 'top-end', showConfirmButton: false, timer: 1500 }); 
+        icon.classList.remove('fa-spin'); 
+        Swal.close();
+        prosesTampilDashboard(data); 
+        Swal.fire({ title: 'Data Diperbarui!', icon: 'success', toast: true, position: 'top-end', showConfirmButton: false, timer: 1500 }); 
       }).catch(err => { icon.classList.remove('fa-spin'); Swal.close(); Swal.fire('Error', 'Gagal memuat ulang data', 'error'); }); 
     }
     
@@ -556,7 +575,11 @@
     function toggleSidebar() { document.getElementById('sidebar').classList.toggle('show-sidebar'); }
     function toggleModeArsip(clickedId) { const isChecked = document.getElementById(clickedId).checked; document.getElementById('toggle-arsip').checked = isChecked; document.getElementById('toggle-arsip-lap').checked = isChecked; document.getElementById('tabel-riwayat').innerHTML = '<tr><td colspan="8">Memuat database...</td></tr>'; muatDashboard(isChecked); }
 
-    function muatDashboard(muatArsip = false) { const role = localStorage.getItem('bukuLinkRole') || 'Cabang'; const cabang = localStorage.getItem('bukuLinkCabang') || 'Pusat'; callAPI('getDashboardData', { muatArsip: muatArsip, role: role, cabang: cabang }).then(data => { prosesTampilDashboard(data); }); }
+    function muatDashboard(muatArsip = false) { 
+        const role = localStorage.getItem('bukuLinkRole') || 'Cabang'; 
+        const cabang = localStorage.getItem('bukuLinkCabang') || 'Pusat'; 
+        callAPI('getDashboardData', { muatArsip: muatArsip, role: role, cabang: cabang }).then(data => { prosesTampilDashboard(data); }); 
+    }
 
     function prosesTampilDashboard(data) {
         if(document.getElementById('sidebar-nama-toko')) document.getElementById('sidebar-nama-toko').innerText = data.profil.namaToko; 
@@ -589,7 +612,6 @@
 
         const dataAktif = dataSemua.filter(x => x.sheetName === 'Transaksi');
         
-        // HITUNG HARI INI BERDASARKAN BROWSER
         const tglSekarang = new Date();
         const dStr = tglSekarang.getFullYear() + "-" + String(tglSekarang.getMonth()+1).padStart(2,'0') + "-" + String(tglSekarang.getDate()).padStart(2,'0');
         const dataHariIni = dataAktif.filter(x => x.tanggal.startsWith(dStr));
@@ -597,8 +619,7 @@
         if(document.getElementById('dash-trx')) document.getElementById('dash-trx').innerText = dataHariIni.length; 
         if(document.getElementById('dash-cuan')) document.getElementById('dash-cuan').innerText = formatRp(dataHariIni.reduce((a,c)=>a+c.untung,0)); 
         
-        // PERBAIKAN: Hitungan Nominal Dikembalikan (Disembunyikan di HTML saja, tapi JS tetap menghitung)
-        if(document.getElementById('sum-nom')) document.getElementById('sum-nom').innerText = formatRp(dataAktif.reduce((a,c)=>a+c.nominal,0)); 
+        // TETAP DIHITUNG NAMUN HANYA UNTUK KEPERLUAN INTERNAL ATAU LAPORAN
         if(document.getElementById('dash-nom')) document.getElementById('dash-nom').innerText = formatRp(dataAktif.reduce((a,c)=>a+c.nominal,0)); 
         if(document.getElementById('dash-bank')) document.getElementById('dash-bank').innerText = formatRp(dataAktif.reduce((a,c)=>a+c.adminBank,0)); 
         if(document.getElementById('dash-pel')) document.getElementById('dash-pel').innerText = formatRp(dataAktif.reduce((a,c)=>a+c.biayaPel,0)); 
@@ -619,8 +640,10 @@
 
     function terapkanFilter() { const jenis = document.getElementById('filter-jenis').value, start = document.getElementById('filter-start').value, end = document.getElementById('filter-end').value; const filterCabang = document.getElementById('filter-cabang') ? document.getElementById('filter-cabang').value : ''; const stTime = start ? new Date(start).setHours(0,0,0,0) : null, enTime = end ? new Date(end).setHours(23,59,59,999) : null; dataTampil = dataSemua.filter(r => { let pass = true; if (jenis && r.jenis !== jenis) pass = false; if (filterCabang && r.cabang !== filterCabang) pass = false; const rTime = new Date(r.tanggal).getTime(); if (stTime && rTime < stTime) pass = false; if (enTime && rTime > enTime) pass = false; return pass; }); currentPage = 1; renderTabel(); }
 
-    function renderTabel() { const startIdx = (currentPage - 1) * rowsPerPage, endIdx = startIdx + rowsPerPage; const dataPage = dataTampil.slice(startIdx, endIdx); let htmlTabel = ''; const role = localStorage.getItem('bukuLinkRole'), cabangSaya = localStorage.getItem('bukuLinkCabang'); if(dataPage.length === 0) htmlTabel = '<tr><td colspan="8" class="text-muted">Data kosong</td></tr>'; else dataPage.forEach(r => { const badgeArsip = r.sheetName === 'Arsip' ? '<br><span class="badge-arsip">Arsip</span>' : ''; let tombolAksi = `<span class="badge bg-secondary" style="font-size:10px;">Akses Terbatas</span>`; if(role === 'Superadmin' || r.cabang === cabangSaya) { tombolAksi = `<button class="btn btn-warning btn-sm py-0 px-1 mb-1" onclick="bukaModalEdit('${r.uid}', ${r.idRow}, '${r.sheetName}')"><i class="fa-solid fa-pen"></i></button> <button class="btn btn-danger btn-sm py-0 px-1 mb-1" onclick="hapusData('${r.uid}', ${r.idRow}, '${r.sheetName}')"><i class="fa-solid fa-trash"></i></button>`; } htmlTabel += `<tr><td>${formatTglPendek(r.tanggal)}<br><small class="text-muted">${r.cabang}</small>${badgeArsip}</td><td class="text-truncate" style="max-width:80px;">${r.jenis}</td><td>${formatRp(r.nominal)}</td><td class="text-danger">-${formatRp(r.adminBank)}</td><td style="color:#764ba2 !important;">+${formatRp(r.feeBank)}</td><td class="text-success">+${formatRp(r.biayaPel)}</td><td class="fw-bold" style="color:#00529C;">${formatRp(r.untung)}</td><td>${tombolAksi}</td></tr>`; }); if(document.getElementById('tabel-riwayat')) document.getElementById('tabel-riwayat').innerHTML = htmlTabel; let pageHtml = ''; const totalPages = Math.ceil(dataTampil.length / rowsPerPage); for (let i = 1; i <= totalPages; i++) pageHtml += `<li class="page-item ${i === currentPage ? 'active' : ''}"><button class="page-link" onclick="gantiHalaman(${i})">${i}</button></li>`; if(document.getElementById('pagination-container')) document.getElementById('pagination-container').innerHTML = pageHtml; 
-      // Penjumlahan tabel transaksi per filter
+    function renderTabel() { 
+      const startIdx = (currentPage - 1) * rowsPerPage, endIdx = startIdx + rowsPerPage; const dataPage = dataTampil.slice(startIdx, endIdx); let htmlTabel = ''; const role = localStorage.getItem('bukuLinkRole'), cabangSaya = localStorage.getItem('bukuLinkCabang'); if(dataPage.length === 0) htmlTabel = '<tr><td colspan="8" class="text-muted">Data kosong</td></tr>'; else dataPage.forEach(r => { const badgeArsip = r.sheetName === 'Arsip' ? '<br><span class="badge-arsip">Arsip</span>' : ''; let tombolAksi = `<span class="badge bg-secondary" style="font-size:10px;">Akses Terbatas</span>`; if(role === 'Superadmin' || r.cabang === cabangSaya) { tombolAksi = `<button class="btn btn-warning btn-sm py-0 px-1 mb-1" onclick="bukaModalEdit('${r.uid}', ${r.idRow}, '${r.sheetName}')"><i class="fa-solid fa-pen"></i></button> <button class="btn btn-danger btn-sm py-0 px-1 mb-1" onclick="hapusData('${r.uid}', ${r.idRow}, '${r.sheetName}')"><i class="fa-solid fa-trash"></i></button>`; } htmlTabel += `<tr><td>${formatTglPendek(r.tanggal)}<br><small class="text-muted">${r.cabang}</small>${badgeArsip}</td><td class="text-truncate" style="max-width:80px;">${r.jenis}</td><td>${formatRp(r.nominal)}</td><td class="text-danger">-${formatRp(r.adminBank)}</td><td style="color:#764ba2 !important;">+${formatRp(r.feeBank)}</td><td class="text-success">+${formatRp(r.biayaPel)}</td><td class="fw-bold" style="color:#00529C;">${formatRp(r.untung)}</td><td>${tombolAksi}</td></tr>`; }); if(document.getElementById('tabel-riwayat')) document.getElementById('tabel-riwayat').innerHTML = htmlTabel; let pageHtml = ''; const totalPages = Math.ceil(dataTampil.length / rowsPerPage); for (let i = 1; i <= totalPages; i++) pageHtml += `<li class="page-item ${i === currentPage ? 'active' : ''}"><button class="page-link" onclick="gantiHalaman(${i})">${i}</button></li>`; if(document.getElementById('pagination-container')) document.getElementById('pagination-container').innerHTML = pageHtml; 
+      
+      // PERBAIKAN: Penjumlahan Tabel Transaksi 
       if(document.getElementById('sum-trx')) document.getElementById('sum-trx').innerText = dataTampil.length; 
       if(document.getElementById('sum-adm')) document.getElementById('sum-adm').innerText = formatRp(dataTampil.reduce((a, c) => a + c.adminBank, 0)); 
       if(document.getElementById('sum-fee-bank')) document.getElementById('sum-fee-bank').innerText = formatRp(dataTampil.reduce((a, c) => a + c.feeBank, 0)); 
