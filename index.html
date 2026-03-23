@@ -129,14 +129,15 @@
         <div class="d-flex justify-content-between align-items-center w-100 px-3 py-2">
           <div class="d-flex align-items-center"><img id="mobile-logo-img" src="" style="width: 32px; height: 32px; object-fit: cover; border-radius: 50%; border: 2px solid #F37021; margin-right: 10px; background:white;"><span class="fw-bold mb-0 text-white" id="mobile-nama-toko" style="font-size: 15px;">eBuku Agenlink</span></div>
           <div>
-            <button class="btn btn-sm py-1 px-2 fw-bold rounded me-1 text-white" style="border: 1px solid #F37021;" onclick="pindahMenu('view-akun')"><i class="fa-solid fa-users-cog"></i></button>
-            <button class="btn btn-sm py-1 px-2 fw-bold rounded me-2 text-white btn-akun-mobile" style="border: 1px solid #F37021;" onclick="pindahMenu('view-atur-profil')"><i class="fa-solid fa-store"></i></button>
+            <button class="btn btn-sm py-1 px-2 fw-bold rounded me-1 text-white btn-akun-mobile" style="border: 1px solid #F37021;" onclick="pindahMenu('view-akun')"><i class="fa-solid fa-users-cog"></i></button>
+            <button class="btn btn-sm py-1 px-2 fw-bold rounded me-2 text-white btn-profil-mobile" style="border: 1px solid #F37021;" onclick="pindahMenu('view-atur-profil')"><i class="fa-solid fa-store"></i></button>
             <button class="btn btn-danger btn-sm py-1 px-2 fw-bold rounded" onclick="logout()"><i class="fa-solid fa-power-off"></i></button>
           </div>
         </div>
       </div>
 
       <div class="content-padding">
+        
         <div id="view-dashboard" class="view-section" style="display: block;">
           <h4 class="fw-bold mb-4 text-dark" style="color: #00529C !important;"><i class="fa-solid fa-chart-pie"></i> Rekapitulasi <span id="label-role" class="badge bg-secondary ms-2" style="font-size: 12px;"></span></h4>
           <div class="row mb-4">
@@ -277,7 +278,7 @@
               <div class="d-flex justify-content-end mb-2"><button class="btn btn-danger btn-sm fw-bold" onclick="unduhPDFBon()"><i class="fa-solid fa-file-pdf"></i> Unduh Laporan Bon</button></div>
               <div class="table-responsive bg-white border rounded mb-2">
                 <table class="table table-hover table-sm mb-0">
-                  <thead class="table-dark text-center" style="--bs-table-bg: #00529C;"><tr><th>Tgl Bon</th><th>Nama Pelanggan</th><th>Nominal</th><th>Status</th><th>Tgl Lunas</th><th>Aksi</th></tr></thead>
+                  <thead class="table-dark text-center" style="--bs-table-bg: #00529C;"><tr><th>Tgl/Cabang</th><th>Nama Pelanggan</th><th>Nominal</th><th>Status</th><th>Tgl Lunas</th><th>Aksi</th></tr></thead>
                   <tbody id="tabel-bon" class="text-center"><tr><td colspan="6">Memuat data...</td></tr></tbody>
                 </table>
               </div>
@@ -429,7 +430,7 @@
 
   <div id="area-cetak-bon" style="background: white; padding: 15px; width: 100%; display: none;">
     <div class="text-center mb-4"><h5 class="fw-bold mb-1 text-dark" style="text-decoration: underline;">LAPORAN CATATAN BON (PIUTANG)</h5><small class="fw-bold" style="color:#F37021;" id="pdf-bon-toko">NAMA TOKO</small></div>
-    <table class="table table-bordered table-sm mb-4" style="color: black; border-color: #000 !important;"><thead class="table-light text-center"><tr><th>Tgl Bon</th><th>Nama Pelanggan</th><th>Nominal</th><th>Status</th><th>Tgl Lunas</th></tr></thead>
+    <table class="table table-bordered table-sm mb-4" style="color: black; border-color: #000 !important;"><thead class="table-light text-center"><tr><th>Tgl/Cabang</th><th>Nama Pelanggan</th><th>Nominal</th><th>Status</th><th>Tgl Lunas</th></tr></thead>
       <tbody id="tabel-laporan-bon" class="text-center"></tbody>
       <tfoot class="table-light fw-bold text-center"><tr><td colspan="2" class="text-end">TOTAL BELUM LUNAS:</td><td id="bon-sum-belum" class="text-danger">Rp 0</td><td colspan="2"></td></tr></tfoot>
     </table>
@@ -440,7 +441,9 @@
     // =========================================================================
     // WAJIB: GANTI TULISAN DI BAWAH DENGAN URL WEB APP GOOGLE APPS SCRIPT ANDA
     // =========================================================================
-    const API_URL = "https://script.google.com/a/macros/admin.sma.belajar.id/s/AKfycbya6Oww7eC3aAcQQaN7CL-DqydF5qfdnr3_4K2euhIgwybTRutkd9hfDA6fy07k9fjlTA/exec"; 
+    const API_URL = "https://script.google.com/a/macros/admin.sma.belajar.id/s/AKfycbwMfHVmg67rNOyTc5tCNdeG03S8LmQ_EKmBD5S__9bHQ5QmqAQ0Z23cGwgeVkkDoSMk1w/exec"; 
+
+
 
     function callAPI(actionName, payloadData) {
       return fetch(API_URL, {
@@ -470,7 +473,7 @@
     const formatRp = (angka) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(angka);
     const formatTglPendek = (tglStr) => { const d = new Date(tglStr); return `${d.getDate().toString().padStart(2,'0')}/${(d.getMonth()+1).toString().padStart(2,'0')}/${d.getFullYear()}`; };
     
-    // PEMBERSIH OVERLAY ANTI-CRASH
+    // PEMBARUAN: Hapus bayangan pop-up dan kembalikan scroll
     function bersihkanOverlay() { 
         document.body.className = ''; 
         document.body.style = ''; 
@@ -538,7 +541,7 @@
       if(labelRole) labelRole.innerText = userRole === 'Superadmin' ? 'Superadmin' : `Cabang: ${userCabang}`;
       
       if(userRole !== 'Superadmin') {
-         document.querySelectorAll('.menu-atur-tarif, .menu-atur-profil').forEach(el => el.style.display = 'none');
+         document.querySelectorAll('.menu-atur-tarif, .menu-atur-profil, .btn-profil-mobile').forEach(el => el.style.display = 'none');
          document.querySelectorAll('.area-filter-cabang').forEach(el => el.style.display = 'none');
          document.getElementById('akun-superadmin').style.display = 'none';
          document.getElementById('akun-cabang').style.display = 'block';
@@ -546,14 +549,14 @@
          document.getElementById('cabang-saya-info').value = userCabang;
          document.getElementById('username-saya-info').value = userL;
       } else {
-         document.querySelectorAll('.menu-atur-tarif, .menu-atur-profil').forEach(el => el.style.display = 'block');
+         document.querySelectorAll('.menu-atur-tarif, .menu-atur-profil, .btn-profil-mobile').forEach(el => el.style.display = 'inline-block');
          document.querySelectorAll('.area-filter-cabang').forEach(el => el.style.display = 'block');
          document.getElementById('akun-superadmin').style.display = 'block';
          document.getElementById('akun-cabang').style.display = 'none';
       }
     }
 
-    function reloadDataApp() { const icon = document.getElementById('ikon-reload'); icon.classList.add('fa-spin'); const statusArsip = document.getElementById('toggle-arsip') ? document.getElementById('toggle-arsip').checked : false; callAPI('getDashboardData', { muatArsip: statusArsip }).then(data => { icon.classList.remove('fa-spin'); prosesTampilDashboard(data); Swal.fire({ title: 'Data Diperbarui!', icon: 'success', toast: true, position: 'top-end', showConfirmButton: false, timer: 1500 }); }).catch(err => { icon.classList.remove('fa-spin'); Swal.fire('Error', 'Gagal memuat ulang data', 'error'); }); }
+    function reloadDataApp() { const icon = document.getElementById('ikon-reload'); icon.classList.add('fa-spin'); const statusArsip = document.getElementById('toggle-arsip') ? document.getElementById('toggle-arsip').checked : false; const role = localStorage.getItem('bukuLinkRole') || 'Cabang'; const cabang = localStorage.getItem('bukuLinkCabang') || 'Pusat'; callAPI('getDashboardData', { muatArsip: statusArsip, role: role, cabang: cabang }).then(data => { icon.classList.remove('fa-spin'); prosesTampilDashboard(data); Swal.fire({ title: 'Data Diperbarui!', icon: 'success', toast: true, position: 'top-end', showConfirmButton: false, timer: 1500 }); }).catch(err => { icon.classList.remove('fa-spin'); Swal.fire('Error', 'Gagal memuat ulang data', 'error'); }); }
     function modalLupaPassword() { Swal.fire({ title: 'Lupa Password?', text: "Masukkan Email Anda yang terdaftar.", input: 'email', inputPlaceholder: 'email@anda.com', showCancelButton: true, confirmButtonText: 'Kirim Sandi Baru', showLoaderOnConfirm: true, preConfirm: (email) => { return callAPI('lupaPassword', {emailInput: email}).then(res => { if(!res) Swal.showValidationMessage('Email tidak terdaftar di database!'); return res; }); }, allowOutsideClick: () => !Swal.isLoading() }).then((result) => { if (result.isConfirmed && result.value) { Swal.fire('Terkirim!', 'Cek Kotak Masuk atau Folder Spam di email Anda.', 'success'); } }); }
     function modalPrivasi() { const teksPrivasi = `<div style="text-align: left; font-size: 14px; line-height: 1.6; color: #333;"><p><strong>1. Pengumpulan Data</strong><br>Kami mengumpulkan data transaksi dan informasi profil yang Anda masukkan secara mandiri ke dalam aplikasi. Kami tidak mengambil data pribadi dari perangkat Anda secara diam-diam.</p><p><strong>2. Penggunaan Data</strong><br>Seluruh data yang tersimpan sepenuhnya digunakan untuk keperluan operasional Anda, termasuk pencatatan, kalkulasi keuangan, dan pembuatan laporan.</p><p><strong>3. Keamanan Data</strong><br>Kami menggunakan sistem keamanan enkripsi berstandar industri (SHA-256) untuk melindungi kata sandi Anda. Data mentah Anda tersimpan secara aman di dalam ekosistem Google Workspace milik Anda sendiri.</p><p><strong>4. Hak Pengguna</strong><br>Anda memegang kendali penuh atas data Anda. Anda dapat menambah, mengedit, menghapus, maupun mengunduh laporan data Anda kapan saja melalui fitur yang telah disediakan di dalam aplikasi.</p><hr><p class="text-muted text-center" style="font-size: 12px;"><em>Dengan menggunakan aplikasi ini, Anda menyetujui ketentuan pemrosesan data sebagaimana dijelaskan di atas.</em></p></div>`; Swal.fire({ title: 'Kebijakan Privasi', html: teksPrivasi, icon: 'info', confirmButtonText: 'Saya Mengerti', confirmButtonColor: '#00529C' }); }
 
@@ -561,7 +564,11 @@
     function toggleSidebar() { document.getElementById('sidebar').classList.toggle('show-sidebar'); }
     function toggleModeArsip(clickedId) { const isChecked = document.getElementById(clickedId).checked; document.getElementById('toggle-arsip').checked = isChecked; document.getElementById('toggle-arsip-lap').checked = isChecked; document.getElementById('tabel-riwayat').innerHTML = '<tr><td colspan="8">Memuat database...</td></tr>'; muatDashboard(isChecked); }
 
-    function muatDashboard(muatArsip = false) { callAPI('getDashboardData', { muatArsip: muatArsip }).then(data => { prosesTampilDashboard(data); }); }
+    function muatDashboard(muatArsip = false) { 
+        const role = localStorage.getItem('bukuLinkRole') || 'Cabang'; 
+        const cabang = localStorage.getItem('bukuLinkCabang') || 'Pusat'; 
+        callAPI('getDashboardData', { muatArsip: muatArsip, role: role, cabang: cabang }).then(data => { prosesTampilDashboard(data); }); 
+    }
 
     function prosesTampilDashboard(data) {
         if(document.getElementById('sidebar-nama-toko')) document.getElementById('sidebar-nama-toko').innerText = data.profil.namaToko; 
@@ -595,15 +602,10 @@
         const dataAktif = dataSemua.filter(x => x.sheetName === 'Transaksi');
         if(document.getElementById('dash-trx')) document.getElementById('dash-trx').innerText = data.totalTrx; 
         if(document.getElementById('dash-cuan')) document.getElementById('dash-cuan').innerText = formatRp(data.untungHariIni); 
-        if(document.getElementById('dash-nom')) document.getElementById('dash-nom').innerText = formatRp(dataAktif.reduce((a,c)=>a+c.nominal,0)); 
-        if(document.getElementById('dash-bank')) document.getElementById('dash-bank').innerText = formatRp(dataAktif.reduce((a,c)=>a+c.adminBank,0)); 
-        if(document.getElementById('dash-pel')) document.getElementById('dash-pel').innerText = formatRp(dataAktif.reduce((a,c)=>a+c.biayaPel,0)); 
-        if(document.getElementById('dash-fee')) document.getElementById('dash-fee').innerText = formatRp(dataAktif.reduce((a,c)=>a+c.feeBank,0)); 
         
         terapkanFilter(); renderTabelSetupTarif(); renderGrafik(dataAktif); renderTabelBon();
     }
 
-    // FUNGSI RENDER TABEL AKUN (SUPERADMIN)
     function renderTabelAkun() {
       let html = '';
       if(globalListAkun.length === 0) html = '<tr><td colspan="5">Data kosong</td></tr>';
@@ -655,10 +657,10 @@
     function selesaiSimpan() { const modalObj = bootstrap.Modal.getInstance(document.getElementById('modalTransaksi')); if(modalObj) modalObj.hide(); setTimeout(bersihkanOverlay, 300); document.getElementById('btn-transaksi').innerHTML = '<i class="fa-solid fa-check"></i> Simpan Data'; document.getElementById('btn-transaksi').disabled = false; Swal.fire({ icon: 'success', title: 'Tersimpan!', timer: 1500, showConfirmButton: false }); muatDashboard(document.getElementById('toggle-arsip').checked); }
     function hapusData(uid, idRow, sheetName) { Swal.fire({ title: 'Hapus Data?', text: "Menghapus dari " + sheetName, icon: 'warning', showCancelButton: true, confirmButtonText: 'Ya, Hapus' }).then((res) => { if (res.isConfirmed) { Swal.fire({title:'Menghapus...', showConfirmButton: false, allowOutsideClick: false}); callAPI('hapusTransaksi', {uid: uid, idRowLama: idRow, namaSheet: sheetName}).then(()=> { muatDashboard(document.getElementById('toggle-arsip').checked); Swal.close(); }); } }); }
 
-    function renderTabelBon() { let html = ''; let htmlPDF = ''; let totalBelum = 0; if(dataPiutang.length === 0) { html = '<tr><td colspan="6">Belum ada bon</td></tr>'; htmlPDF = html; } else { dataPiutang.forEach(b => { let stBadge = b.status === 'Lunas' ? `<span class="badge bg-success">Lunas</span>` : `<span class="badge bg-danger">Belum Lunas</span>`; let btnLunas = b.status === 'Lunas' ? '' : `<button class="btn btn-success btn-sm py-0 px-1 mb-1 me-1" onclick="lunasiBon('${b.uid}', ${b.idRow})" title="Tandai Lunas"><i class="fa-solid fa-check"></i></button>`; let tglLnsStr = b.status === 'Lunas' ? formatTglPendek(b.tglLunas) : '-'; if(b.status !== 'Lunas') totalBelum += b.nominal; html += `<tr><td>${formatTglPendek(b.tanggal)}</td><td>${b.nama}</td><td class="fw-bold">${formatRp(b.nominal)}</td><td>${stBadge}</td><td>${tglLnsStr}</td><td>${btnLunas}<button class="btn btn-warning btn-sm py-0 px-1 mb-1 me-1" onclick="bukaModalBonEdit('${b.uid}', ${b.idRow})"><i class="fa-solid fa-pen"></i></button><button class="btn btn-danger btn-sm py-0 px-1 mb-1" onclick="hapusBon('${b.uid}', ${b.idRow})"><i class="fa-solid fa-trash"></i></button></td></tr>`; htmlPDF += `<tr><td>${formatTglPendek(b.tanggal)}</td><td>${b.nama}</td><td class="fw-bold">${formatRp(b.nominal)}</td><td>${b.status}</td><td>${tglLnsStr}</td></tr>`; }); } if(document.getElementById('tabel-bon')) document.getElementById('tabel-bon').innerHTML = html; if(document.getElementById('tabel-laporan-bon')) document.getElementById('tabel-laporan-bon').innerHTML = htmlPDF; if(document.getElementById('bon-sum-belum')) document.getElementById('bon-sum-belum').innerText = formatRp(totalBelum); }
+    function renderTabelBon() { let html = ''; let htmlPDF = ''; let totalBelum = 0; if(dataPiutang.length === 0) { html = '<tr><td colspan="6">Belum ada bon</td></tr>'; htmlPDF = html; } else { dataPiutang.forEach(b => { let stBadge = b.status === 'Lunas' ? `<span class="badge bg-success">Lunas</span>` : `<span class="badge bg-danger">Belum Lunas</span>`; let btnLunas = b.status === 'Lunas' ? '' : `<button class="btn btn-success btn-sm py-0 px-1 mb-1 me-1" onclick="lunasiBon('${b.uid}', ${b.idRow})" title="Tandai Lunas"><i class="fa-solid fa-check"></i></button>`; let tglLnsStr = b.status === 'Lunas' ? formatTglPendek(b.tglLunas) : '-'; if(b.status !== 'Lunas') totalBelum += b.nominal; html += `<tr><td>${formatTglPendek(b.tanggal)}<br><small class="text-muted">${b.cabang || 'Pusat'}</small></td><td>${b.nama}</td><td class="fw-bold">${formatRp(b.nominal)}</td><td>${stBadge}</td><td>${tglLnsStr}</td><td>${btnLunas}<button class="btn btn-warning btn-sm py-0 px-1 mb-1 me-1" onclick="bukaModalBonEdit('${b.uid}', ${b.idRow})"><i class="fa-solid fa-pen"></i></button><button class="btn btn-danger btn-sm py-0 px-1 mb-1" onclick="hapusBon('${b.uid}', ${b.idRow})"><i class="fa-solid fa-trash"></i></button></td></tr>`; htmlPDF += `<tr><td>${formatTglPendek(b.tanggal)}<br><small class="text-muted">${b.cabang || 'Pusat'}</small></td><td>${b.nama}</td><td class="fw-bold">${formatRp(b.nominal)}</td><td>${b.status}</td><td>${tglLnsStr}</td></tr>`; }); } if(document.getElementById('tabel-bon')) document.getElementById('tabel-bon').innerHTML = html; if(document.getElementById('tabel-laporan-bon')) document.getElementById('tabel-laporan-bon').innerHTML = htmlPDF; if(document.getElementById('bon-sum-belum')) document.getElementById('bon-sum-belum').innerText = formatRp(totalBelum); }
     function bukaModalBonTambah() { document.getElementById('form-bon').reset(); document.getElementById('bon-id').value = ""; document.getElementById('bon-uid').value = ""; document.getElementById('modal-bon-title').innerHTML = '<i class="fa-solid fa-book-open"></i> Tambah Bon Baru'; document.getElementById('bon-tanggal').valueAsDate = new Date(); new bootstrap.Modal(document.getElementById('modalBon')).show(); }
     function bukaModalBonEdit(uid, idRow) { const data = dataPiutang.find(x => x.idRow === idRow); if(!data) return; document.getElementById('bon-id').value = data.idRow; document.getElementById('bon-uid').value = data.uid; document.getElementById('modal-bon-title').innerHTML = '<i class="fa-solid fa-pen"></i> Edit Bon'; document.getElementById('bon-tanggal').value = data.tanggal; document.getElementById('bon-nama').value = data.nama; document.getElementById('bon-nominal').value = data.nominal.toLocaleString('id-ID'); new bootstrap.Modal(document.getElementById('modalBon')).show(); }
-    function handleBon() { const btn = document.getElementById('btn-bon'); btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Menyimpan...'; btn.disabled = true; const idRow = document.getElementById('bon-id').value, uid = document.getElementById('bon-uid').value; const dataBon = { tanggal: document.getElementById('bon-tanggal').value, nama: document.getElementById('bon-nama').value, nominal: unformatUang(document.getElementById('bon-nominal').value) }; const aksi = idRow === "" ? 'simpanPiutang' : 'editPiutang'; callAPI(aksi, {uid: uid, idRowLama: idRow, data: dataBon}).then(() => { selesaiBon(); }); }
+    function handleBon() { const btn = document.getElementById('btn-bon'); btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Menyimpan...'; btn.disabled = true; const idRow = document.getElementById('bon-id').value, uid = document.getElementById('bon-uid').value; const userCabang = localStorage.getItem('bukuLinkCabang') || 'Pusat'; const dataBon = { tanggal: document.getElementById('bon-tanggal').value, nama: document.getElementById('bon-nama').value, nominal: unformatUang(document.getElementById('bon-nominal').value), cabang: userCabang }; const aksi = idRow === "" ? 'simpanPiutang' : 'editPiutang'; callAPI(aksi, {uid: uid, idRowLama: idRow, data: dataBon}).then(() => { selesaiBon(); }); }
     function selesaiBon() { const modalObj = bootstrap.Modal.getInstance(document.getElementById('modalBon')); if(modalObj) modalObj.hide(); setTimeout(bersihkanOverlay, 300); document.getElementById('btn-bon').innerHTML = '<i class="fa-solid fa-save"></i> Simpan Bon'; document.getElementById('btn-bon').disabled = false; Swal.fire({ icon: 'success', title: 'Tersimpan!', timer: 1500, showConfirmButton: false }); muatDashboard(document.getElementById('toggle-arsip').checked); }
     function hapusBon(uid, idRow) { Swal.fire({ title: 'Hapus Bon?', text: "Data ini akan dihapus permanen.", icon: 'warning', showCancelButton: true, confirmButtonText: 'Ya, Hapus' }).then((res) => { if (res.isConfirmed) { Swal.fire({title:'Menghapus...', showConfirmButton: false, allowOutsideClick: false}); callAPI('hapusPiutang', {uid: uid, idRowLama: idRow}).then(()=> { muatDashboard(document.getElementById('toggle-arsip').checked); Swal.close(); }); } }); }
     function lunasiBon(uid, idRow) { Swal.fire({ title: 'Tandai Lunas?', text: "Bon ini akan dicatat sudah dibayar hari ini.", icon: 'info', showCancelButton: true, confirmButtonText: 'Ya, Lunas!' }).then((res) => { if (res.isConfirmed) { Swal.fire({title:'Memproses...', showConfirmButton: false, allowOutsideClick: false}); callAPI('lunasiPiutang', {uid: uid, idRowLama: idRow}).then(() => { muatDashboard(document.getElementById('toggle-arsip').checked); Swal.close(); }); } }); }
@@ -677,3 +679,5 @@
     
     function simpanProfilKeServer() { const btn = document.getElementById('btn-simpan-profil'); btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Menyimpan...'; btn.disabled = true; const dataP = { namaToko: document.getElementById('set-nama').value, alamat: document.getElementById('set-alamat').value, kontak: document.getElementById('set-kontak').value, urlLogoLama: document.getElementById('set-url-lama').value, linkWindows: document.getElementById('set-link-win').value, linkAndroid: document.getElementById('set-link-and').value }; callAPI('simpanProfil', {dataProfile: dataP, dataGambarBase64: croppedBase64}).then(() => { Swal.fire('Berhasil!', 'Profil Toko diperbarui.', 'success'); croppedBase64 = null; document.getElementById('image-workspace').style.display = 'none'; document.getElementById('upload-logo').value = ''; btn.innerHTML = '<i class="fa-solid fa-save"></i> SIMPAN PROFIL TOKO'; btn.disabled = false; document.getElementById('sidebar-nama-toko').innerText = dataP.namaToko; document.getElementById('mobile-nama-toko').innerText = dataP.namaToko; document.getElementById('footer-nama-toko').innerText = dataP.namaToko; document.getElementById('pdf-nama-toko').innerText = dataP.namaToko; document.getElementById('pdf-alamat').innerText = dataP.alamat; }); }
   </script>
+</body>
+</html>
