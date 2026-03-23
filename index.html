@@ -2,11 +2,9 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
-    <title>eBuku AgenLink</title>
-    <link rel="icon" type="image/png" href="./logo.png">
-
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <title>eBuku Agenlink</title>
+  <link rel="icon" type="image/png" href="./logo.png">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" rel="stylesheet">
@@ -16,25 +14,13 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   
   <style>
-
-    /* Mencegah zoom cubitan layar dan efek membal saat mentok */
-html, body {
-    touch-action: pan-y; 
-    overscroll-behavior-y: none; }
-
-/* Mencegah zoom otomatis saat mengklik kolom input / form */
-input, button, select, textarea {
-    touch-action: manipulation; 
-    font-size: 16px !important; }
-
-    /* DESAIN KONSEP BIRU BRI */
-    /* Background utama laptop disetel menggunakan Biru khas BRI (#00529C) */
+    html, body { touch-action: pan-y; overscroll-behavior-y: none; }
+    input, button, select, textarea { touch-action: manipulation; font-size: 16px !important; }
+    
     body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #00529C; overflow-x: hidden; display: flex; flex-direction: column; min-height: 100vh;}
     #app-wrapper { display: flex; width: 100%; flex-grow: 1; }
-    /* Sidebar diberi warna biru yang sedikit lebih gelap agar padu */
     #sidebar { width: 260px; background: linear-gradient(180deg, #003b73, #00284d); color: white; transition: all 0.3s; z-index: 1040; position: fixed; height: 100vh; overflow-y: auto; border-right: 1px solid rgba(255,255,255,0.1);}
     #sidebar .logo-container { text-align: center; padding: 30px 15px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 15px;}
-    /* Aksen tombol aktif diganti Oranye khas BRI (#F37021) */
     #sidebar-logo-img { width: 70px; height: 70px; object-fit: cover; border-radius: 50%; border: 3px solid #F37021; margin-bottom: 10px; }
     #sidebar .nav-link { color: rgba(255,255,255,0.7); padding: 15px 25px; border-radius: 0; border-left: 4px solid transparent; cursor: pointer; font-weight: 500;}
     #sidebar .nav-link:hover { background: rgba(255,255,255,0.05); color: white; }
@@ -46,7 +32,6 @@ input, button, select, textarea {
     
     #mobile-header { background: #00529C; display: none; position: sticky; top: 0; z-index: 1030; width: 100%;}
     
-    /* Menu bawah HP Biru BRI */
     .bottom-nav { display: none; position: fixed; bottom: 0; width: 100%; background: #00529C; box-shadow: 0 -4px 15px rgba(0,0,0,0.2); z-index: 1040; justify-content: space-around; align-items: center; padding: 5px 0 10px 0; border-top-left-radius: 20px; border-top-right-radius: 20px;}
     .bottom-nav-item { flex: 1; text-align: center; color: rgba(255,255,255,0.6); font-size: 11px; cursor: pointer; font-weight: 600; transition: 0.3s; }
     .bottom-nav-item.active { color: white; }
@@ -58,10 +43,9 @@ input, button, select, textarea {
     .bottom-nav-center i { font-size: 26px; margin: 0; color: white;}
     
     @media (max-width: 768px) { 
-      body { background-color: #f4f7f6; } /* Kembalikan abu-abu untuk area konten di HP */
-      #main-content { border-radius: 0; }
+      body { background-color: #f4f7f6; } 
+      #main-content { border-radius: 0; margin-left: 0; width: 100%; margin-bottom: 75px; } 
       #sidebar { display: none !important; } 
-      #main-content { margin-left: 0; width: 100%; margin-bottom: 75px; } 
       .content-padding { padding: 15px; } 
       #mobile-header { display: flex; align-items: center; justify-content: space-between; } 
       .bottom-nav { display: flex; }
@@ -76,11 +60,10 @@ input, button, select, textarea {
     @keyframes fadeIn { from { opacity: 0; transform: translateY(10px);} to { opacity: 1; transform: translateY(0);} }
     .stat-card { border-radius: 12px; color: white; border: none; padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: transform 0.2s;}
     
-    /* Ganti tema gradasi agar sesuai nuansa aplikasi */
     .bg-gradient-primary { background: linear-gradient(135deg, #00529C 0%, #003b73 100%); }
     .bg-gradient-success { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); }
     .bg-gradient-danger { background: linear-gradient(135deg, #ff0844 0%, #ffb199 100%); }
-    .bg-gradient-warning { background: linear-gradient(135deg, #F37021 0%, #ff9a55 100%); } /* Oranye */
+    .bg-gradient-warning { background: linear-gradient(135deg, #F37021 0%, #ff9a55 100%); }
     .bg-gradient-info { background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%); }
     .bg-gradient-secondary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
     
@@ -112,22 +95,21 @@ input, button, select, textarea {
             <h3 class="fw-bold mb-0" id="login-nama-toko">Nama Toko</h3>
             <p class="small text-info mb-0" style="color:#F37021 !important;">eBuku Agenlink App</p></div>
 
-            <div class="mb-3"><div class="input-group"><span class="input-group-text glass-icon"><i class="fa-solid fa-user"></i></span><input type="text" id="login-username" class="form-control glass-input" placeholder="Username (admin)"></div></div>
-            <div class="mb-3"><div class="input-group"><span class="input-group-text glass-icon"><i class="fa-solid fa-lock"></i></span><input type="password" id="login-password" class="form-control glass-input" placeholder="Password (demo123)"><button class="btn btn-outline-light glass-icon border-start-0" type="button" onclick="togglePassword('login-password', 'eye-icon-login')"><i id="eye-icon-login" class="fa-solid fa-eye"></i></button></div></div>
+            <div class="mb-3"><div class="input-group"><span class="input-group-text glass-icon"><i class="fa-solid fa-user"></i></span><input type="text" id="login-username" class="form-control glass-input" placeholder="Username"></div></div>
+            <div class="mb-3"><div class="input-group"><span class="input-group-text glass-icon"><i class="fa-solid fa-lock"></i></span><input type="password" id="login-password" class="form-control glass-input" placeholder="Password"><button class="btn btn-outline-light glass-icon border-start-0" type="button" onclick="togglePassword('login-password', 'eye-icon-login')"><i id="eye-icon-login" class="fa-solid fa-eye"></i></button></div></div>
             <div class="text-end mb-4"><a href="#" onclick="event.preventDefault(); modalLupaPassword()" class="small text-decoration-none" style="color: #F37021;">Lupa Password?</a></div>
             <button class="btn w-100 fw-bold py-2 rounded-pill text-white mb-3" style="background-color: #F37021;" onclick="handleLogin()" id="btn-login"><i class="fa-solid fa-right-to-bracket"></i> Masuk Aplikasi</button>
-            <div class="text-center" id="area-download" style="display: none;"><p class="small text-white-50 mb-2">Unduh Aplikasi :</p><div class="d-flex justify-content-center gap-2"><a id="btn-dl-win" href="#" target="_blank" class="btn btn-outline-light btn-sm" style="display:none;"><i class="fa-brands fa-windows"></i> Windows</a><a id="btn-dl-and" href="#" target="_blank" class="btn btn-outline-success btn-sm" style="display:none;"><i class="fa-brands fa-android"></i> Android</a></div></div>
           </div>
         </div>
       </div>
     </div>
-    <div class="login-footer">eBuku Agenlink App &copy; 2026 <span id="login-footer-toko" class="fw-bold text-white">Nama Toko</span><br><a href="#" onclick="event.preventDefault(); modalPrivasi()" class="text-decoration-none" style="color:#F37021;">Kebijakan Privasi</a> | Powered by : <a href='https://www.farypin-inovasiteknologi.com' rel='dofollow' style='color:blue;'>PT Farypin Inovasi Teknologi</a></div>
+    <div class="login-footer">eBuku Agenlink App &copy; 2026 <span id="login-footer-toko" class="fw-bold text-white">Nama Toko</span><br><a href="#" onclick="event.preventDefault(); modalPrivasi()" class="text-decoration-none" style="color:#F37021;">Kebijakan Privasi</a> | Powered by : <a href='https://www.farypin-inovasiteknologi.com' rel='dofollow' style='color:white;'>PT Farypin Inovasi Teknologi</a></div>
   </div>
 
   <div id="app-wrapper" style="display: none;">
     <button onclick="reloadDataApp()" class="btn text-white btn-floating" title="Muat Ulang Data"><i id="ikon-reload" class="fa-solid fa-arrows-rotate fs-5"></i></button>
     <div id="sidebar" class="d-none d-md-block">
-      <div class="logo-container"><img id="sidebar-logo-img" src="" alt="Logo" style="background:white;"><h5 class="fw-bold mb-0 mt-2" id="sidebar-nama-toko">Toko AgenLink</h5><small style="color: #F37021;">eBuku AgenLink</small></div>
+      <div class="logo-container"><img id="sidebar-logo-img" src="" alt="Logo" style="background:white;"><h5 class="fw-bold mb-0 mt-2" id="sidebar-nama-toko">BukuLink</h5><small style="color: #F37021;">eBuku AgenLink</small></div>
       <nav class="nav flex-column mt-2">
         <a class="nav-link active menu-dashboard" onclick="pindahMenu('view-dashboard')"><i class="fa-solid fa-chart-pie"></i> Dashboard Utama</a>
         <a class="nav-link menu-atur-tarif" onclick="pindahMenu('view-atur-tarif')"><i class="fa-solid fa-tags"></i> Atur Tarif</a>
@@ -144,7 +126,7 @@ input, button, select, textarea {
         <div class="d-flex justify-content-between align-items-center w-100 px-3 py-2">
           <div class="d-flex align-items-center"><img id="mobile-logo-img" src="" style="width: 32px; height: 32px; object-fit: cover; border-radius: 50%; border: 2px solid #F37021; margin-right: 10px; background:white;"><span class="fw-bold mb-0 text-white" id="mobile-nama-toko" style="font-size: 15px;">eBuku Agenlink</span></div>
           <div>
-            <button class="btn btn-sm py-1 px-2 fw-bold rounded me-2 text-white" style="border: 1px solid #F37021;" onclick="pindahMenu('view-atur-profil')"><i class="fa-solid fa-user"></i></button>
+            <button class="btn btn-sm py-1 px-2 fw-bold rounded me-2 text-white btn-akun-mobile" style="border: 1px solid #F37021;" onclick="pindahMenu('view-atur-profil')"><i class="fa-solid fa-user"></i></button>
             <button class="btn btn-danger btn-sm py-1 px-2 fw-bold rounded" onclick="logout()"><i class="fa-solid fa-power-off"></i></button>
           </div>
         </div>
@@ -152,14 +134,13 @@ input, button, select, textarea {
 
       <div class="content-padding">
         <div id="view-dashboard" class="view-section" style="display: block;">
-          <h4 class="fw-bold mb-4 text-dark" style="color: #00529C !important;"><i class="fa-solid fa-chart-pie"></i> Rekapitulasi (Aktif)</h4>
+          <h4 class="fw-bold mb-4 text-dark" style="color: #00529C !important;"><i class="fa-solid fa-chart-pie"></i> Rekapitulasi <span id="label-role" class="badge bg-secondary ms-2" style="font-size: 12px;"></span></h4>
           <div class="row mb-4">
-            <div class="col-4 col-md-4 mb-3"><div class="stat-card bg-gradient-primary h-100 p-3"><div class="small mb-1"><i class="fa-solid fa-receipt"></i> Trx</div><h3 class="fw-bold mb-0" id="dash-trx">0</h3></div></div>
-            <div class="col-8 col-md-4 mb-3"><div class="stat-card bg-gradient-success h-100 p-3"><div class="small mb-1"><i class="fa-solid fa-sack-dollar"></i> Cuan Bersih</div><h4 class="fw-bold mb-0" id="dash-cuan">Rp 0</h4></div></div>
-            <div class="col-12 col-md-4 mb-3"><div class="stat-card bg-gradient-info h-100 p-3"><div class="small mb-1"><i class="fa-solid fa-money-bill-wave"></i> Total Nominal</div><h4 class="fw-bold mb-0" id="dash-nom">Rp 0</h4></div></div>
-            <div class="col-12 col-md-4 mb-3"><div class="stat-card bg-gradient-warning text-dark h-100 p-3"><div class="small mb-1"><i class="fa-solid fa-hand-holding-dollar"></i> Biaya Pelanggan</div><h5 class="fw-bold mb-0" id="dash-pel">Rp 0</h5></div></div>
-            <div class="col-6 col-md-4 mb-3"><div class="stat-card bg-gradient-danger h-100 p-3"><div class="small mb-1"><i class="fa-solid fa-building-columns"></i> Admin Bank</div><h5 class="fw-bold mb-0" id="dash-bank">Rp 0</h5></div></div>
-            <div class="col-6 col-md-4 mb-3"><div class="stat-card bg-gradient-secondary h-100 p-3"><div class="small mb-1"><i class="fa-solid fa-piggy-bank"></i> Fee Bank</div><h5 class="fw-bold mb-0" id="dash-fee">Rp 0</h5></div></div>
+            <div class="col-6 col-md-6 mb-3"><div class="stat-card bg-gradient-primary h-100 p-3"><div class="small mb-1"><i class="fa-solid fa-receipt"></i> Trx (Hari Ini)</div><h3 class="fw-bold mb-0" id="dash-trx">0</h3></div></div>
+            <div class="col-6 col-md-6 mb-3"><div class="stat-card bg-gradient-success h-100 p-3"><div class="small mb-1"><i class="fa-solid fa-sack-dollar"></i> Cuan (Hari Ini)</div><h4 class="fw-bold mb-0" id="dash-cuan">Rp 0</h4></div></div>
+            <div class="col-4 col-md-4 mb-3"><div class="stat-card bg-gradient-warning text-dark h-100 p-3"><div class="small mb-1"><i class="fa-solid fa-hand-holding-dollar"></i> Pelanggan</div><h5 class="fw-bold mb-0" id="dash-pel">Rp 0</h5></div></div>
+            <div class="col-4 col-md-4 mb-3"><div class="stat-card bg-gradient-danger h-100 p-3"><div class="small mb-1"><i class="fa-solid fa-building-columns"></i> Adm Bank</div><h5 class="fw-bold mb-0" id="dash-bank">Rp 0</h5></div></div>
+            <div class="col-4 col-md-4 mb-3"><div class="stat-card bg-gradient-secondary h-100 p-3"><div class="small mb-1"><i class="fa-solid fa-piggy-bank"></i> Fee Bank</div><h5 class="fw-bold mb-0" id="dash-fee">Rp 0</h5></div></div>
           </div>
           <div class="card border-0 shadow-sm rounded-3 mb-4 w-100"><div class="card-header bg-white fw-bold py-3" style="color: #00529C;"><i class="fa-solid fa-chart-line"></i> Grafik Tren Keuntungan</div><div class="card-body"><canvas id="chartKeuntungan" height="100"></canvas></div></div>
         </div>
@@ -168,7 +149,17 @@ input, button, select, textarea {
           <h4 class="fw-bold mb-4 text-success"><i class="fa-solid fa-tags"></i> Atur Tarif Otomatis</h4>
           <div class="card border-0 shadow-sm rounded-3 mb-4 w-100">
             <div class="card-body">
-              <div class="mb-3"><label class="fw-bold">Pilih Jenis Transaksi:</label><select id="tarif-jenis-filter" class="form-select border-success fw-bold" onchange="renderTabelSetupTarif()"><option value="Tarik Tunai">Tarik Tunai</option><option value="Transfer Sesama BRI">Transfer Sesama BRI</option><option value="Transfer Bank Lain">Transfer Bank Lain</option><option value="Bayar Tagihan/Briva">Bayar Tagihan/Briva</option><option value="Top Up E-Wallet">Top Up E-Wallet</option></select></div>
+              <div class="mb-3"><label class="fw-bold">Pilih Jenis Transaksi:</label>
+                <select id="tarif-jenis-filter" class="form-select border-success fw-bold" onchange="renderTabelSetupTarif()">
+                  <option value="Tarik Tunai">Tarik Tunai</option>
+                  <option value="Transfer Sesama BRI">Transfer Sesama BRI</option>
+                  <option value="Transfer Bank Lain">Transfer Bank Lain</option>
+                  <option value="Bayar Tagihan/Briva">Bayar Tagihan/Briva</option>
+                  <option value="Top Up E-Wallet">Top Up E-Wallet</option>
+                  <option value="Numpang Transfer Sesama">Numpang Transfer Sesama</option>
+                  <option value="Numpang Transfer Bank Lain">Numpang Transfer Bank Lain</option>
+                </select>
+              </div>
               <div class="bg-light p-3 rounded mb-3 border">
                 <h6 class="fw-bold text-success mb-2">Tambah Rentang Baru</h6>
                 <div class="row g-2 mb-2">
@@ -196,9 +187,24 @@ input, button, select, textarea {
           <div class="card border-0 shadow-sm rounded-3 w-100">
             <div class="card-body bg-light px-2 px-md-3">
               <div class="row g-2 mb-3 align-items-center">
-                <div class="col-md-3 col-12"><label class="small fw-bold">Jenis</label><select id="filter-jenis" class="form-select form-select-sm"><option value="">Semua Jenis</option><option value="Tarik Tunai">Tarik Tunai</option><option value="Transfer Sesama BRI">Transfer Sesama BRI</option><option value="Transfer Bank Lain">Transfer Bank Lain</option><option value="Bayar Tagihan/Briva">Bayar Tagihan/Briva</option><option value="Top Up E-Wallet">Top Up E-Wallet</option></select></div>
-                <div class="col-md-3 col-6"><label class="small fw-bold">Dari Tgl</label><input type="date" id="filter-start" class="form-control form-control-sm"></div>
-                <div class="col-md-3 col-6"><label class="small fw-bold">Sampai</label><input type="date" id="filter-end" class="form-control form-control-sm"></div>
+                <div class="col-md-2 col-6 area-filter-cabang">
+                  <label class="small fw-bold">Cabang</label>
+                  <select id="filter-cabang" class="form-select form-select-sm"><option value="">Semua</option></select>
+                </div>
+                <div class="col-md-3 col-6"><label class="small fw-bold">Jenis</label>
+                  <select id="filter-jenis" class="form-select form-select-sm">
+                    <option value="">Semua Jenis</option>
+                    <option value="Tarik Tunai">Tarik Tunai</option>
+                    <option value="Transfer Sesama BRI">Transfer Sesama BRI</option>
+                    <option value="Transfer Bank Lain">Transfer Bank Lain</option>
+                    <option value="Bayar Tagihan/Briva">Bayar Tagihan/Briva</option>
+                    <option value="Top Up E-Wallet">Top Up E-Wallet</option>
+                    <option value="Numpang Transfer Sesama">Numpang Transfer Sesama</option>
+                    <option value="Numpang Transfer Bank Lain">Numpang Transfer Bank Lain</option>
+                  </select>
+                </div>
+                <div class="col-md-2 col-6"><label class="small fw-bold">Dari Tgl</label><input type="date" id="filter-start" class="form-control form-control-sm"></div>
+                <div class="col-md-2 col-6"><label class="small fw-bold">Sampai</label><input type="date" id="filter-end" class="form-control form-control-sm"></div>
                 <div class="col-md-3 col-12"><button class="btn btn-success btn-sm w-100 fw-bold mt-md-4" onclick="terapkanFilter()"><i class="fa-solid fa-filter"></i> Filter</button></div>
               </div>
               <div class="form-check form-switch mb-3 bg-white p-2 rounded border">
@@ -207,7 +213,7 @@ input, button, select, textarea {
               </div>
               <div class="table-responsive bg-white border rounded mb-2">
                 <table class="table table-hover table-sm mb-0">
-                  <thead class="table-dark text-center" style="--bs-table-bg: #00529C;"><tr><th>Tgl</th><th>Jenis</th><th>Nominal</th><th>Bank</th><th>Fee</th><th>Pelanggan</th><th>Cuan</th><th>Aksi</th></tr></thead>
+                  <thead class="table-dark text-center" style="--bs-table-bg: #00529C;"><tr><th>Tgl/Cabang</th><th>Jenis</th><th>Nominal</th><th>Bank</th><th>Fee</th><th>Pelanggan</th><th>Cuan</th><th>Aksi</th></tr></thead>
                   <tbody id="tabel-riwayat" class="text-center"><tr><td colspan="8">Memuat data...</td></tr></tbody>
                 </table>
               </div>
@@ -215,12 +221,11 @@ input, button, select, textarea {
             </div>
             <div class="card-footer bg-white border-top border-3 p-2 p-md-3" style="border-color:#F37021 !important;">
               <div class="row text-center fw-bold text-dark rekap-hp">
-                <div class="col-4 col-md-2 border-end border-bottom p-1">Trx<br><span id="sum-trx" style="color: #00529C;">0</span></div>
-                <div class="col-4 col-md-2 border-end border-bottom p-1">Nominal<br><span id="sum-nom" class="text-info">Rp 0</span></div>
-                <div class="col-4 col-md-2 border-end-md border-bottom p-1">Bank<br><span id="sum-adm" class="text-danger">Rp 0</span></div>
-                <div class="col-4 col-md-2 border-end p-1 pt-2">Fee Bank<br><span id="sum-fee-bank" class="text-secondary" style="color: #764ba2 !important;">Rp 0</span></div>
-                <div class="col-4 col-md-2 border-end p-1 pt-2">Pelanggan<br><span id="sum-biaya-pel" class="text-success">Rp 0</span></div>
-                <div class="col-4 col-md-2 p-1 pt-2">Total Cuan<br><span id="sum-cuan" style="color: #00529C;" class="rekap-hp-cuan">Rp 0</span></div>
+                <div class="col-6 col-md text-center border-end border-bottom p-1">Trx<br><span id="sum-trx" style="color: #00529C;">0</span></div>
+                <div class="col-6 col-md text-center border-bottom p-1">Total Cuan<br><span id="sum-cuan" style="color: #00529C;" class="rekap-hp-cuan">Rp 0</span></div>
+                <div class="col-4 col-md text-center border-end p-1 pt-2">Bank<br><span id="sum-adm" class="text-danger">Rp 0</span></div>
+                <div class="col-4 col-md text-center border-end p-1 pt-2">Fee Bank<br><span id="sum-fee-bank" class="text-secondary" style="color: #764ba2 !important;">Rp 0</span></div>
+                <div class="col-4 col-md text-center p-1 pt-2">Pelanggan<br><span id="sum-biaya-pel" class="text-success">Rp 0</span></div>
               </div>
             </div>
           </div>
@@ -249,11 +254,22 @@ input, button, select, textarea {
           <div class="card border-0 shadow-sm rounded-3 w-100">
             <div class="card-body px-2 px-md-3">
               <div class="row g-2 mb-2 align-items-end bg-light p-3 rounded border">
-                <div class="col-md-3 col-12"><label class="small fw-bold">Jenis</label><select id="lap-jenis" class="form-select form-select-sm"><option value="">Semua Jenis</option><option value="Tarik Tunai">Tarik Tunai</option><option value="Transfer Sesama BRI">Transfer Sesama BRI</option><option value="Transfer Bank Lain">Transfer Bank Lain</option><option value="Bayar Tagihan/Briva">Bayar Tagihan/Briva</option><option value="Top Up E-Wallet">Top Up E-Wallet</option></select></div>
-                <div class="col-md-3 col-6"><label class="small fw-bold">Dari Tanggal</label><input type="date" id="lap-start" class="form-control form-control-sm"></div>
+                <div class="col-md-2 col-12 area-filter-cabang"><label class="small fw-bold">Cabang</label><select id="lap-cabang" class="form-select form-select-sm"><option value="">Semua</option></select></div>
+                <div class="col-md-3 col-12"><label class="small fw-bold">Jenis</label>
+                  <select id="lap-jenis" class="form-select form-select-sm">
+                    <option value="">Semua Jenis</option>
+                    <option value="Tarik Tunai">Tarik Tunai</option>
+                    <option value="Transfer Sesama BRI">Transfer Sesama BRI</option>
+                    <option value="Transfer Bank Lain">Transfer Bank Lain</option>
+                    <option value="Bayar Tagihan/Briva">Bayar Tagihan/Briva</option>
+                    <option value="Top Up E-Wallet">Top Up E-Wallet</option>
+                    <option value="Numpang Transfer Sesama">Numpang Transfer Sesama</option>
+                    <option value="Numpang Transfer Bank Lain">Numpang Transfer Bank Lain</option>
+                  </select>
+                </div>
+                <div class="col-md-2 col-6"><label class="small fw-bold">Dari Tgl</label><input type="date" id="lap-start" class="form-control form-control-sm"></div>
                 <div class="col-md-2 col-6"><label class="small fw-bold">Sampai Tanggal</label><input type="date" id="lap-end" class="form-control form-control-sm"></div>
-                <div class="col-md-2 col-6"><button class="btn btn-sm w-100 fw-bold text-white" style="background-color:#00529C;" onclick="prosesLaporan()">Tampilkan</button></div>
-                <div class="col-md-2 col-6"><button class="btn btn-danger btn-sm w-100 fw-bold" onclick="unduhPDF()"><i class="fa-solid fa-download"></i> Unduh</button></div>
+                <div class="col-md-3 col-12"><button class="btn btn-sm w-100 fw-bold text-white mb-2" style="background-color:#00529C;" onclick="prosesLaporan()">Tampilkan</button><button class="btn btn-danger btn-sm w-100 fw-bold" onclick="unduhPDF()"><i class="fa-solid fa-download"></i> Unduh</button></div>
               </div>
               <div class="form-check form-switch mb-4"><input class="form-check-input" type="checkbox" id="toggle-arsip-lap" onchange="toggleModeArsip(this.id)"><label class="form-check-label small fw-bold text-danger">Termasuk Data Arsip</label></div>
               
@@ -265,9 +281,11 @@ input, button, select, textarea {
                 <div class="text-center mb-4"><h5 class="fw-bold mb-1 text-dark" style="text-decoration: underline;">LAPORAN TRANSAKSI KEUANGAN HARIAN</h5><small id="kop-periode" class="fw-bold" style="color: #F37021;">Periode: Semua Data</small></div>
                 <div class="table-responsive">
                   <table class="table table-bordered table-sm mb-4" style="color: black; border-color: #000 !important;">
-                    <thead class="table-light text-center"><tr><th>Tgl</th><th>Jenis Transaksi</th><th>Nominal</th><th>Bank</th><th>Fee Bank</th><th>Pelanggan</th><th>Cuan</th></tr></thead>
+                    <thead class="table-light text-center"><tr><th>Tgl / Cabang</th><th>Jenis Transaksi</th><th>Nominal</th><th>Bank</th><th>Fee Bank</th><th>Pelanggan</th><th>Cuan</th></tr></thead>
                     <tbody id="tabel-laporan" class="text-center"></tbody>
-                    <tfoot class="table-light fw-bold text-center"><tr><td colspan="2" class="text-end">TOTAL KESELURUHAN:</td><td id="lap-sum-nom">Rp 0</td><td id="lap-sum-bank" class="text-danger">Rp 0</td><td id="lap-sum-fee" style="color:#764ba2;">Rp 0</td><td id="lap-sum-biaya-pel" class="text-success">Rp 0</td><td id="lap-sum-cuan" style="color:#00529C;">Rp 0</td></tr></tfoot>
+                    <tfoot class="table-light fw-bold text-center">
+                      <tr><td colspan="3" class="text-end">TOTAL KESELURUHAN:</td><td id="lap-sum-bank" class="text-danger">Rp 0</td><td id="lap-sum-fee" style="color:#764ba2;">Rp 0</td><td id="lap-sum-biaya-pel" class="text-success">Rp 0</td><td id="lap-sum-cuan" style="color:#00529C;">Rp 0</td></tr>
+                    </tfoot>
                   </table>
                 </div>
               </div>
@@ -293,7 +311,7 @@ input, button, select, textarea {
               <div class="mb-3"><label class="form-label small fw-bold">Android</label><input type="text" id="set-link-and" class="form-control"></div>
               <hr><h6 class="fw-bold mb-3 text-danger"><i class="fa-solid fa-user-shield"></i> Akun Login (Keamanan SHA-256)</h6>
               <div class="mb-3"><label class="form-label small fw-bold">Email (Untuk Lupa Password)</label><input type="email" id="set-email" class="form-control" placeholder="wajib@diisi.com"></div>
-              <div class="mb-3"><label class="form-label small fw-bold">Username</label><input type="text" id="set-username" class="form-control"></div>
+              <div class="mb-3"><label class="form-label small fw-bold">Username Utama</label><input type="text" id="set-username" class="form-control"></div>
               <div class="mb-4">
                 <label class="form-label small fw-bold">Ganti Password (Kosongkan jika tidak diganti)</label>
                 <div class="input-group"><input type="password" id="set-password" class="form-control" placeholder="Ketik sandi baru..."><button class="btn btn-outline-secondary" type="button" onclick="togglePassword('set-password', 'eye-icon-profil')"><i id="eye-icon-profil" class="fa-solid fa-eye"></i></button></div>
@@ -305,7 +323,6 @@ input, button, select, textarea {
 
       </div>
       <footer class="app-footer"><div class="container"><span class="fw-bold text-dark">eBuku Agenlink App</span> &copy; 2026 <span id="footer-nama-toko" class="fw-bold" style="color:#00529C;">Nama Toko</span>.<br><a href="#" onclick="event.preventDefault(); modalPrivasi()" class="text-decoration-none text-muted">Kebijakan Privasi</a> | Powered by: <span class="fw-bold text-dark"><a href='https://www.farypin-inovasiteknologi.com' rel='dofollow'>PT Farypin Inovasi Teknologi</a></span></div></footer>
-    
     </div> 
   </div> 
 
@@ -325,7 +342,18 @@ input, button, select, textarea {
           <form id="form-transaksi" onsubmit="event.preventDefault(); handleTransaksi();">
             <input type="hidden" id="trans-id" value=""><input type="hidden" id="trans-uid" value=""><input type="hidden" id="trans-sheet" value="Transaksi">
             <div class="mb-3"><label class="form-label small fw-bold">Tanggal</label><input type="date" id="trans-tanggal" class="form-control" required></div>
-            <div class="mb-3"><label class="form-label small fw-bold">Jenis Transaksi</label><select id="trans-jenis" class="form-select border-primary" required onchange="cekAutoTarif()"><option value="">Pilih...</option><option value="Tarik Tunai">Tarik Tunai</option><option value="Transfer Sesama BRI">Transfer Sesama BRI</option><option value="Transfer Bank Lain">Transfer Bank Lain</option><option value="Bayar Tagihan/Briva">Bayar Tagihan/Briva</option><option value="Top Up E-Wallet">Top Up E-Wallet</option></select></div>
+            <div class="mb-3"><label class="form-label small fw-bold">Jenis Transaksi</label>
+              <select id="trans-jenis" class="form-select border-primary" required onchange="cekAutoTarif()">
+                <option value="">Pilih...</option>
+                <option value="Tarik Tunai">Tarik Tunai</option>
+                <option value="Transfer Sesama BRI">Transfer Sesama BRI</option>
+                <option value="Transfer Bank Lain">Transfer Bank Lain</option>
+                <option value="Bayar Tagihan/Briva">Bayar Tagihan/Briva</option>
+                <option value="Top Up E-Wallet">Top Up E-Wallet</option>
+                <option value="Numpang Transfer Sesama">Numpang Transfer Sesama</option>
+                <option value="Numpang Transfer Bank Lain">Numpang Transfer Bank Lain</option>
+              </select>
+            </div>
             <div class="mb-3"><label class="form-label small fw-bold">Nominal Transaksi (Rp)</label><input type="text" inputmode="numeric" id="trans-nominal" class="form-control border-primary form-control-lg fw-bold" style="color:#00529C;" required oninput="formatInputUang(event)"></div>
             <div class="row">
               <div class="col-4 mb-3"><label class="form-label small fw-bold">Adm Bank</label><input type="text" id="trans-admin-bank" class="form-control bg-white text-danger fw-bold" required readonly placeholder="Auto"></div>
@@ -369,17 +397,15 @@ input, button, select, textarea {
     // =========================================================================
     // WAJIB: GANTI TULISAN DI BAWAH DENGAN URL WEB APP GOOGLE APPS SCRIPT ANDA
     // =========================================================================
-    const API_URL = "https://script.google.com/macros/s/AKfycbxKQaAIR0LlNP7aWnq4UwHZV9ceDaOqj0mP_oJ05LrFNpMXnmtuxVlvWzDF1eKqWMj_Yg/exec"; 
+    const API_URL = "https://script.google.com/a/macros/admin.sma.belajar.id/s/AKfycbwzbvExvB5BFAtENVHquE_-emCMXFQb089pOEBNM5Z0rOwprrU5BDhSqgdhPdRTy6wbhA/exec"; 
 
-    // FUNGSI KOMUNIKASI FETCH API PENGGANTI google.script.run
+
     function callAPI(actionName, payloadData) {
       return fetch(API_URL, {
         method: 'POST',
-        headers: { 'Content-Type': 'text/plain;charset=utf-8' }, // Akali agar GAS tidak menolak POST
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
         body: JSON.stringify({ action: actionName, ...payloadData })
-      })
-      .then(response => response.json())
-      .then(data => {
+      }).then(response => response.json()).then(data => {
         if (data.status === 'success') return data.data;
         else throw new Error(data.message);
       });
@@ -394,20 +420,21 @@ input, button, select, textarea {
     function bersihkanOverlay() { document.querySelectorAll('.modal-backdrop').forEach(el => el.remove()); document.body.classList.remove('modal-open', 'swal2-shown', 'swal2-height-auto'); document.body.style.overflow = 'auto'; document.body.style.paddingRight = ''; Swal.close(); }
 
     window.onload = function() {
-      // Pastikan URL API sudah diubah, jika belum, tahan eksekusi
       if(API_URL.includes("ISI_DENGAN_URL")) {
-        document.getElementById('loading-screen').innerHTML = '<h5 class="text-danger p-4 text-center">ERROR: URL API belum dimasukkan di kode HTML baris 732. Harap ubah kodenya.</h5>';
-        return;
+        document.getElementById('loading-screen').innerHTML = '<h5 class="text-danger p-4 text-center">ERROR: URL API belum dimasukkan di kode HTML baris 627.</h5>'; return;
       }
-
       callAPI('getProfilApp', {}).then(data => {
         document.getElementById('login-nama-toko').innerText = data.namaToko; document.getElementById('login-footer-toko').innerText = data.namaToko; document.getElementById('login-logo').src = data.urlLogo;
         if(data.linkWindows) { document.getElementById('btn-dl-win').href = data.linkWindows; document.getElementById('btn-dl-win').style.display = 'inline-block'; document.getElementById('area-download').style.display = 'block'; }
         if(data.linkAndroid) { document.getElementById('btn-dl-and').href = data.linkAndroid; document.getElementById('btn-dl-and').style.display = 'inline-block'; document.getElementById('area-download').style.display = 'block'; }
         
         document.getElementById('loading-screen').style.display = 'none'; 
-        if(localStorage.getItem('bukuLinkLoggedIn') === 'true') { document.getElementById('view-login').style.display = 'none'; document.getElementById('app-wrapper').style.display = 'flex'; document.getElementById('mobile-bottom-nav').style.display = ''; pindahMenu('view-dashboard'); muatDashboard(false); } 
-        else { document.getElementById('view-login').style.display = 'flex'; document.getElementById('mobile-bottom-nav').style.display = 'none'; }
+        if(localStorage.getItem('bukuLinkLoggedIn') === 'true') { 
+            document.getElementById('view-login').style.display = 'none'; document.getElementById('app-wrapper').style.display = 'flex'; document.getElementById('mobile-bottom-nav').style.display = ''; 
+            terapkanRoleAkses(); pindahMenu('view-dashboard'); muatDashboard(false); 
+        } else { 
+            document.getElementById('view-login').style.display = 'flex'; document.getElementById('mobile-bottom-nav').style.display = 'none'; 
+        }
       }).catch(err => { Swal.fire('Error Database', 'Gagal memuat sistem: ' + err.message, 'error'); });
     };
 
@@ -416,15 +443,35 @@ input, button, select, textarea {
         if(!u || !p) { Swal.fire('Perhatian', 'Username dan Password tidak boleh kosong!', 'warning'); return; } 
         btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Memeriksa...'; btn.disabled = true; 
         
-        callAPI('prosesLogin', { username: u, password: p }).then(berhasil => {
+        callAPI('prosesLogin', { username: u, password: p }).then(res => {
             btn.innerHTML = '<i class="fa-solid fa-right-to-bracket"></i> Masuk Aplikasi'; btn.disabled = false; 
-            if(berhasil) { localStorage.setItem('bukuLinkLoggedIn', 'true'); bersihkanOverlay(); document.getElementById('view-login').style.display = 'none'; document.getElementById('app-wrapper').style.display = 'flex'; document.getElementById('mobile-bottom-nav').style.display = ''; pindahMenu('view-dashboard'); muatDashboard(false); } 
-            else Swal.fire('Gagal', 'Username/Password salah!', 'error'); 
+            if(res && res.valid) { 
+                localStorage.setItem('bukuLinkLoggedIn', 'true'); 
+                localStorage.setItem('bukuLinkRole', res.role); 
+                localStorage.setItem('bukuLinkCabang', res.cabang); 
+                bersihkanOverlay(); document.getElementById('view-login').style.display = 'none'; document.getElementById('app-wrapper').style.display = 'flex'; document.getElementById('mobile-bottom-nav').style.display = ''; 
+                terapkanRoleAkses(); pindahMenu('view-dashboard'); muatDashboard(false); 
+            } else Swal.fire('Gagal', 'Username/Password salah!', 'error'); 
         }).catch(err => { btn.innerHTML = 'Masuk Aplikasi'; btn.disabled = false; Swal.fire('Error', 'Gagal koneksi ke server', 'error'); });
     }
     
-    function logout() { localStorage.removeItem('bukuLinkLoggedIn'); document.getElementById('app-wrapper').style.display = 'none'; document.getElementById('view-login').style.display = 'flex'; document.getElementById('mobile-bottom-nav').style.display = 'none'; bersihkanOverlay(); }
+    function logout() { localStorage.removeItem('bukuLinkLoggedIn'); localStorage.removeItem('bukuLinkRole'); localStorage.removeItem('bukuLinkCabang'); document.getElementById('app-wrapper').style.display = 'none'; document.getElementById('view-login').style.display = 'flex'; document.getElementById('mobile-bottom-nav').style.display = 'none'; bersihkanOverlay(); }
     
+    // PENGATURAN HAK AKSES ROLE
+    function terapkanRoleAkses() {
+      const userRole = localStorage.getItem('bukuLinkRole');
+      const userCabang = localStorage.getItem('bukuLinkCabang');
+      document.getElementById('label-role').innerText = userRole === 'Superadmin' ? 'Superadmin' : `Cabang: ${userCabang}`;
+      
+      if(userRole !== 'Superadmin') {
+         document.querySelectorAll('.menu-atur-tarif, .menu-atur-profil, .btn-akun-mobile').forEach(el => el.style.display = 'none');
+         document.querySelectorAll('.area-filter-cabang').forEach(el => el.style.display = 'none');
+      } else {
+         document.querySelectorAll('.menu-atur-tarif, .menu-atur-profil, .btn-akun-mobile').forEach(el => el.style.display = 'block');
+         document.querySelectorAll('.area-filter-cabang').forEach(el => el.style.display = 'block');
+      }
+    }
+
     function reloadDataApp() {
         const icon = document.getElementById('ikon-reload'); icon.classList.add('fa-spin'); 
         const statusArsip = document.getElementById('toggle-arsip') ? document.getElementById('toggle-arsip').checked : false;
@@ -435,35 +482,69 @@ input, button, select, textarea {
     }
     
     function modalLupaPassword() { Swal.fire({ title: 'Lupa Password?', text: "Masukkan Email Anda yang terdaftar.", input: 'email', inputPlaceholder: 'email@anda.com', showCancelButton: true, confirmButtonText: 'Kirim Sandi Baru', showLoaderOnConfirm: true, preConfirm: (email) => { return callAPI('lupaPassword', {emailInput: email}).then(res => { if(!res) Swal.showValidationMessage('Email tidak terdaftar di database!'); return res; }); }, allowOutsideClick: () => !Swal.isLoading() }).then((result) => { if (result.isConfirmed && result.value) { Swal.fire('Terkirim!', 'Cek Kotak Masuk atau Folder Spam di email Anda.', 'success'); } }); }
-    
-    function modalPrivasi() {
-      const teksPrivasi = `<div style="text-align: left; font-size: 14px; line-height: 1.6; color: #333;"><p><strong>1. Pengumpulan Data</strong><br>Kami mengumpulkan data transaksi dan informasi profil yang Anda masukkan secara mandiri ke dalam aplikasi. Kami tidak mengambil data pribadi dari perangkat Anda secara diam-diam.</p><p><strong>2. Penggunaan Data</strong><br>Seluruh data yang tersimpan sepenuhnya digunakan untuk keperluan operasional Anda, termasuk pencatatan, kalkulasi keuangan, dan pembuatan laporan.</p><p><strong>3. Keamanan Data</strong><br>Kami menggunakan sistem keamanan enkripsi berstandar industri (SHA-256) untuk melindungi kata sandi Anda. Data mentah Anda tersimpan secara aman di dalam ekosistem Google Workspace milik Anda sendiri.</p><p><strong>4. Hak Pengguna</strong><br>Anda memegang kendali penuh atas data Anda. Anda dapat menambah, mengedit, menghapus, maupun mengunduh laporan data Anda kapan saja melalui fitur yang telah disediakan di dalam aplikasi.</p><hr><p class="text-muted text-center" style="font-size: 12px;"><em>Dengan menggunakan aplikasi ini, Anda menyetujui ketentuan pemrosesan data sebagaimana dijelaskan di atas.</em></p></div>`;
-      Swal.fire({ title: 'Kebijakan Privasi', html: teksPrivasi, icon: 'info', confirmButtonText: 'Saya Mengerti', confirmButtonColor: '#00529C' });
-    }
+    function modalPrivasi() { const teksPrivasi = `<div style="text-align: left; font-size: 14px; line-height: 1.6; color: #333;"><p><strong>1. Pengumpulan Data</strong><br>Kami mengumpulkan data transaksi dan informasi profil yang Anda masukkan secara mandiri ke dalam aplikasi. Kami tidak mengambil data pribadi dari perangkat Anda secara diam-diam.</p><p><strong>2. Penggunaan Data</strong><br>Seluruh data yang tersimpan sepenuhnya digunakan untuk keperluan operasional Anda, termasuk pencatatan, kalkulasi keuangan, dan pembuatan laporan.</p><p><strong>3. Keamanan Data</strong><br>Kami menggunakan sistem keamanan enkripsi berstandar industri (SHA-256) untuk melindungi kata sandi Anda. Data mentah Anda tersimpan secara aman di dalam ekosistem Google Workspace milik Anda sendiri.</p><p><strong>4. Hak Pengguna</strong><br>Anda memegang kendali penuh atas data Anda. Anda dapat menambah, mengedit, menghapus, maupun mengunduh laporan data Anda kapan saja melalui fitur yang telah disediakan di dalam aplikasi.</p><hr><p class="text-muted text-center" style="font-size: 12px;"><em>Dengan menggunakan aplikasi ini, Anda menyetujui ketentuan pemrosesan data sebagaimana dijelaskan di atas.</em></p></div>`; Swal.fire({ title: 'Kebijakan Privasi', html: teksPrivasi, icon: 'info', confirmButtonText: 'Saya Mengerti', confirmButtonColor: '#00529C' }); }
 
     function pindahMenu(viewId) { document.querySelectorAll('.view-section').forEach(el => el.style.display = 'none'); document.getElementById(viewId).style.display = 'block'; const menuClass = viewId.replace('view-', 'menu-'); document.querySelectorAll('#sidebar .nav-link').forEach(el => el.classList.remove('active')); const deskMenu = document.querySelector('#sidebar .nav-link.' + menuClass); if(deskMenu) deskMenu.classList.add('active'); document.querySelectorAll('.bottom-nav-item').forEach(el => el.classList.remove('active')); const mobMenu = document.querySelector('.bottom-nav-item.' + menuClass); if(mobMenu) mobMenu.classList.add('active'); if(viewId === 'view-laporan') prosesLaporan(); window.scrollTo(0,0); }
     function toggleSidebar() { document.getElementById('sidebar').classList.toggle('show-sidebar'); }
     function toggleModeArsip(clickedId) { const isChecked = document.getElementById(clickedId).checked; document.getElementById('toggle-arsip').checked = isChecked; document.getElementById('toggle-arsip-lap').checked = isChecked; document.getElementById('tabel-riwayat').innerHTML = '<tr><td colspan="8">Memuat database...</td></tr>'; muatDashboard(isChecked); }
 
-    function muatDashboard(muatArsip = false) {
-      callAPI('getDashboardData', { muatArsip: muatArsip }).then(data => { prosesTampilDashboard(data); });
-    }
+    function muatDashboard(muatArsip = false) { callAPI('getDashboardData', { muatArsip: muatArsip }).then(data => { prosesTampilDashboard(data); }); }
 
     function prosesTampilDashboard(data) {
         document.getElementById('sidebar-nama-toko').innerText = data.profil.namaToko; document.getElementById('sidebar-logo-img').src = data.profil.urlLogo; document.getElementById('mobile-nama-toko').innerText = data.profil.namaToko; document.getElementById('mobile-logo-img').src = data.profil.urlLogo; document.getElementById('footer-nama-toko').innerText = data.profil.namaToko; document.getElementById('pdf-nama-toko').innerText = data.profil.namaToko; document.getElementById('pdf-alamat').innerText = data.profil.alamat; document.getElementById('pdf-logo').src = data.profil.urlLogo; document.getElementById('pdf-bon-toko').innerText = data.profil.namaToko;
         document.getElementById('set-nama').value = data.profil.namaToko; document.getElementById('set-alamat').value = data.profil.alamat; document.getElementById('set-kontak').value = data.profil.kontak; document.getElementById('set-url-lama').value = data.profil.urlLogo; document.getElementById('set-link-win').value = data.profil.linkWindows; document.getElementById('set-link-and').value = data.profil.linkAndroid; document.getElementById('set-username').value = data.akun.username; document.getElementById('set-email').value = data.akun.email; document.getElementById('set-password').value = ''; 
+        
         dataSemua = data.riwayat; listTarifGlobal = data.listTarif; dataPiutang = data.piutang;
+        
+        // POPULASI FILTER CABANG UNTUK SUPERADMIN
+        if(localStorage.getItem('bukuLinkRole') === 'Superadmin') {
+           const cabangList = [...new Set(dataSemua.map(item => item.cabang))].filter(c => c && c !== 'undefined');
+           let optCabang = '<option value="">Semua Cabang</option>';
+           cabangList.forEach(c => { optCabang += `<option value="${c}">${c}</option>`; });
+           document.getElementById('filter-cabang').innerHTML = optCabang;
+           document.getElementById('lap-cabang').innerHTML = optCabang;
+        }
+
         document.getElementById('dash-trx').innerText = data.totalTrx; document.getElementById('dash-cuan').innerText = formatRp(data.untungHariIni); 
         const dataAktif = dataSemua.filter(x => x.sheetName === 'Transaksi');
         document.getElementById('dash-nom').innerText = formatRp(dataAktif.reduce((a,c)=>a+c.nominal,0)); document.getElementById('dash-bank').innerText = formatRp(dataAktif.reduce((a,c)=>a+c.adminBank,0)); document.getElementById('dash-pel').innerText = formatRp(dataAktif.reduce((a,c)=>a+c.biayaPel,0)); document.getElementById('dash-fee').innerText = formatRp(dataAktif.reduce((a,c)=>a+c.feeBank,0)); 
+        
         terapkanFilter(); renderTabelSetupTarif(); renderGrafik(dataAktif); renderTabelBon();
     }
 
     function renderGrafik(dataGrafik) { const ctx = document.getElementById('chartKeuntungan').getContext('2d'); if(chartInstance) chartInstance.destroy(); const groupedData = {}; dataGrafik.forEach(r => { if(!groupedData[r.tanggal]) groupedData[r.tanggal] = 0; groupedData[r.tanggal] += r.untung; }); const sortedDates = Object.keys(groupedData).sort().slice(-7); const labels = sortedDates.map(d => formatTglPendek(d)); const chartData = sortedDates.map(d => groupedData[d]); chartInstance = new Chart(ctx, { type: 'line', data: { labels: labels, datasets: [{ label: 'Keuntungan (Rp)', data: chartData, backgroundColor: 'rgba(0, 82, 156, 0.2)', borderColor: '#00529C', borderWidth: 3, pointBackgroundColor: '#fff', pointBorderColor: '#00529C', pointRadius: 5, fill: true, tension: 0.3 }] }, options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } } }); }
 
-    function terapkanFilter() { const jenis = document.getElementById('filter-jenis').value, start = document.getElementById('filter-start').value, end = document.getElementById('filter-end').value; const stTime = start ? new Date(start).setHours(0,0,0,0) : null, enTime = end ? new Date(end).setHours(23,59,59,999) : null; dataTampil = dataSemua.filter(r => { let pass = true; if (jenis && r.jenis !== jenis) pass = false; const rTime = new Date(r.tanggal).getTime(); if (stTime && rTime < stTime) pass = false; if (enTime && rTime > enTime) pass = false; return pass; }); currentPage = 1; renderTabel(); }
+    function terapkanFilter() { 
+      const jenis = document.getElementById('filter-jenis').value, start = document.getElementById('filter-start').value, end = document.getElementById('filter-end').value; 
+      const filterCabang = document.getElementById('filter-cabang').value;
+      const stTime = start ? new Date(start).setHours(0,0,0,0) : null, enTime = end ? new Date(end).setHours(23,59,59,999) : null; 
+      
+      dataTampil = dataSemua.filter(r => { 
+        let pass = true; 
+        if (jenis && r.jenis !== jenis) pass = false; 
+        if (filterCabang && r.cabang !== filterCabang) pass = false; // Filter Cabang Khusus Admin
+        const rTime = new Date(r.tanggal).getTime(); 
+        if (stTime && rTime < stTime) pass = false; if (enTime && rTime > enTime) pass = false; return pass; 
+      }); 
+      currentPage = 1; renderTabel(); 
+    }
 
-    function renderTabel() { const startIdx = (currentPage - 1) * rowsPerPage, endIdx = startIdx + rowsPerPage; const dataPage = dataTampil.slice(startIdx, endIdx); let htmlTabel = ''; if(dataPage.length === 0) htmlTabel = '<tr><td colspan="8" class="text-muted">Data kosong</td></tr>'; else dataPage.forEach(r => { const badgeArsip = r.sheetName === 'Arsip' ? '<span class="badge-arsip">Arsip</span>' : ''; htmlTabel += `<tr><td>${formatTglPendek(r.tanggal)}${badgeArsip}</td><td class="text-truncate" style="max-width:80px;">${r.jenis}</td><td>${formatRp(r.nominal)}</td><td class="text-danger">-${formatRp(r.adminBank)}</td><td style="color:#764ba2 !important;">+${formatRp(r.feeBank)}</td><td class="text-success">+${formatRp(r.biayaPel)}</td><td class="fw-bold" style="color:#00529C;">${formatRp(r.untung)}</td><td><button class="btn btn-warning btn-sm py-0 px-1 mb-1" onclick="bukaModalEdit('${r.uid}', ${r.idRow}, '${r.sheetName}')"><i class="fa-solid fa-pen"></i></button> <button class="btn btn-danger btn-sm py-0 px-1 mb-1" onclick="hapusData('${r.uid}', ${r.idRow}, '${r.sheetName}')"><i class="fa-solid fa-trash"></i></button></td></tr>`; }); document.getElementById('tabel-riwayat').innerHTML = htmlTabel; let pageHtml = ''; const totalPages = Math.ceil(dataTampil.length / rowsPerPage); for (let i = 1; i <= totalPages; i++) pageHtml += `<li class="page-item ${i === currentPage ? 'active' : ''}"><button class="page-link" onclick="gantiHalaman(${i})">${i}</button></li>`; document.getElementById('pagination-container').innerHTML = pageHtml; document.getElementById('sum-trx').innerText = dataTampil.length; document.getElementById('sum-nom').innerText = formatRp(dataTampil.reduce((a, c) => a + c.nominal, 0)); document.getElementById('sum-adm').innerText = formatRp(dataTampil.reduce((a, c) => a + c.adminBank, 0)); document.getElementById('sum-fee-bank').innerText = formatRp(dataTampil.reduce((a, c) => a + c.feeBank, 0)); document.getElementById('sum-biaya-pel').innerText = formatRp(dataTampil.reduce((a, c) => a + c.biayaPel, 0)); document.getElementById('sum-cuan').innerText = formatRp(dataTampil.reduce((a, c) => a + c.untung, 0)); }
+    function renderTabel() { 
+      const startIdx = (currentPage - 1) * rowsPerPage, endIdx = startIdx + rowsPerPage; const dataPage = dataTampil.slice(startIdx, endIdx); let htmlTabel = ''; 
+      const role = localStorage.getItem('bukuLinkRole'), cabangSaya = localStorage.getItem('bukuLinkCabang');
+
+      if(dataPage.length === 0) htmlTabel = '<tr><td colspan="8" class="text-muted">Data kosong</td></tr>'; 
+      else dataPage.forEach(r => { 
+        const badgeArsip = r.sheetName === 'Arsip' ? '<br><span class="badge-arsip">Arsip</span>' : ''; 
+        let tombolAksi = `<span class="badge bg-secondary" style="font-size:10px;">Akses Terbatas</span>`;
+        if(role === 'Superadmin' || r.cabang === cabangSaya) {
+            tombolAksi = `<button class="btn btn-warning btn-sm py-0 px-1 mb-1" onclick="bukaModalEdit('${r.uid}', ${r.idRow}, '${r.sheetName}')"><i class="fa-solid fa-pen"></i></button> <button class="btn btn-danger btn-sm py-0 px-1 mb-1" onclick="hapusData('${r.uid}', ${r.idRow}, '${r.sheetName}')"><i class="fa-solid fa-trash"></i></button>`;
+        }
+        htmlTabel += `<tr><td>${formatTglPendek(r.tanggal)}<br><small class="text-muted">${r.cabang}</small>${badgeArsip}</td><td class="text-truncate" style="max-width:80px;">${r.jenis}</td><td>${formatRp(r.nominal)}</td><td class="text-danger">-${formatRp(r.adminBank)}</td><td style="color:#764ba2 !important;">+${formatRp(r.feeBank)}</td><td class="text-success">+${formatRp(r.biayaPel)}</td><td class="fw-bold" style="color:#00529C;">${formatRp(r.untung)}</td><td>${tombolAksi}</td></tr>`; 
+      }); 
+      document.getElementById('tabel-riwayat').innerHTML = htmlTabel; 
+      let pageHtml = ''; const totalPages = Math.ceil(dataTampil.length / rowsPerPage); for (let i = 1; i <= totalPages; i++) pageHtml += `<li class="page-item ${i === currentPage ? 'active' : ''}"><button class="page-link" onclick="gantiHalaman(${i})">${i}</button></li>`; document.getElementById('pagination-container').innerHTML = pageHtml; document.getElementById('sum-trx').innerText = dataTampil.length; document.getElementById('sum-adm').innerText = formatRp(dataTampil.reduce((a, c) => a + c.adminBank, 0)); document.getElementById('sum-fee-bank').innerText = formatRp(dataTampil.reduce((a, c) => a + c.feeBank, 0)); document.getElementById('sum-biaya-pel').innerText = formatRp(dataTampil.reduce((a, c) => a + c.biayaPel, 0)); document.getElementById('sum-cuan').innerText = formatRp(dataTampil.reduce((a, c) => a + c.untung, 0)); 
+    }
     function gantiHalaman(page) { currentPage = page; renderTabel(); }
 
     function cekAutoTarif() { const jenis = document.getElementById('trans-jenis').value; const nom = unformatUang(document.getElementById('trans-nominal').value); const inputBiaya = document.getElementById('trans-biaya-pelanggan'); const inputAdmBank = document.getElementById('trans-admin-bank'); const inputFeeBank = document.getElementById('trans-fee-bank'); if(!jenis || nom === 0) { inputBiaya.value = ''; inputAdmBank.value = ''; inputFeeBank.value = ''; return; } const match = listTarifGlobal.find(t => t.jenis === jenis && nom >= t.min && nom <= t.max); if (match) { inputBiaya.value = match.tarif.toLocaleString('id-ID'); inputAdmBank.value = match.admBank.toLocaleString('id-ID'); inputFeeBank.value = match.feeBank.toLocaleString('id-ID'); } else { inputBiaya.value = ''; inputAdmBank.value = ''; inputFeeBank.value = ''; } }
@@ -475,34 +556,40 @@ input, button, select, textarea {
     function handleTransaksi() { 
       const btn = document.getElementById('btn-transaksi'); btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Menyimpan...'; btn.disabled = true; 
       const idRow = document.getElementById('trans-id').value, uid = document.getElementById('trans-uid').value, sheetName = document.getElementById('trans-sheet').value; 
-      const dataTrans = { tanggal: document.getElementById('trans-tanggal').value, jenis: document.getElementById('trans-jenis').value, nominal: unformatUang(document.getElementById('trans-nominal').value), adminBank: unformatUang(document.getElementById('trans-admin-bank').value), feeBank: unformatUang(document.getElementById('trans-fee-bank').value), biayaPelanggan: unformatUang(document.getElementById('trans-biaya-pelanggan').value) }; 
+      
+      const userCabang = localStorage.getItem('bukuLinkCabang') || 'Pusat';
+      const dataTrans = { tanggal: document.getElementById('trans-tanggal').value, jenis: document.getElementById('trans-jenis').value, nominal: unformatUang(document.getElementById('trans-nominal').value), adminBank: unformatUang(document.getElementById('trans-admin-bank').value), feeBank: unformatUang(document.getElementById('trans-fee-bank').value), biayaPelanggan: unformatUang(document.getElementById('trans-biaya-pelanggan').value), cabang: userCabang }; 
       
       const aksi = idRow === "" ? 'simpanTransaksi' : 'editTransaksi';
       callAPI(aksi, { uid: uid, idRowLama: idRow, data: dataTrans, namaSheet: sheetName }).then(() => { selesaiSimpan(); });
     }
     
     function selesaiSimpan() { const modalObj = bootstrap.Modal.getInstance(document.getElementById('modalTransaksi')); if(modalObj) modalObj.hide(); setTimeout(bersihkanOverlay, 300); document.getElementById('btn-transaksi').innerHTML = '<i class="fa-solid fa-check"></i> Simpan Data'; document.getElementById('btn-transaksi').disabled = false; Swal.fire({ icon: 'success', title: 'Tersimpan!', timer: 1500, showConfirmButton: false }); muatDashboard(document.getElementById('toggle-arsip').checked); }
-    
     function hapusData(uid, idRow, sheetName) { Swal.fire({ title: 'Hapus Data?', text: "Menghapus dari " + sheetName, icon: 'warning', showCancelButton: true, confirmButtonText: 'Ya, Hapus' }).then((res) => { if (res.isConfirmed) { Swal.fire({title:'Menghapus...', showConfirmButton: false, allowOutsideClick: false}); callAPI('hapusTransaksi', {uid: uid, idRowLama: idRow, namaSheet: sheetName}).then(()=> { muatDashboard(document.getElementById('toggle-arsip').checked); Swal.close(); }); } }); }
 
     function renderTabelBon() { let html = ''; let htmlPDF = ''; let totalBelum = 0; if(dataPiutang.length === 0) { html = '<tr><td colspan="6">Belum ada bon</td></tr>'; htmlPDF = html; } else { dataPiutang.forEach(b => { let stBadge = b.status === 'Lunas' ? `<span class="badge bg-success">Lunas</span>` : `<span class="badge bg-danger">Belum Lunas</span>`; let btnLunas = b.status === 'Lunas' ? '' : `<button class="btn btn-success btn-sm py-0 px-1 mb-1 me-1" onclick="lunasiBon('${b.uid}', ${b.idRow})" title="Tandai Lunas"><i class="fa-solid fa-check"></i></button>`; let tglLnsStr = b.status === 'Lunas' ? formatTglPendek(b.tglLunas) : '-'; if(b.status !== 'Lunas') totalBelum += b.nominal; html += `<tr><td>${formatTglPendek(b.tanggal)}</td><td>${b.nama}</td><td class="fw-bold">${formatRp(b.nominal)}</td><td>${stBadge}</td><td>${tglLnsStr}</td><td>${btnLunas}<button class="btn btn-warning btn-sm py-0 px-1 mb-1 me-1" onclick="bukaModalBonEdit('${b.uid}', ${b.idRow})"><i class="fa-solid fa-pen"></i></button><button class="btn btn-danger btn-sm py-0 px-1 mb-1" onclick="hapusBon('${b.uid}', ${b.idRow})"><i class="fa-solid fa-trash"></i></button></td></tr>`; htmlPDF += `<tr><td>${formatTglPendek(b.tanggal)}</td><td>${b.nama}</td><td class="fw-bold">${formatRp(b.nominal)}</td><td>${b.status}</td><td>${tglLnsStr}</td></tr>`; }); } document.getElementById('tabel-bon').innerHTML = html; document.getElementById('tabel-laporan-bon').innerHTML = htmlPDF; document.getElementById('bon-sum-belum').innerText = formatRp(totalBelum); }
     function bukaModalBonTambah() { document.getElementById('form-bon').reset(); document.getElementById('bon-id').value = ""; document.getElementById('bon-uid').value = ""; document.getElementById('modal-bon-title').innerHTML = '<i class="fa-solid fa-book-open"></i> Tambah Bon Baru'; document.getElementById('bon-tanggal').valueAsDate = new Date(); new bootstrap.Modal(document.getElementById('modalBon')).show(); }
     function bukaModalBonEdit(uid, idRow) { const data = dataPiutang.find(x => x.idRow === idRow); if(!data) return; document.getElementById('bon-id').value = data.idRow; document.getElementById('bon-uid').value = data.uid; document.getElementById('modal-bon-title').innerHTML = '<i class="fa-solid fa-pen"></i> Edit Bon'; document.getElementById('bon-tanggal').value = data.tanggal; document.getElementById('bon-nama').value = data.nama; document.getElementById('bon-nominal').value = data.nominal.toLocaleString('id-ID'); new bootstrap.Modal(document.getElementById('modalBon')).show(); }
-    
-    function handleBon() { 
-      const btn = document.getElementById('btn-bon'); btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Menyimpan...'; btn.disabled = true; 
-      const idRow = document.getElementById('bon-id').value, uid = document.getElementById('bon-uid').value; 
-      const dataBon = { tanggal: document.getElementById('bon-tanggal').value, nama: document.getElementById('bon-nama').value, nominal: unformatUang(document.getElementById('bon-nominal').value) }; 
-      const aksi = idRow === "" ? 'simpanPiutang' : 'editPiutang';
-      callAPI(aksi, {uid: uid, idRowLama: idRow, data: dataBon}).then(() => { selesaiBon(); }); 
-    }
-    
+    function handleBon() { const btn = document.getElementById('btn-bon'); btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Menyimpan...'; btn.disabled = true; const idRow = document.getElementById('bon-id').value, uid = document.getElementById('bon-uid').value; const dataBon = { tanggal: document.getElementById('bon-tanggal').value, nama: document.getElementById('bon-nama').value, nominal: unformatUang(document.getElementById('bon-nominal').value) }; const aksi = idRow === "" ? 'simpanPiutang' : 'editPiutang'; callAPI(aksi, {uid: uid, idRowLama: idRow, data: dataBon}).then(() => { selesaiBon(); }); }
     function selesaiBon() { const modalObj = bootstrap.Modal.getInstance(document.getElementById('modalBon')); if(modalObj) modalObj.hide(); setTimeout(bersihkanOverlay, 300); document.getElementById('btn-bon').innerHTML = '<i class="fa-solid fa-save"></i> Simpan Bon'; document.getElementById('btn-bon').disabled = false; Swal.fire({ icon: 'success', title: 'Tersimpan!', timer: 1500, showConfirmButton: false }); muatDashboard(document.getElementById('toggle-arsip').checked); }
     function hapusBon(uid, idRow) { Swal.fire({ title: 'Hapus Bon?', text: "Data ini akan dihapus permanen.", icon: 'warning', showCancelButton: true, confirmButtonText: 'Ya, Hapus' }).then((res) => { if (res.isConfirmed) { Swal.fire({title:'Menghapus...', showConfirmButton: false, allowOutsideClick: false}); callAPI('hapusPiutang', {uid: uid, idRowLama: idRow}).then(()=> { muatDashboard(document.getElementById('toggle-arsip').checked); Swal.close(); }); } }); }
     function lunasiBon(uid, idRow) { Swal.fire({ title: 'Tandai Lunas?', text: "Bon ini akan dicatat sudah dibayar hari ini.", icon: 'info', showCancelButton: true, confirmButtonText: 'Ya, Lunas!' }).then((res) => { if (res.isConfirmed) { Swal.fire({title:'Memproses...', showConfirmButton: false, allowOutsideClick: false}); callAPI('lunasiPiutang', {uid: uid, idRowLama: idRow}).then(() => { muatDashboard(document.getElementById('toggle-arsip').checked); Swal.close(); }); } }); }
     function unduhPDFBon() { document.getElementById('area-cetak-bon').style.display = 'block'; const element = document.getElementById('area-cetak-bon'); const namaFile = 'Laporan_Bon_' + new Date().getTime() + '.pdf'; const opt = { margin: 0.5, filename: namaFile, image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2, scrollX: 0, scrollY: 0 }, jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' } }; Swal.fire({title: 'Memproses PDF...', text: 'File akan segera diunduh.', allowOutsideClick: false, didOpen: () => { Swal.showLoading() }}); html2pdf().set(opt).from(element).save().then(() => { Swal.close(); document.getElementById('area-cetak-bon').style.display = 'none'; Swal.fire('Berhasil!', 'PDF Bon diunduh.', 'success'); }); }
 
-    function prosesLaporan() { const start = document.getElementById('lap-start').value, end = document.getElementById('lap-end').value, jenis = document.getElementById('lap-jenis').value; let dataLap = dataSemua; if (start || end || jenis) { document.getElementById('kop-periode').innerText = `Periode: ${start ? formatTglPendek(start) : 'Awal'} s.d ${end ? formatTglPendek(end) : 'Akhir'} ${jenis ? '('+jenis+')' : ''}`; const stTime = start ? new Date(start).setHours(0,0,0,0) : null, enTime = end ? new Date(end).setHours(23,59,59,999) : null; dataLap = dataSemua.filter(r => { let pass = true; if (jenis && r.jenis !== jenis) pass = false; const rTime = new Date(r.tanggal).getTime(); if (stTime && rTime < stTime) pass = false; if (enTime && rTime > enTime) pass = false; return pass; }); } else { document.getElementById('kop-periode').innerText = `Periode: Semua Data`; } let html = ''; let sNom=0, sBank=0, sFee=0, sPel=0, sCuan=0; dataLap.forEach(r => { sNom += r.nominal; sBank += r.adminBank; sFee += r.feeBank; sPel += r.biayaPel; sCuan += r.untung; html += `<tr><td>${formatTglPendek(r.tanggal)}</td><td>${r.jenis}</td><td>${formatRp(r.nominal)}</td><td class="text-danger">${formatRp(r.adminBank)}</td><td style="color:#764ba2;">${formatRp(r.feeBank)}</td><td class="text-success">${formatRp(r.biayaPel)}</td><td class="fw-bold" style="color:#00529C;">${formatRp(r.untung)}</td></tr>`; }); if(dataLap.length===0) html='<tr><td colspan="7">Data kosong</td></tr>'; document.getElementById('tabel-laporan').innerHTML = html; document.getElementById('lap-sum-nom').innerText = formatRp(sNom); document.getElementById('lap-sum-bank').innerText = formatRp(sBank); document.getElementById('lap-sum-fee').innerText = formatRp(sFee); document.getElementById('lap-sum-biaya-pel').innerText = formatRp(sPel); document.getElementById('lap-sum-cuan').innerText = formatRp(sCuan); }
+    function prosesLaporan() { 
+      const start = document.getElementById('lap-start').value, end = document.getElementById('lap-end').value, jenis = document.getElementById('lap-jenis').value, filterCabang = document.getElementById('lap-cabang').value; 
+      let dataLap = dataSemua; 
+      if (start || end || jenis || filterCabang) { 
+        document.getElementById('kop-periode').innerText = `Periode: ${start ? formatTglPendek(start) : 'Awal'} s.d ${end ? formatTglPendek(end) : 'Akhir'} ${jenis ? '('+jenis+')' : ''}`; 
+        const stTime = start ? new Date(start).setHours(0,0,0,0) : null, enTime = end ? new Date(end).setHours(23,59,59,999) : null; 
+        dataLap = dataSemua.filter(r => { let pass = true; if (jenis && r.jenis !== jenis) pass = false; if(filterCabang && r.cabang !== filterCabang) pass = false; const rTime = new Date(r.tanggal).getTime(); if (stTime && rTime < stTime) pass = false; if (enTime && rTime > enTime) pass = false; return pass; }); 
+      } else { document.getElementById('kop-periode').innerText = `Periode: Semua Data`; } 
+      
+      let html = ''; let sBank=0, sFee=0, sPel=0, sCuan=0; 
+      dataLap.forEach(r => { sBank += r.adminBank; sFee += r.feeBank; sPel += r.biayaPel; sCuan += r.untung; html += `<tr><td>${formatTglPendek(r.tanggal)}<br><small class="text-muted">${r.cabang}</small></td><td>${r.jenis}</td><td>${formatRp(r.nominal)}</td><td class="text-danger">${formatRp(r.adminBank)}</td><td style="color:#764ba2;">${formatRp(r.feeBank)}</td><td class="text-success">${formatRp(r.biayaPel)}</td><td class="fw-bold" style="color:#00529C;">${formatRp(r.untung)}</td></tr>`; }); 
+      if(dataLap.length===0) html='<tr><td colspan="7">Data kosong</td></tr>'; document.getElementById('tabel-laporan').innerHTML = html; document.getElementById('lap-sum-bank').innerText = formatRp(sBank); document.getElementById('lap-sum-fee').innerText = formatRp(sFee); document.getElementById('lap-sum-biaya-pel').innerText = formatRp(sPel); document.getElementById('lap-sum-cuan').innerText = formatRp(sCuan); 
+    }
+    
     function unduhPDF() { const element = document.getElementById('area-cetak'); const namaFile = 'Laporan_BukuLink_' + new Date().getTime() + '.pdf'; const opt = { margin: 0.5, filename: namaFile, image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2, scrollX: 0, scrollY: 0 }, jsPDF: { unit: 'in', format: 'a4', orientation: 'landscape' } }; Swal.fire({title: 'Memproses PDF...', text: 'File akan segera diunduh.', allowOutsideClick: false, didOpen: () => { Swal.showLoading() }}); html2pdf().set(opt).from(element).save().then(() => { Swal.close(); Swal.fire('Berhasil!', 'PDF berhasil diunduh.', 'success'); }); }
 
     function renderTabelSetupTarif() { const jenisFilter = document.getElementById('tarif-jenis-filter').value; let html = ''; const tarifFiltered = listTarifGlobal.filter(t => t.jenis === jenisFilter).sort((a,b) => a.min - b.min); let maxTertinggi = 0; tarifFiltered.forEach(t => { const realIdx = listTarifGlobal.indexOf(t); html += `<tr><td>${formatRp(t.min)}</td><td>${formatRp(t.max)}</td><td class="fw-bold text-success">${formatRp(t.tarif)}</td><td class="text-danger">${formatRp(t.admBank)}</td><td style="color:#764ba2 !important;">${formatRp(t.feeBank)}</td><td><button class="btn btn-sm btn-danger py-0" onclick="hapusTarif(${realIdx})"><i class="fa-solid fa-xmark"></i></button></td></tr>`; if(t.max > maxTertinggi) maxTertinggi = t.max; }); if(tarifFiltered.length === 0) html='<tr><td colspan="6" class="text-muted small">Belum ada aturan untuk jenis ini</td></tr>'; document.getElementById('tabel-setup-tarif').innerHTML = html; if(tarifFiltered.length > 0) { document.getElementById('tarif-min').value = (maxTertinggi + 1).toLocaleString('id-ID'); } else { document.getElementById('tarif-min').value = '0'; } }
