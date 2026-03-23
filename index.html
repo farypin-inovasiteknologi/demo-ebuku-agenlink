@@ -397,7 +397,7 @@
     // =========================================================================
     // WAJIB: GANTI TULISAN DI BAWAH DENGAN URL WEB APP GOOGLE APPS SCRIPT ANDA
     // =========================================================================
-    const API_URL = "https://script.google.com/a/macros/admin.sma.belajar.id/s/AKfycbwzbvExvB5BFAtENVHquE_-emCMXFQb089pOEBNM5Z0rOwprrU5BDhSqgdhPdRTy6wbhA/exec"; 
+    const API_URL = "https://script.google.com/a/macros/admin.sma.belajar.id/s/AKfycbz7lqGIXWXU_k1Uj-nsL_lQZQ_eQEjWHqGksNOG0k8Fh_Ra1xtUw4MDdj6ZUfr4Ru3zcQ/exec"; 
 
 
     function callAPI(actionName, payloadData) {
@@ -435,7 +435,10 @@
         } else { 
             document.getElementById('view-login').style.display = 'flex'; document.getElementById('mobile-bottom-nav').style.display = 'none'; 
         }
-      }).catch(err => { Swal.fire('Error Database', 'Gagal memuat sistem: ' + err.message, 'error'); });
+      }).catch(err => { 
+          document.getElementById('loading-screen').style.display = 'none'; 
+          Swal.fire('Koneksi Terputus', 'Gagal terhubung ke database. Pastikan URL Web App benar dan akses Deploy diset ke "Siapa saja". Detail: ' + err.message, 'error'); 
+      });
     };
 
     function handleLogin() { 
