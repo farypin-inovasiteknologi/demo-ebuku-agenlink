@@ -32,6 +32,7 @@
     
     #mobile-header { background: #00529C; display: none; position: sticky; top: 0; z-index: 1030; width: 100%;}
     
+    /* CSS HP: Sistem Hide & Show Otomatis */
     .bottom-nav { display: none; position: fixed; bottom: 0; width: 100%; background: #00529C; box-shadow: 0 -4px 15px rgba(0,0,0,0.2); z-index: 1040; justify-content: space-around; align-items: center; padding: 5px 0 10px 0; border-top-left-radius: 20px; border-top-right-radius: 20px;}
     .bottom-nav-item { flex: 1; text-align: center; color: rgba(255,255,255,0.6); font-size: 11px; cursor: pointer; font-weight: 600; transition: 0.3s; }
     .bottom-nav-item.active { color: white; }
@@ -44,11 +45,11 @@
     
     @media (max-width: 768px) { 
       body { background-color: #f4f7f6; } 
+      body.is-logged-in .bottom-nav { display: flex !important; }
       #main-content { border-radius: 0; margin-left: 0; width: 100%; margin-bottom: 75px; } 
       #sidebar { display: none !important; } 
       .content-padding { padding: 15px; } 
       #mobile-header { display: flex; align-items: center; justify-content: space-between; } 
-      .bottom-nav { display: flex; }
       .app-footer { margin-bottom: 70px; }
       .rekap-hp { font-size: 11px !important; }
       .rekap-hp span { font-size: 13px !important; }
@@ -126,9 +127,12 @@
 
     <div id="main-content">
       <div id="mobile-header" class="shadow-sm">
-        <div class="d-flex justify-content-between align-items-center w-100 px-3 py-2">
-          <div class="d-flex align-items-center"><img id="mobile-logo-img" src="" style="width: 32px; height: 32px; object-fit: cover; border-radius: 50%; border: 2px solid #F37021; margin-right: 10px; background:white;"><span class="fw-bold mb-0 text-white" id="mobile-nama-toko" style="font-size: 15px;">eBuku Agenlink</span></div>
-          <div>
+        <div class="d-flex justify-content-between align-items-center w-100 px-3 py-2 flex-nowrap">
+          <div class="d-flex align-items-center text-truncate me-2" style="min-width: 0;">
+            <img id="mobile-logo-img" src="" style="width: 32px; height: 32px; object-fit: cover; border-radius: 50%; border: 2px solid #F37021; margin-right: 10px; background:white; flex-shrink: 0;">
+            <span class="fw-bold mb-0 text-white text-truncate" id="mobile-nama-toko" style="font-size: 15px;">eBuku Agenlink</span>
+          </div>
+          <div class="d-flex flex-shrink-0">
             <button class="btn btn-sm py-1 px-2 fw-bold rounded me-1 text-white btn-akun-mobile" style="border: 1px solid #F37021;" onclick="pindahMenu('view-akun')"><i class="fa-solid fa-users-cog"></i></button>
             <button class="btn btn-sm py-1 px-2 fw-bold rounded me-2 text-white btn-profil-mobile" style="border: 1px solid #F37021;" onclick="pindahMenu('view-atur-profil')"><i class="fa-solid fa-store"></i></button>
             <button class="btn btn-danger btn-sm py-1 px-2 fw-bold rounded" onclick="logout()"><i class="fa-solid fa-power-off"></i></button>
@@ -152,6 +156,7 @@
 
         <div id="view-akun" class="view-section">
           <h4 class="fw-bold mb-4 text-dark"><i class="fa-solid fa-users-cog" style="color:#F37021;"></i> Manajemen Akun</h4>
+          
           <div id="akun-superadmin" class="card border-0 shadow-sm rounded-3 w-100 mb-4" style="display:none;">
             <div class="card-body">
               <div class="d-flex justify-content-between align-items-center mb-3">
@@ -192,8 +197,8 @@
                   <option value="Transfer Bank Lain">Transfer Bank Lain</option>
                   <option value="Bayar Tagihan/Briva">Bayar Tagihan/Briva</option>
                   <option value="Top Up E-Wallet">Top Up E-Wallet</option>
-                  <option value="Numpang Transfer Sesama">Numpang Transfer Sesama</option>
-                  <option value="Numpang Transfer Bank Lain">Numpang Transfer Bank Lain</option>
+                  <option value="Jasa Transfer Sesama">Jasa Transfer (Rek. Pelanggan) Sesama BRI</option>
+                <option value="Jasa Transfer Bank Lain">Jasa Transfer (Rek. Pelanggan) Bank Lain</option>
                 </select>
               </div>
               <div class="bg-light p-3 rounded mb-3 border">
@@ -235,8 +240,8 @@
                     <option value="Transfer Bank Lain">Transfer Bank Lain</option>
                     <option value="Bayar Tagihan/Briva">Bayar Tagihan/Briva</option>
                     <option value="Top Up E-Wallet">Top Up E-Wallet</option>
-                    <option value="Numpang Transfer Sesama">Numpang Transfer Sesama</option>
-                    <option value="Numpang Transfer Bank Lain">Numpang Transfer Bank Lain</option>
+                    <option value="Jasa Transfer Sesama">Jasa Transfer (Rek. Pelanggan) Sesama BRI</option>
+                <option value="Jasa Transfer Bank Lain">Jasa Transfer (Rek. Pelanggan) Bank Lain</option>
                   </select>
                 </div>
                 <div class="col-md-2 col-6"><label class="small fw-bold">Dari Tgl</label><input type="date" id="filter-start" class="form-control form-control-sm"></div>
@@ -262,7 +267,6 @@
                 <div class="col-4 col-md text-center border-end p-1 pt-2">Bank<br><span id="sum-adm" class="text-danger">Rp 0</span></div>
                 <div class="col-4 col-md text-center border-end p-1 pt-2">Fee Bank<br><span id="sum-fee-bank" class="text-secondary" style="color: #764ba2 !important;">Rp 0</span></div>
                 <div class="col-4 col-md text-center p-1 pt-2">Pelanggan<br><span id="sum-biaya-pel" class="text-success">Rp 0</span></div>
-                <div id="sum-nom" style="display:none;"></div>
               </div>
             </div>
           </div>
@@ -300,8 +304,8 @@
                     <option value="Transfer Bank Lain">Transfer Bank Lain</option>
                     <option value="Bayar Tagihan/Briva">Bayar Tagihan/Briva</option>
                     <option value="Top Up E-Wallet">Top Up E-Wallet</option>
-                    <option value="Numpang Transfer Sesama">Numpang Transfer Sesama</option>
-                    <option value="Numpang Transfer Bank Lain">Numpang Transfer Bank Lain</option>
+                    <option value="Jasa Transfer Sesama">Jasa Transfer (Rek. Pelanggan) Sesama BRI</option>
+                <option value="Jasa Transfer Bank Lain">Jasa Transfer (Rek. Pelanggan) Bank Lain</option>
                   </select>
                 </div>
                 <div class="col-md-2 col-6"><label class="small fw-bold">Dari Tgl</label><input type="date" id="lap-start" class="form-control form-control-sm"></div>
@@ -356,6 +360,14 @@
     </div> 
   </div> 
 
+  <div class="bottom-nav" id="mobile-bottom-nav">
+    <div class="bottom-nav-item active menu-dashboard" onclick="pindahMenu('view-dashboard')"><i class="fa-solid fa-chart-pie"></i><span>Beranda</span></div>
+    <div class="bottom-nav-item menu-atur-tarif" onclick="pindahMenu('view-atur-tarif')"><i class="fa-solid fa-tags"></i><span>Tarif</span></div>
+    <div class="bottom-nav-item bottom-nav-center menu-transaksi" onclick="pindahMenu('view-transaksi')"><div class="circle"><i class="fa-solid fa-plus"></i></div><span style="font-weight:bold; color:white; display:block; margin-top:5px;">Transaksi</span></div>
+    <div class="bottom-nav-item menu-laporan" onclick="pindahMenu('view-laporan')"><i class="fa-solid fa-file-pdf"></i><span>Laporan</span></div>
+    <div class="bottom-nav-item menu-piutang" onclick="pindahMenu('view-piutang')"><i class="fa-solid fa-book-open"></i><span>Bon</span></div>
+  </div>
+
   <div class="modal fade" id="modalAkun" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content border-0 shadow">
@@ -394,8 +406,8 @@
                 <option value="Transfer Bank Lain">Transfer Bank Lain</option>
                 <option value="Bayar Tagihan/Briva">Bayar Tagihan/Briva</option>
                 <option value="Top Up E-Wallet">Top Up E-Wallet</option>
-                <option value="Numpang Transfer Sesama">Numpang Transfer Sesama</option>
-                <option value="Numpang Transfer Bank Lain">Numpang Transfer Bank Lain</option>
+                <option value="Jasa Transfer Sesama">Jasa Transfer (Rek. Pelanggan) Sesama BRI</option>
+                <option value="Jasa Transfer Bank Lain">Jasa Transfer (Rek. Pelanggan) Bank Lain</option>
               </select>
             </div>
             <div class="mb-3"><label class="form-label small fw-bold">Nominal Transaksi (Rp)</label><input type="text" inputmode="numeric" id="trans-nominal" class="form-control border-primary form-control-lg fw-bold" style="color:#00529C;" required oninput="formatInputUang(event)"></div>
@@ -428,20 +440,12 @@
     </div>
   </div>
 
-  <div id="area-cetak-bon" style="background: white; padding: 15px; width: 100%; display: none;">
-    <div class="text-center mb-4"><h5 class="fw-bold mb-1 text-dark" style="text-decoration: underline;">LAPORAN CATATAN BON (PIUTANG)</h5><small class="fw-bold" style="color:#F37021;" id="pdf-bon-toko">NAMA TOKO</small></div>
-    <table class="table table-bordered table-sm mb-4" style="color: black; border-color: #000 !important;"><thead class="table-light text-center"><tr><th>Tgl/Cabang</th><th>Nama Pelanggan</th><th>Nominal</th><th>Status</th><th>Tgl Lunas</th></tr></thead>
-      <tbody id="tabel-laporan-bon" class="text-center"></tbody>
-      <tfoot class="table-light fw-bold text-center"><tr><td colspan="2" class="text-end">TOTAL BELUM LUNAS:</td><td id="bon-sum-belum" class="text-danger">Rp 0</td><td colspan="2"></td></tr></tfoot>
-    </table>
-  </div>
-
   <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
   <script>
     // =========================================================================
     // WAJIB: GANTI TULISAN DI BAWAH DENGAN URL WEB APP GOOGLE APPS SCRIPT ANDA
     // =========================================================================
-    const API_URL = "https://script.google.com/a/macros/admin.sma.belajar.id/s/AKfycbx92uB0uJfNk9-hCE7XpQqVraQ4nbISBgHQmaMzpDcCpNxj-LrsLPPDUHv0N111Nq9yyA/exec"; 
+    const API_URL = "https://script.google.com/a/macros/admin.sma.belajar.id/s/AKfycbwerw8_4Zu9O6MXoHBhnxZLSxIxLeuw_86RmDUUzY8lwtul4Ve_63ODZfIg8YPR2WOP4g/exec"; 
 
     function callAPI(actionName, payloadData) {
       return fetch(API_URL, {
@@ -474,19 +478,11 @@
     function bersihkanOverlay() { document.body.className = ''; document.body.style = ''; document.querySelectorAll('.modal-backdrop').forEach(el => el.remove()); if (typeof Swal !== 'undefined') Swal.close(); }
     function togglePassword(inputId, iconId) { const input = document.getElementById(inputId); const icon = document.getElementById(iconId); if(!input || !icon) return; if (input.type === "password") { input.type = "text"; icon.classList.remove("fa-eye"); icon.classList.add("fa-eye-slash"); } else { input.type = "password"; icon.classList.remove("fa-eye-slash"); icon.classList.add("fa-eye"); } }
 
-    // FUNGSI LOADING TIMER
     function tampilkanLoading(pesan) {
       let timerInterval;
       Swal.fire({
         title: pesan, html: 'Memproses dalam <b>5</b> detik...', timer: 5000, timerProgressBar: true, allowOutsideClick: false,
-        didOpen: () => {
-          Swal.showLoading();
-          const b = Swal.getHtmlContainer().querySelector('b');
-          timerInterval = setInterval(() => {
-            const left = Math.ceil(Swal.getTimerLeft() / 1000);
-            if(b) b.textContent = left > 0 ? left : 0;
-          }, 1000);
-        },
+        didOpen: () => { Swal.showLoading(); const b = Swal.getHtmlContainer().querySelector('b'); timerInterval = setInterval(() => { const left = Math.ceil(Swal.getTimerLeft() / 1000); if(b) b.textContent = left > 0 ? left : 0; }, 1000); },
         willClose: () => { clearInterval(timerInterval); }
       });
     }
@@ -501,10 +497,12 @@
         if(data.linkWindows && btnWin) { btnWin.href = data.linkWindows; btnWin.style.display = 'inline-block'; document.getElementById('area-download').style.display = 'block'; }
         if(data.linkAndroid && btnAnd) { btnAnd.href = data.linkAndroid; btnAnd.style.display = 'inline-block'; document.getElementById('area-download').style.display = 'block'; }
         document.getElementById('loading-screen').style.display = 'none'; 
+        
         if(localStorage.getItem('bukuLinkLoggedIn') === 'true') { 
-            document.getElementById('view-login').style.display = 'none'; document.getElementById('app-wrapper').style.display = 'flex'; if(document.getElementById('mobile-bottom-nav')) document.getElementById('mobile-bottom-nav').style.display = ''; 
+            document.getElementById('view-login').style.display = 'none'; document.getElementById('app-wrapper').style.display = 'flex'; 
+            document.body.classList.add('is-logged-in'); // Mengatur menu HP otomatis via CSS
             terapkanRoleAkses(); pindahMenu('view-dashboard'); muatDashboard(false); 
-        } else { document.getElementById('view-login').style.display = 'flex'; if(document.getElementById('mobile-bottom-nav')) document.getElementById('mobile-bottom-nav').style.display = 'none'; }
+        } else { document.getElementById('view-login').style.display = 'flex'; document.body.classList.remove('is-logged-in'); }
       }).catch(err => { document.getElementById('loading-screen').style.display = 'none'; Swal.fire('Koneksi Terputus', err.message, 'error'); });
     };
 
@@ -516,12 +514,12 @@
             btn.innerHTML = '<i class="fa-solid fa-right-to-bracket"></i> Masuk Aplikasi'; btn.disabled = false; 
             if(res && res.valid) { 
                 localStorage.setItem('bukuLinkLoggedIn', 'true'); localStorage.setItem('bukuLinkRole', res.role); localStorage.setItem('bukuLinkCabang', res.cabang); localStorage.setItem('bukuLinkUser', res.username);
-                try { setTimeout(() => { bersihkanOverlay(); document.getElementById('view-login').style.display = 'none'; document.getElementById('app-wrapper').style.display = 'flex'; if(document.getElementById('mobile-bottom-nav')) document.getElementById('mobile-bottom-nav').style.display = ''; terapkanRoleAkses(); pindahMenu('view-dashboard'); muatDashboard(false); }, 300); } catch(e) { window.location.reload(); }
+                try { setTimeout(() => { bersihkanOverlay(); document.getElementById('view-login').style.display = 'none'; document.getElementById('app-wrapper').style.display = 'flex'; document.body.classList.add('is-logged-in'); terapkanRoleAkses(); pindahMenu('view-dashboard'); muatDashboard(false); }, 300); } catch(e) { window.location.reload(); }
             } else Swal.fire('Gagal', 'Username/Password salah!', 'error'); 
         }).catch(err => { btn.innerHTML = '<i class="fa-solid fa-right-to-bracket"></i> Masuk Aplikasi'; btn.disabled = false; Swal.fire('Error', err.message, 'error'); });
     }
     
-    function logout() { localStorage.removeItem('bukuLinkLoggedIn'); localStorage.removeItem('bukuLinkRole'); localStorage.removeItem('bukuLinkCabang'); localStorage.removeItem('bukuLinkUser'); document.getElementById('app-wrapper').style.display = 'none'; document.getElementById('view-login').style.display = 'flex'; if(document.getElementById('mobile-bottom-nav')) document.getElementById('mobile-bottom-nav').style.display = 'none'; bersihkanOverlay(); }
+    function logout() { localStorage.removeItem('bukuLinkLoggedIn'); localStorage.removeItem('bukuLinkRole'); localStorage.removeItem('bukuLinkCabang'); localStorage.removeItem('bukuLinkUser'); document.getElementById('app-wrapper').style.display = 'none'; document.getElementById('view-login').style.display = 'flex'; document.body.classList.remove('is-logged-in'); bersihkanOverlay(); }
     
     function terapkanRoleAkses() {
       const userRole = localStorage.getItem('bukuLinkRole') || 'Cabang', userCabang = localStorage.getItem('bukuLinkCabang') || 'Pusat', userL = localStorage.getItem('bukuLinkUser') || '';
@@ -547,10 +545,7 @@
       
       tampilkanLoading('Memuat Data Terbaru...');
       callAPI('getDashboardData', { muatArsip: statusArsip, role: role, cabang: cabang }).then(data => { 
-        icon.classList.remove('fa-spin'); 
-        Swal.close();
-        prosesTampilDashboard(data); 
-        Swal.fire({ title: 'Data Diperbarui!', icon: 'success', toast: true, position: 'top-end', showConfirmButton: false, timer: 1500 }); 
+        icon.classList.remove('fa-spin'); Swal.close(); prosesTampilDashboard(data); Swal.fire({ title: 'Data Diperbarui!', icon: 'success', toast: true, position: 'top-end', showConfirmButton: false, timer: 1500 }); 
       }).catch(err => { icon.classList.remove('fa-spin'); Swal.close(); Swal.fire('Error', 'Gagal memuat ulang data', 'error'); }); 
     }
     
@@ -593,11 +588,21 @@
         }
 
         const dataAktif = dataSemua.filter(x => x.sheetName === 'Transaksi');
-        if(document.getElementById('dash-trx')) document.getElementById('dash-trx').innerText = data.totalTrx; 
-        if(document.getElementById('dash-cuan')) document.getElementById('dash-cuan').innerText = formatRp(data.untungHariIni); 
         
-        // BUG FIX: KEMBALIKAN PENJUMLAHAN NOMINAL AGAR BERJALAN DI BACKGROUND
+        // HITUNG HARI INI BERDASARKAN BROWSER
+        const tglSekarang = new Date();
+        const dStr = tglSekarang.getFullYear() + "-" + String(tglSekarang.getMonth()+1).padStart(2,'0') + "-" + String(tglSekarang.getDate()).padStart(2,'0');
+        const dataHariIni = dataAktif.filter(x => x.tanggal.startsWith(dStr));
+
+        if(document.getElementById('dash-trx')) document.getElementById('dash-trx').innerText = dataHariIni.length; 
+        if(document.getElementById('dash-cuan')) document.getElementById('dash-cuan').innerText = formatRp(dataHariIni.reduce((a,c)=>a+c.untung,0)); 
+        
+        // PERBAIKAN: Hitungan Nominal Dikembalikan (Disembunyikan di HTML saja, tapi JS tetap menghitung)
         if(document.getElementById('sum-nom')) document.getElementById('sum-nom').innerText = formatRp(dataAktif.reduce((a,c)=>a+c.nominal,0)); 
+        if(document.getElementById('dash-nom')) document.getElementById('dash-nom').innerText = formatRp(dataAktif.reduce((a,c)=>a+c.nominal,0)); 
+        if(document.getElementById('dash-bank')) document.getElementById('dash-bank').innerText = formatRp(dataAktif.reduce((a,c)=>a+c.adminBank,0)); 
+        if(document.getElementById('dash-pel')) document.getElementById('dash-pel').innerText = formatRp(dataAktif.reduce((a,c)=>a+c.biayaPel,0)); 
+        if(document.getElementById('dash-fee')) document.getElementById('dash-fee').innerText = formatRp(dataAktif.reduce((a,c)=>a+c.feeBank,0)); 
         
         terapkanFilter(); renderTabelSetupTarif(); renderGrafik(dataAktif); renderTabelBon();
     }
@@ -606,15 +611,22 @@
     function bukaModalAkunTambah() { document.getElementById('form-akun').reset(); document.getElementById('akun-user-lama').value = ""; document.getElementById('form-akun-cabang').value = ""; document.getElementById('modal-akun-title').innerText = 'Tambah Akun Baru'; document.getElementById('akun-username').readOnly = false; document.getElementById('label-pass-akun').innerText = 'Password (Wajib)'; document.getElementById('akun-password').required = true; new bootstrap.Modal(document.getElementById('modalAkun')).show(); }
     function bukaModalAkunEdit(username) { const data = globalListAkun.find(x => x.username === username); if(!data) return; document.getElementById('akun-user-lama').value = data.username; document.getElementById('akun-username').value = data.username; document.getElementById('akun-username').readOnly = true; document.getElementById('akun-email').value = data.email; document.getElementById('akun-role').value = data.role; document.getElementById('form-akun-cabang').value = data.cabang; document.getElementById('label-pass-akun').innerText = 'Ganti Password (Opsional)'; document.getElementById('akun-password').value = ''; document.getElementById('akun-password').required = false; document.getElementById('modal-akun-title').innerText = 'Edit Akun'; new bootstrap.Modal(document.getElementById('modalAkun')).show(); }
     
-    function handleSimpanAkun() { const btn = document.getElementById('btn-simpan-akun-form'); btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Menyimpan...'; btn.disabled = true; const userLama = document.getElementById('akun-user-lama').value; const dataA = { username: document.getElementById('akun-username').value, email: document.getElementById('akun-email').value, password: document.getElementById('akun-password').value, role: document.getElementById('akun-role').value, cabang: document.getElementById('form-akun-cabang').value }; const aksi = userLama === "" ? 'simpanAkun' : 'editAkun'; callAPI(aksi, { userLama: userLama, data: dataA }).then(() => { const modalObj = bootstrap.Modal.getInstance(document.getElementById('modalAkun')); if(modalObj) modalObj.hide(); setTimeout(bersihkanOverlay, 300); btn.innerHTML = '<i class="fa-solid fa-save"></i> Simpan Akun'; btn.disabled = false; Swal.fire('Tersimpan!', 'Data akun diperbarui.', 'success'); reloadDataApp(); }).catch(err => { btn.innerHTML = '<i class="fa-solid fa-save"></i> Simpan Akun'; btn.disabled = false; Swal.fire('Error', err.message, 'error'); }); }
-    function hapusAkun(username) { if(username === localStorage.getItem('bukuLinkUser')) return Swal.fire('Ditolak', 'Anda tidak bisa menghapus akun Anda sendiri saat sedang login!', 'error'); Swal.fire({ title: 'Hapus Akun?', text: "Akun ini tidak akan bisa login lagi.", icon: 'warning', showCancelButton: true, confirmButtonText: 'Ya, Hapus' }).then((res) => { if (res.isConfirmed) { Swal.fire({title:'Menghapus...', showConfirmButton: false, allowOutsideClick: false}); callAPI('hapusAkun', {username: username}).then(()=> { Swal.close(); reloadDataApp(); }); } }); }
-    function simpanPasswordCabang() { const pass = document.getElementById('set-password-cabang').value; const userL = localStorage.getItem('bukuLinkUser'); if(!pass || pass.trim() === '') return Swal.fire('Oops', 'Password tidak boleh kosong!', 'warning'); const btn = document.getElementById('btn-simpan-pass-cabang'); btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Loading...'; btn.disabled = true; callAPI('gantiPasswordCabang', { username: userL, passwordBaru: pass }).then(() => { btn.innerHTML = '<i class="fa-solid fa-save"></i> UPDATE PASSWORD'; btn.disabled = false; document.getElementById('set-password-cabang').value = ''; Swal.fire('Sukses', 'Password Anda berhasil diubah!', 'success'); }).catch(err => { btn.innerHTML = '<i class="fa-solid fa-save"></i> UPDATE PASSWORD'; btn.disabled = false; Swal.fire('Error', err.message, 'error'); }); }
+    function handleSimpanAkun() { const btn = document.getElementById('btn-simpan-akun-form'); btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Menyimpan...'; btn.disabled = true; const userLama = document.getElementById('akun-user-lama').value; const dataA = { username: document.getElementById('akun-username').value, email: document.getElementById('akun-email').value, password: document.getElementById('akun-password').value, role: document.getElementById('akun-role').value, cabang: document.getElementById('form-akun-cabang').value }; const aksi = userLama === "" ? 'simpanAkun' : 'editAkun'; tampilkanLoading('Menyimpan Akun...'); callAPI(aksi, { userLama: userLama, data: dataA }).then(() => { const modalObj = bootstrap.Modal.getInstance(document.getElementById('modalAkun')); if(modalObj) modalObj.hide(); Swal.close(); setTimeout(bersihkanOverlay, 300); btn.innerHTML = '<i class="fa-solid fa-save"></i> Simpan Akun'; btn.disabled = false; Swal.fire('Tersimpan!', 'Data akun diperbarui.', 'success'); reloadDataApp(); }).catch(err => { Swal.close(); btn.innerHTML = '<i class="fa-solid fa-save"></i> Simpan Akun'; btn.disabled = false; Swal.fire('Error', err.message, 'error'); }); }
+    function hapusAkun(username) { if(username === localStorage.getItem('bukuLinkUser')) return Swal.fire('Ditolak', 'Anda tidak bisa menghapus akun Anda sendiri saat sedang login!', 'error'); Swal.fire({ title: 'Hapus Akun?', text: "Akun ini tidak akan bisa login lagi.", icon: 'warning', showCancelButton: true, confirmButtonText: 'Ya, Hapus' }).then((res) => { if (res.isConfirmed) { tampilkanLoading('Menghapus Akun...'); callAPI('hapusAkun', {username: username}).then(()=> { Swal.close(); reloadDataApp(); }); } }); }
+    function simpanPasswordCabang() { const pass = document.getElementById('set-password-cabang').value; const userL = localStorage.getItem('bukuLinkUser'); if(!pass || pass.trim() === '') return Swal.fire('Oops', 'Password tidak boleh kosong!', 'warning'); const btn = document.getElementById('btn-simpan-pass-cabang'); btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Loading...'; btn.disabled = true; tampilkanLoading('Update Password...'); callAPI('gantiPasswordCabang', { username: userL, passwordBaru: pass }).then(() => { Swal.close(); btn.innerHTML = '<i class="fa-solid fa-save"></i> UPDATE PASSWORD'; btn.disabled = false; document.getElementById('set-password-cabang').value = ''; Swal.fire('Sukses', 'Password Anda berhasil diubah!', 'success'); }).catch(err => { Swal.close(); btn.innerHTML = '<i class="fa-solid fa-save"></i> UPDATE PASSWORD'; btn.disabled = false; Swal.fire('Error', err.message, 'error'); }); }
 
     function renderGrafik(dataGrafik) { const ctx = document.getElementById('chartKeuntungan')?.getContext('2d'); if(!ctx) return; if(chartInstance) chartInstance.destroy(); const groupedData = {}; dataGrafik.forEach(r => { if(!groupedData[r.tanggal]) groupedData[r.tanggal] = 0; groupedData[r.tanggal] += r.untung; }); const sortedDates = Object.keys(groupedData).sort().slice(-7); const labels = sortedDates.map(d => formatTglPendek(d)); const chartData = sortedDates.map(d => groupedData[d]); chartInstance = new Chart(ctx, { type: 'line', data: { labels: labels, datasets: [{ label: 'Keuntungan (Rp)', data: chartData, backgroundColor: 'rgba(0, 82, 156, 0.2)', borderColor: '#00529C', borderWidth: 3, pointBackgroundColor: '#fff', pointBorderColor: '#00529C', pointRadius: 5, fill: true, tension: 0.3 }] }, options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } } }); }
 
     function terapkanFilter() { const jenis = document.getElementById('filter-jenis').value, start = document.getElementById('filter-start').value, end = document.getElementById('filter-end').value; const filterCabang = document.getElementById('filter-cabang') ? document.getElementById('filter-cabang').value : ''; const stTime = start ? new Date(start).setHours(0,0,0,0) : null, enTime = end ? new Date(end).setHours(23,59,59,999) : null; dataTampil = dataSemua.filter(r => { let pass = true; if (jenis && r.jenis !== jenis) pass = false; if (filterCabang && r.cabang !== filterCabang) pass = false; const rTime = new Date(r.tanggal).getTime(); if (stTime && rTime < stTime) pass = false; if (enTime && rTime > enTime) pass = false; return pass; }); currentPage = 1; renderTabel(); }
 
-    function renderTabel() { const startIdx = (currentPage - 1) * rowsPerPage, endIdx = startIdx + rowsPerPage; const dataPage = dataTampil.slice(startIdx, endIdx); let htmlTabel = ''; const role = localStorage.getItem('bukuLinkRole'), cabangSaya = localStorage.getItem('bukuLinkCabang'); if(dataPage.length === 0) htmlTabel = '<tr><td colspan="8" class="text-muted">Data kosong</td></tr>'; else dataPage.forEach(r => { const badgeArsip = r.sheetName === 'Arsip' ? '<br><span class="badge-arsip">Arsip</span>' : ''; let tombolAksi = `<span class="badge bg-secondary" style="font-size:10px;">Akses Terbatas</span>`; if(role === 'Superadmin' || r.cabang === cabangSaya) { tombolAksi = `<button class="btn btn-warning btn-sm py-0 px-1 mb-1" onclick="bukaModalEdit('${r.uid}', ${r.idRow}, '${r.sheetName}')"><i class="fa-solid fa-pen"></i></button> <button class="btn btn-danger btn-sm py-0 px-1 mb-1" onclick="hapusData('${r.uid}', ${r.idRow}, '${r.sheetName}')"><i class="fa-solid fa-trash"></i></button>`; } htmlTabel += `<tr><td>${formatTglPendek(r.tanggal)}<br><small class="text-muted">${r.cabang}</small>${badgeArsip}</td><td class="text-truncate" style="max-width:80px;">${r.jenis}</td><td>${formatRp(r.nominal)}</td><td class="text-danger">-${formatRp(r.adminBank)}</td><td style="color:#764ba2 !important;">+${formatRp(r.feeBank)}</td><td class="text-success">+${formatRp(r.biayaPel)}</td><td class="fw-bold" style="color:#00529C;">${formatRp(r.untung)}</td><td>${tombolAksi}</td></tr>`; }); if(document.getElementById('tabel-riwayat')) document.getElementById('tabel-riwayat').innerHTML = htmlTabel; let pageHtml = ''; const totalPages = Math.ceil(dataTampil.length / rowsPerPage); for (let i = 1; i <= totalPages; i++) pageHtml += `<li class="page-item ${i === currentPage ? 'active' : ''}"><button class="page-link" onclick="gantiHalaman(${i})">${i}</button></li>`; if(document.getElementById('pagination-container')) document.getElementById('pagination-container').innerHTML = pageHtml; }
+    function renderTabel() { const startIdx = (currentPage - 1) * rowsPerPage, endIdx = startIdx + rowsPerPage; const dataPage = dataTampil.slice(startIdx, endIdx); let htmlTabel = ''; const role = localStorage.getItem('bukuLinkRole'), cabangSaya = localStorage.getItem('bukuLinkCabang'); if(dataPage.length === 0) htmlTabel = '<tr><td colspan="8" class="text-muted">Data kosong</td></tr>'; else dataPage.forEach(r => { const badgeArsip = r.sheetName === 'Arsip' ? '<br><span class="badge-arsip">Arsip</span>' : ''; let tombolAksi = `<span class="badge bg-secondary" style="font-size:10px;">Akses Terbatas</span>`; if(role === 'Superadmin' || r.cabang === cabangSaya) { tombolAksi = `<button class="btn btn-warning btn-sm py-0 px-1 mb-1" onclick="bukaModalEdit('${r.uid}', ${r.idRow}, '${r.sheetName}')"><i class="fa-solid fa-pen"></i></button> <button class="btn btn-danger btn-sm py-0 px-1 mb-1" onclick="hapusData('${r.uid}', ${r.idRow}, '${r.sheetName}')"><i class="fa-solid fa-trash"></i></button>`; } htmlTabel += `<tr><td>${formatTglPendek(r.tanggal)}<br><small class="text-muted">${r.cabang}</small>${badgeArsip}</td><td class="text-truncate" style="max-width:80px;">${r.jenis}</td><td>${formatRp(r.nominal)}</td><td class="text-danger">-${formatRp(r.adminBank)}</td><td style="color:#764ba2 !important;">+${formatRp(r.feeBank)}</td><td class="text-success">+${formatRp(r.biayaPel)}</td><td class="fw-bold" style="color:#00529C;">${formatRp(r.untung)}</td><td>${tombolAksi}</td></tr>`; }); if(document.getElementById('tabel-riwayat')) document.getElementById('tabel-riwayat').innerHTML = htmlTabel; let pageHtml = ''; const totalPages = Math.ceil(dataTampil.length / rowsPerPage); for (let i = 1; i <= totalPages; i++) pageHtml += `<li class="page-item ${i === currentPage ? 'active' : ''}"><button class="page-link" onclick="gantiHalaman(${i})">${i}</button></li>`; if(document.getElementById('pagination-container')) document.getElementById('pagination-container').innerHTML = pageHtml; 
+      // Penjumlahan tabel transaksi per filter
+      if(document.getElementById('sum-trx')) document.getElementById('sum-trx').innerText = dataTampil.length; 
+      if(document.getElementById('sum-adm')) document.getElementById('sum-adm').innerText = formatRp(dataTampil.reduce((a, c) => a + c.adminBank, 0)); 
+      if(document.getElementById('sum-fee-bank')) document.getElementById('sum-fee-bank').innerText = formatRp(dataTampil.reduce((a, c) => a + c.feeBank, 0)); 
+      if(document.getElementById('sum-biaya-pel')) document.getElementById('sum-biaya-pel').innerText = formatRp(dataTampil.reduce((a, c) => a + c.biayaPel, 0)); 
+      if(document.getElementById('sum-cuan')) document.getElementById('sum-cuan').innerText = formatRp(dataTampil.reduce((a, c) => a + c.untung, 0)); 
+    }
     function gantiHalaman(page) { currentPage = page; renderTabel(); }
 
     function cekAutoTarif() { const jenis = document.getElementById('trans-jenis').value; const nom = unformatUang(document.getElementById('trans-nominal').value); const inputBiaya = document.getElementById('trans-biaya-pelanggan'); const inputAdmBank = document.getElementById('trans-admin-bank'); const inputFeeBank = document.getElementById('trans-fee-bank'); if(!jenis || nom === 0) { inputBiaya.value = ''; inputAdmBank.value = ''; inputFeeBank.value = ''; return; } const match = listTarifGlobal.find(t => t.jenis === jenis && nom >= t.min && nom <= t.max); if (match) { inputBiaya.value = match.tarif.toLocaleString('id-ID'); inputAdmBank.value = match.admBank.toLocaleString('id-ID'); inputFeeBank.value = match.feeBank.toLocaleString('id-ID'); } else { inputBiaya.value = ''; inputAdmBank.value = ''; inputFeeBank.value = ''; } }
@@ -631,7 +643,6 @@
       tampilkanLoading('Menyimpan Transaksi...');
       callAPI(aksi, { uid: uid, idRowLama: idRow, data: dataTrans, namaSheet: sheetName }).then(() => { 
           Swal.close();
-          // FIRE AND FORGET ARSIP KE BELAKANG LAYAR
           fetch(API_URL, { method: 'POST', headers: {'Content-Type': 'text/plain;charset=utf-8'}, body: JSON.stringify({action: 'jalankanArsip'})});
           selesaiSimpan(); 
       }).catch(err => { Swal.close(); btn.innerHTML = '<i class="fa-solid fa-check"></i> Simpan Data'; btn.disabled = false; Swal.fire('Error', err.message, 'error'); });
@@ -643,17 +654,7 @@
     function renderTabelBon() { let html = ''; let htmlPDF = ''; let totalBelum = 0; if(dataPiutang.length === 0) { html = '<tr><td colspan="6">Belum ada bon</td></tr>'; htmlPDF = html; } else { dataPiutang.forEach(b => { let stBadge = b.status === 'Lunas' ? `<span class="badge bg-success">Lunas</span>` : `<span class="badge bg-danger">Belum Lunas</span>`; let btnLunas = b.status === 'Lunas' ? '' : `<button class="btn btn-success btn-sm py-0 px-1 mb-1 me-1" onclick="lunasiBon('${b.uid}', ${b.idRow})" title="Tandai Lunas"><i class="fa-solid fa-check"></i></button>`; let tglLnsStr = b.status === 'Lunas' ? formatTglPendek(b.tglLunas) : '-'; if(b.status !== 'Lunas') totalBelum += b.nominal; html += `<tr><td>${formatTglPendek(b.tanggal)}<br><small class="text-muted">${b.cabang || 'Pusat'}</small></td><td>${b.nama}</td><td class="fw-bold">${formatRp(b.nominal)}</td><td>${stBadge}</td><td>${tglLnsStr}</td><td>${btnLunas}<button class="btn btn-warning btn-sm py-0 px-1 mb-1 me-1" onclick="bukaModalBonEdit('${b.uid}', ${b.idRow})"><i class="fa-solid fa-pen"></i></button><button class="btn btn-danger btn-sm py-0 px-1 mb-1" onclick="hapusBon('${b.uid}', ${b.idRow})"><i class="fa-solid fa-trash"></i></button></td></tr>`; htmlPDF += `<tr><td>${formatTglPendek(b.tanggal)}<br><small class="text-muted">${b.cabang || 'Pusat'}</small></td><td>${b.nama}</td><td class="fw-bold">${formatRp(b.nominal)}</td><td>${b.status}</td><td>${tglLnsStr}</td></tr>`; }); } if(document.getElementById('tabel-bon')) document.getElementById('tabel-bon').innerHTML = html; if(document.getElementById('tabel-laporan-bon')) document.getElementById('tabel-laporan-bon').innerHTML = htmlPDF; if(document.getElementById('bon-sum-belum')) document.getElementById('bon-sum-belum').innerText = formatRp(totalBelum); }
     function bukaModalBonTambah() { document.getElementById('form-bon').reset(); document.getElementById('bon-id').value = ""; document.getElementById('bon-uid').value = ""; document.getElementById('modal-bon-title').innerHTML = '<i class="fa-solid fa-book-open"></i> Tambah Bon Baru'; document.getElementById('bon-tanggal').valueAsDate = new Date(); new bootstrap.Modal(document.getElementById('modalBon')).show(); }
     function bukaModalBonEdit(uid, idRow) { const data = dataPiutang.find(x => x.idRow === idRow); if(!data) return; document.getElementById('bon-id').value = data.idRow; document.getElementById('bon-uid').value = data.uid; document.getElementById('modal-bon-title').innerHTML = '<i class="fa-solid fa-pen"></i> Edit Bon'; document.getElementById('bon-tanggal').value = data.tanggal; document.getElementById('bon-nama').value = data.nama; document.getElementById('bon-nominal').value = data.nominal.toLocaleString('id-ID'); new bootstrap.Modal(document.getElementById('modalBon')).show(); }
-    
-    function handleBon() { 
-      const btn = document.getElementById('btn-bon'); btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Menyimpan...'; btn.disabled = true; 
-      const idRow = document.getElementById('bon-id').value, uid = document.getElementById('bon-uid').value; 
-      const userCabang = localStorage.getItem('bukuLinkCabang') || 'Pusat'; 
-      const dataBon = { tanggal: document.getElementById('bon-tanggal').value, nama: document.getElementById('bon-nama').value, nominal: unformatUang(document.getElementById('bon-nominal').value), cabang: userCabang }; 
-      const aksi = idRow === "" ? 'simpanPiutang' : 'editPiutang'; 
-      tampilkanLoading('Menyimpan Bon...');
-      callAPI(aksi, {uid: uid, idRowLama: idRow, data: dataBon}).then(() => { Swal.close(); selesaiBon(); }).catch(err => { Swal.close(); btn.innerHTML = '<i class="fa-solid fa-save"></i> Simpan Bon'; btn.disabled = false; Swal.fire('Error', err.message, 'error'); }); 
-    }
-    
+    function handleBon() { const btn = document.getElementById('btn-bon'); btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Menyimpan...'; btn.disabled = true; const idRow = document.getElementById('bon-id').value, uid = document.getElementById('bon-uid').value; const userCabang = localStorage.getItem('bukuLinkCabang') || 'Pusat'; const dataBon = { tanggal: document.getElementById('bon-tanggal').value, nama: document.getElementById('bon-nama').value, nominal: unformatUang(document.getElementById('bon-nominal').value), cabang: userCabang }; const aksi = idRow === "" ? 'simpanPiutang' : 'editPiutang'; tampilkanLoading('Menyimpan Bon...'); callAPI(aksi, {uid: uid, idRowLama: idRow, data: dataBon}).then(() => { Swal.close(); selesaiBon(); }).catch(err => { Swal.close(); btn.innerHTML = '<i class="fa-solid fa-save"></i> Simpan Bon'; btn.disabled = false; Swal.fire('Error', err.message, 'error'); }); }
     function selesaiBon() { const modalObj = bootstrap.Modal.getInstance(document.getElementById('modalBon')); if(modalObj) modalObj.hide(); setTimeout(bersihkanOverlay, 300); document.getElementById('btn-bon').innerHTML = '<i class="fa-solid fa-save"></i> Simpan Bon'; document.getElementById('btn-bon').disabled = false; Swal.fire({ icon: 'success', title: 'Tersimpan!', timer: 1500, showConfirmButton: false }); muatDashboard(document.getElementById('toggle-arsip').checked); }
     function hapusBon(uid, idRow) { Swal.fire({ title: 'Hapus Bon?', text: "Data ini akan dihapus permanen.", icon: 'warning', showCancelButton: true, confirmButtonText: 'Ya, Hapus' }).then((res) => { if (res.isConfirmed) { tampilkanLoading('Menghapus Data...'); callAPI('hapusPiutang', {uid: uid, idRowLama: idRow}).then(()=> { Swal.close(); muatDashboard(document.getElementById('toggle-arsip').checked); }); } }); }
     function lunasiBon(uid, idRow) { Swal.fire({ title: 'Tandai Lunas?', text: "Bon ini akan dicatat sudah dibayar hari ini.", icon: 'info', showCancelButton: true, confirmButtonText: 'Ya, Lunas!' }).then((res) => { if (res.isConfirmed) { tampilkanLoading('Mencatat Pelunasan...'); callAPI('lunasiPiutang', {uid: uid, idRowLama: idRow}).then(() => { Swal.close(); muatDashboard(document.getElementById('toggle-arsip').checked); }); } }); }
@@ -672,3 +673,5 @@
     
     function simpanProfilKeServer() { const btn = document.getElementById('btn-simpan-profil'); btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Menyimpan...'; btn.disabled = true; const dataP = { namaToko: document.getElementById('set-nama').value, alamat: document.getElementById('set-alamat').value, kontak: document.getElementById('set-kontak').value, urlLogoLama: document.getElementById('set-url-lama').value, linkWindows: document.getElementById('set-link-win').value, linkAndroid: document.getElementById('set-link-and').value }; tampilkanLoading('Menyimpan Profil...'); callAPI('simpanProfil', {dataProfile: dataP, dataGambarBase64: croppedBase64}).then(() => { Swal.close(); Swal.fire('Berhasil!', 'Profil Toko diperbarui.', 'success'); croppedBase64 = null; document.getElementById('image-workspace').style.display = 'none'; document.getElementById('upload-logo').value = ''; btn.innerHTML = '<i class="fa-solid fa-save"></i> SIMPAN PROFIL TOKO'; btn.disabled = false; document.getElementById('sidebar-nama-toko').innerText = dataP.namaToko; document.getElementById('mobile-nama-toko').innerText = dataP.namaToko; document.getElementById('footer-nama-toko').innerText = dataP.namaToko; document.getElementById('pdf-nama-toko').innerText = dataP.namaToko; document.getElementById('pdf-alamat').innerText = dataP.alamat; }).catch(err => { Swal.close(); btn.innerHTML = '<i class="fa-solid fa-save"></i> SIMPAN PROFIL TOKO'; btn.disabled = false; Swal.fire('Error', err.message, 'error');}); }
   </script>
+</body>
+</html>
