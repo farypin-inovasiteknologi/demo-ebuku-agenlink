@@ -116,8 +116,11 @@
         <a class="nav-link menu-transaksi" onclick="pindahMenu('view-transaksi')"><i class="fa-solid fa-database"></i> Transaksi</a>
         <a class="nav-link menu-piutang" onclick="pindahMenu('view-piutang')"><i class="fa-solid fa-book-open"></i> Catatan Bon (Piutang)</a>
         <a class="nav-link menu-laporan" onclick="pindahMenu('view-laporan')"><i class="fa-solid fa-file-pdf"></i> Laporan PDF</a>
-        <a class="nav-link menu-atur-profil mt-4 border-top pt-3" onclick="pindahMenu('view-atur-profil')"><i class="fa-solid fa-store"></i> Profil & Akun</a>
-        <a class="nav-link text-danger" onclick="logout()"><i class="fa-solid fa-power-off"></i> Keluar</a>
+        
+        <a class="nav-link menu-akun mt-4 border-top pt-3" onclick="pindahMenu('view-akun')"><i class="fa-solid fa-users-cog"></i> Manajemen Akun</a>
+        <a class="nav-link menu-atur-profil" onclick="pindahMenu('view-atur-profil')"><i class="fa-solid fa-store"></i> Profil Toko</a>
+        
+        <a class="nav-link text-danger mt-2" onclick="logout()"><i class="fa-solid fa-power-off"></i> Keluar</a>
       </nav>
     </div>
 
@@ -126,7 +129,8 @@
         <div class="d-flex justify-content-between align-items-center w-100 px-3 py-2">
           <div class="d-flex align-items-center"><img id="mobile-logo-img" src="" style="width: 32px; height: 32px; object-fit: cover; border-radius: 50%; border: 2px solid #F37021; margin-right: 10px; background:white;"><span class="fw-bold mb-0 text-white" id="mobile-nama-toko" style="font-size: 15px;">eBuku Agenlink</span></div>
           <div>
-            <button class="btn btn-sm py-1 px-2 fw-bold rounded me-2 text-white btn-akun-mobile" style="border: 1px solid #F37021;" onclick="pindahMenu('view-atur-profil')"><i class="fa-solid fa-user"></i></button>
+            <button class="btn btn-sm py-1 px-2 fw-bold rounded me-1 text-white" style="border: 1px solid #F37021;" onclick="pindahMenu('view-akun')"><i class="fa-solid fa-users-cog"></i></button>
+            <button class="btn btn-sm py-1 px-2 fw-bold rounded me-2 text-white btn-akun-mobile" style="border: 1px solid #F37021;" onclick="pindahMenu('view-atur-profil')"><i class="fa-solid fa-store"></i></button>
             <button class="btn btn-danger btn-sm py-1 px-2 fw-bold rounded" onclick="logout()"><i class="fa-solid fa-power-off"></i></button>
           </div>
         </div>
@@ -143,6 +147,38 @@
             <div class="col-4 col-md-4 mb-3"><div class="stat-card bg-gradient-secondary h-100 p-3"><div class="small mb-1"><i class="fa-solid fa-piggy-bank"></i> Fee Bank</div><h5 class="fw-bold mb-0" id="dash-fee">Rp 0</h5></div></div>
           </div>
           <div class="card border-0 shadow-sm rounded-3 mb-4 w-100"><div class="card-header bg-white fw-bold py-3" style="color: #00529C;"><i class="fa-solid fa-chart-line"></i> Grafik Tren Keuntungan</div><div class="card-body"><canvas id="chartKeuntungan" height="100"></canvas></div></div>
+        </div>
+
+        <div id="view-akun" class="view-section">
+          <h4 class="fw-bold mb-4 text-dark"><i class="fa-solid fa-users-cog" style="color:#F37021;"></i> Manajemen Akun</h4>
+          
+          <div id="akun-superadmin" class="card border-0 shadow-sm rounded-3 w-100 mb-4" style="display:none;">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <h6 class="fw-bold text-primary mb-0"><i class="fa-solid fa-list"></i> Daftar Pengguna</h6>
+                <button class="btn btn-primary btn-sm fw-bold shadow-sm" style="background-color:#00529C; border:none;" onclick="bukaModalAkunTambah()"><i class="fa-solid fa-plus"></i> Tambah Akun</button>
+              </div>
+              <div class="table-responsive bg-white border rounded">
+                <table class="table table-hover table-sm mb-0">
+                  <thead class="table-dark text-center" style="--bs-table-bg: #00529C;"><tr><th>Username</th><th>Email</th><th>Role</th><th>Cabang</th><th>Aksi</th></tr></thead>
+                  <tbody id="tabel-akun" class="text-center"><tr><td colspan="5">Memuat data...</td></tr></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <div id="akun-cabang" class="card border-0 shadow-sm rounded-3 w-100" style="display:none;">
+            <div class="card-body">
+              <h6 class="fw-bold mb-3 text-danger"><i class="fa-solid fa-user-shield"></i> Ubah Password Cabang</h6>
+              <div class="mb-3"><label class="form-label small fw-bold">Nama Cabang Anda</label><input type="text" id="cabang-saya-info" class="form-control fw-bold text-secondary" readonly></div>
+              <div class="mb-3"><label class="form-label small fw-bold">Username</label><input type="text" id="username-saya-info" class="form-control fw-bold text-secondary" readonly></div>
+              <div class="mb-3">
+                <label class="form-label small fw-bold">Password Baru</label>
+                <div class="input-group"><input type="password" id="set-password-cabang" class="form-control" placeholder="Ketik sandi baru..."><button class="btn btn-outline-secondary" type="button" onclick="togglePassword('set-password-cabang', 'eye-icon-cabang')"><i id="eye-icon-cabang" class="fa-solid fa-eye"></i></button></div>
+              </div>
+              <button class="btn w-100 py-3 fw-bold shadow text-white" style="background-color:#F37021;" onclick="simpanPasswordCabang()" id="btn-simpan-pass-cabang"><i class="fa-solid fa-save"></i> UPDATE PASSWORD</button>
+            </div>
+          </div>
         </div>
 
         <div id="view-atur-tarif" class="view-section">
@@ -294,13 +330,13 @@
         </div>
 
         <div id="view-atur-profil" class="view-section">
-          <h4 class="fw-bold mb-4 text-dark"><i class="fa-solid fa-store" style="color:#F37021;"></i> Profil & Akun</h4>
+          <h4 class="fw-bold mb-4 text-dark"><i class="fa-solid fa-store" style="color:#F37021;"></i> Profil Toko</h4>
           <div class="card border-0 shadow-sm rounded-3 w-100">
             <div class="card-body">
-              <h6 class="fw-bold mb-3" style="color:#00529C;"><i class="fa-solid fa-shop"></i> Info Usaha</h6>
-              <div class="mb-3"><label class="form-label small fw-bold">Nama Toko</label><input type="text" id="set-nama" class="form-control"></div>
-              <div class="mb-3"><label class="form-label small fw-bold">Alamat</label><input type="text" id="set-alamat" class="form-control"></div>
-              <div class="mb-3"><label class="form-label small fw-bold">Kontak / WA</label><input type="text" id="set-kontak" class="form-control"></div>
+              <h6 class="fw-bold mb-3" style="color:#00529C;"><i class="fa-solid fa-shop"></i> Info Usaha Utama</h6>
+              <div class="mb-3"><label class="form-label small fw-bold">Nama Toko Utama</label><input type="text" id="set-nama" class="form-control"></div>
+              <div class="mb-3"><label class="form-label small fw-bold">Alamat Pusat</label><input type="text" id="set-alamat" class="form-control"></div>
+              <div class="mb-3"><label class="form-label small fw-bold">Kontak / WA Pusat</label><input type="text" id="set-kontak" class="form-control"></div>
               <hr><h6 class="fw-bold mb-3" style="color:#00529C;"><i class="fa-solid fa-image"></i> Logo Usaha</h6>
               <input type="file" id="upload-logo" accept="image/*" class="form-control mb-3">
               <div class="text-center"><img id="image-workspace" src=""></div>
@@ -309,14 +345,7 @@
               <hr><h6 class="fw-bold mb-3 text-info"><i class="fa-solid fa-link"></i> Link Unduh (Opsional)</h6>
               <div class="mb-3"><label class="form-label small fw-bold">Windows</label><input type="text" id="set-link-win" class="form-control"></div>
               <div class="mb-3"><label class="form-label small fw-bold">Android</label><input type="text" id="set-link-and" class="form-control"></div>
-              <hr><h6 class="fw-bold mb-3 text-danger"><i class="fa-solid fa-user-shield"></i> Akun Login (Keamanan SHA-256)</h6>
-              <div class="mb-3"><label class="form-label small fw-bold">Email (Untuk Lupa Password)</label><input type="email" id="set-email" class="form-control" placeholder="wajib@diisi.com"></div>
-              <div class="mb-3"><label class="form-label small fw-bold">Username Utama</label><input type="text" id="set-username" class="form-control"></div>
-              <div class="mb-4">
-                <label class="form-label small fw-bold">Ganti Password (Kosongkan jika tidak diganti)</label>
-                <div class="input-group"><input type="password" id="set-password" class="form-control" placeholder="Ketik sandi baru..."><button class="btn btn-outline-secondary" type="button" onclick="togglePassword('set-password', 'eye-icon-profil')"><i id="eye-icon-profil" class="fa-solid fa-eye"></i></button></div>
-              </div>
-              <button class="btn w-100 py-3 fw-bold shadow text-white" style="background-color:#00529C;" onclick="simpanProfilKeServer()" id="btn-simpan-profil"><i class="fa-solid fa-save"></i> SIMPAN PERUBAHAN</button>
+              <button class="btn w-100 py-3 fw-bold shadow text-white mt-3" style="background-color:#00529C;" onclick="simpanProfilKeServer()" id="btn-simpan-profil"><i class="fa-solid fa-save"></i> SIMPAN PROFIL TOKO</button>
             </div>
           </div>
         </div>
@@ -326,12 +355,26 @@
     </div> 
   </div> 
 
-  <div class="bottom-nav" id="mobile-bottom-nav" style="display: none;">
-    <div class="bottom-nav-item active menu-dashboard" onclick="pindahMenu('view-dashboard')"><i class="fa-solid fa-chart-pie"></i><span>Beranda</span></div>
-    <div class="bottom-nav-item menu-atur-tarif" onclick="pindahMenu('view-atur-tarif')"><i class="fa-solid fa-tags"></i><span>Tarif</span></div>
-    <div class="bottom-nav-item bottom-nav-center menu-transaksi" onclick="pindahMenu('view-transaksi')"><div class="circle"><i class="fa-solid fa-plus"></i></div><span style="font-weight:bold; color:white; display:block; margin-top:5px;">Transaksi</span></div>
-    <div class="bottom-nav-item menu-laporan" onclick="pindahMenu('view-laporan')"><i class="fa-solid fa-file-pdf"></i><span>Laporan</span></div>
-    <div class="bottom-nav-item menu-piutang" onclick="pindahMenu('view-piutang')"><i class="fa-solid fa-book-open"></i><span>Bon</span></div>
+  <div class="modal fade" id="modalAkun" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0 shadow">
+        <div class="modal-header text-white" style="background-color:#00529C;"><h5 class="modal-title fw-bold" id="modal-akun-title">Form Akun</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" onclick="bersihkanOverlay()"></button></div>
+        <div class="modal-body bg-light">
+          <form id="form-akun" onsubmit="event.preventDefault(); handleSimpanAkun();">
+            <input type="hidden" id="akun-user-lama" value="">
+            <div class="mb-3"><label class="form-label small fw-bold">Username</label><input type="text" id="akun-username" class="form-control border-primary" required></div>
+            <div class="mb-3"><label class="form-label small fw-bold">Email (U/ Lupa Password)</label><input type="email" id="akun-email" class="form-control"></div>
+            <div class="mb-3">
+              <label class="form-label small fw-bold" id="label-pass-akun">Password</label>
+              <div class="input-group"><input type="password" id="akun-password" class="form-control" required><button class="btn btn-outline-secondary" type="button" onclick="togglePassword('akun-password', 'eye-icon-akun')"><i id="eye-icon-akun" class="fa-solid fa-eye"></i></button></div>
+            </div>
+            <div class="mb-3"><label class="form-label small fw-bold">Role Akses</label><select id="akun-role" class="form-select border-primary"><option value="Cabang">Kasir / Cabang (Akses Terbatas)</option><option value="Superadmin">Superadmin (Akses Penuh)</option></select></div>
+            <div class="mb-4"><label class="form-label small fw-bold">Nama Cabang (Cth: Cab. Sudirman)</label><input type="text" id="akun-cabang" class="form-control border-primary" required></div>
+            <button type="submit" class="btn w-100 py-2 fw-bold shadow-sm text-white" style="background-color:#00529C;" id="btn-simpan-akun-form"><i class="fa-solid fa-save"></i> Simpan Akun</button>
+          </form>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="modal fade" id="modalTransaksi" tabindex="-1">
@@ -392,15 +435,13 @@
     </table>
   </div>
 
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
   <script>
     // =========================================================================
     // WAJIB: GANTI TULISAN DI BAWAH DENGAN URL WEB APP GOOGLE APPS SCRIPT ANDA
     // =========================================================================
-    const API_URL = "https://script.google.com/a/macros/admin.sma.belajar.id/s/AKfycbziqEupVkp4C3IKmwUFAxkxuBWUCjlX5xz32zLwQ3mDf_wDOkINRq_9SE6TVATgqpc-Wg/exec"; 
+    const API_URL = "https://script.google.com/a/macros/admin.sma.belajar.id/s/AKfycbya6Oww7eC3aAcQQaN7CL-DqydF5qfdnr3_4K2euhIgwybTRutkd9hfDA6fy07k9fjlTA/exec"; 
 
-    // 1. FUNGSI KOMUNIKASI API ANTI-BADAI
     function callAPI(actionName, payloadData) {
       return fetch(API_URL, {
         method: 'POST',
@@ -420,130 +461,95 @@
       });
     }
 
-    // 2. VARIABEL GLOBAL & FORMATTER
     let cropper, croppedBase64 = null; 
-    let dataSemua = [], dataTampil = [], listTarifGlobal = [], dataPiutang = []; 
+    let dataSemua = [], dataTampil = [], listTarifGlobal = [], dataPiutang = [], globalListAkun = []; 
     let currentPage = 1; const rowsPerPage = 10; let chartInstance = null;
 
     function formatInputUang(e) { let val = e.target.value.replace(/[^0-9]/g, ''); if(val !== '') { e.target.value = parseInt(val, 10).toLocaleString('id-ID'); } else { e.target.value = ''; } if(e.target.id === 'trans-nominal' || e.target.id === 'trans-jenis') cekAutoTarif(); }
     function unformatUang(val) { if(!val) return 0; return parseFloat(String(val).replace(/\./g, '')) || 0; }
     const formatRp = (angka) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(angka);
     const formatTglPendek = (tglStr) => { const d = new Date(tglStr); return `${d.getDate().toString().padStart(2,'0')}/${(d.getMonth()+1).toString().padStart(2,'0')}/${d.getFullYear()}`; };
-    function bersihkanOverlay() { document.querySelectorAll('.modal-backdrop').forEach(el => el.remove()); document.body.classList.remove('modal-open', 'swal2-shown', 'swal2-height-auto'); document.body.style.overflow = 'auto'; document.body.style.paddingRight = ''; Swal.close(); }
-
-    // FUNGSI MATA PASSWORD (SUDAH DIPERBAIKI)
-    function togglePassword(inputId, iconId) { 
-      const input = document.getElementById(inputId); 
-      const icon = document.getElementById(iconId); 
-      if(!input || !icon) return; // Mencegah error jika elemen hilang
-      if (input.type === "password") { 
-          input.type = "text"; 
-          icon.classList.remove("fa-eye"); 
-          icon.classList.add("fa-eye-slash"); 
-      } else { 
-          input.type = "password"; 
-          icon.classList.remove("fa-eye-slash"); 
-          icon.classList.add("fa-eye"); 
-      } 
+    
+    // PEMBERSIH OVERLAY ANTI-CRASH
+    function bersihkanOverlay() { 
+        document.body.className = ''; 
+        document.body.style = ''; 
+        document.querySelectorAll('.modal-backdrop').forEach(el => el.remove()); 
+        if (typeof Swal !== 'undefined') Swal.close(); 
     }
 
-    // 3. LOGIKA SAAT HALAMAN PERTAMA KALI DIBUKA
-    window.onload = function() {
-      if(API_URL.includes("ISI_DENGAN_URL")) {
-        document.getElementById('loading-screen').innerHTML = '<h5 class="text-danger p-4 text-center">ERROR: URL API belum dimasukkan di kode HTML.</h5>'; 
-        return;
-      }
+    function togglePassword(inputId, iconId) { 
+      const input = document.getElementById(inputId); const icon = document.getElementById(iconId); 
+      if(!input || !icon) return;
+      if (input.type === "password") { input.type = "text"; icon.classList.remove("fa-eye"); icon.classList.add("fa-eye-slash"); } 
+      else { input.type = "password"; icon.classList.remove("fa-eye-slash"); icon.classList.add("fa-eye"); } 
+    }
 
+    window.onload = function() {
+      if(API_URL.includes("ISI_DENGAN_URL")) { document.getElementById('loading-screen').innerHTML = '<h5 class="text-danger p-4 text-center">ERROR: URL API belum dimasukkan di kode HTML.</h5>'; return; }
+      
       callAPI('getProfilApp', {}).then(data => {
-        // Gunakan tanda tanya (?) untuk mencegah crash jika ID terhapus
-        document.getElementById('login-nama-toko').innerText = data.namaToko || 'eBuku Agenlink'; 
-        document.getElementById('login-footer-toko').innerText = data.namaToko || ''; 
+        if(document.getElementById('login-nama-toko')) document.getElementById('login-nama-toko').innerText = data.namaToko || 'eBuku Agenlink'; 
+        if(document.getElementById('login-footer-toko')) document.getElementById('login-footer-toko').innerText = data.namaToko || ''; 
         if(document.getElementById('login-logo')) document.getElementById('login-logo').src = data.urlLogo;
         
-        const btnWin = document.getElementById('btn-dl-win');
-        const btnAnd = document.getElementById('btn-dl-and');
+        const btnWin = document.getElementById('btn-dl-win'), btnAnd = document.getElementById('btn-dl-and');
         if(data.linkWindows && btnWin) { btnWin.href = data.linkWindows; btnWin.style.display = 'inline-block'; document.getElementById('area-download').style.display = 'block'; }
         if(data.linkAndroid && btnAnd) { btnAnd.href = data.linkAndroid; btnAnd.style.display = 'inline-block'; document.getElementById('area-download').style.display = 'block'; }
         
         document.getElementById('loading-screen').style.display = 'none'; 
         
-        // Cek Sesi Login Aktif
         if(localStorage.getItem('bukuLinkLoggedIn') === 'true') { 
-            document.getElementById('view-login').style.display = 'none'; 
-            document.getElementById('app-wrapper').style.display = 'flex'; 
-            if(document.getElementById('mobile-bottom-nav')) document.getElementById('mobile-bottom-nav').style.display = ''; 
-            terapkanRoleAkses(); 
-            pindahMenu('view-dashboard'); 
-            muatDashboard(false); 
+            document.getElementById('view-login').style.display = 'none'; document.getElementById('app-wrapper').style.display = 'flex'; if(document.getElementById('mobile-bottom-nav')) document.getElementById('mobile-bottom-nav').style.display = ''; 
+            terapkanRoleAkses(); pindahMenu('view-dashboard'); muatDashboard(false); 
         } else { 
-            document.getElementById('view-login').style.display = 'flex'; 
-            if(document.getElementById('mobile-bottom-nav')) document.getElementById('mobile-bottom-nav').style.display = 'none'; 
+            document.getElementById('view-login').style.display = 'flex'; if(document.getElementById('mobile-bottom-nav')) document.getElementById('mobile-bottom-nav').style.display = 'none'; 
         }
-      }).catch(err => { 
-        document.getElementById('loading-screen').style.display = 'none';
-        Swal.fire('Koneksi Terputus', err.message, 'error'); 
-      });
+      }).catch(err => { document.getElementById('loading-screen').style.display = 'none'; Swal.fire('Koneksi Terputus', err.message, 'error'); });
     };
 
-    // 4. LOGIKA LOGIN YANG ANTI-CRASH
     function handleLogin() { 
-        const u = document.getElementById('login-username').value;
-        const p = document.getElementById('login-password').value;
-        const btn = document.getElementById('btn-login'); 
-
+        const u = document.getElementById('login-username').value, p = document.getElementById('login-password').value, btn = document.getElementById('btn-login'); 
         if(!u || !p) { Swal.fire('Perhatian', 'Username dan Password tidak boleh kosong!', 'warning'); return; } 
-        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Memeriksa...'; 
-        btn.disabled = true; 
+        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Memeriksa...'; btn.disabled = true; 
         
         callAPI('prosesLogin', { username: u, password: p }).then(res => {
-            btn.innerHTML = '<i class="fa-solid fa-right-to-bracket"></i> Masuk Aplikasi'; 
-            btn.disabled = false; 
-            
+            btn.innerHTML = '<i class="fa-solid fa-right-to-bracket"></i> Masuk Aplikasi'; btn.disabled = false; 
             if(res && res.valid) { 
-                // Sukses! Simpan Sesi
-                localStorage.setItem('bukuLinkLoggedIn', 'true'); 
-                localStorage.setItem('bukuLinkRole', res.role); 
-                localStorage.setItem('bukuLinkCabang', res.cabang); 
-                
+                localStorage.setItem('bukuLinkLoggedIn', 'true'); localStorage.setItem('bukuLinkRole', res.role); localStorage.setItem('bukuLinkCabang', res.cabang); localStorage.setItem('bukuLinkUser', res.username);
                 try {
-                    // Coba jalankan transisi animasi UI
-                    bersihkanOverlay(); 
-                    document.getElementById('view-login').style.display = 'none'; 
-                    document.getElementById('app-wrapper').style.display = 'flex'; 
-                    if(document.getElementById('mobile-bottom-nav')) document.getElementById('mobile-bottom-nav').style.display = ''; 
-                    terapkanRoleAkses(); 
-                    pindahMenu('view-dashboard'); 
-                    muatDashboard(false); 
-                } catch (errUI) {
-                    // JIKA TRANSISI CRASH, KITA PAKSA RELOAD AGAR TETAP MASUK!
-                    console.error("UI Transisi Error, Memaksa Reload...", errUI);
-                    window.location.reload();
-                }
-            } else {
-                Swal.fire('Gagal', 'Username/Password salah!', 'error'); 
-            }
-        }).catch(err => { 
-            btn.innerHTML = '<i class="fa-solid fa-right-to-bracket"></i> Masuk Aplikasi'; 
-            btn.disabled = false; 
-            Swal.fire('Error', err.message, 'error'); 
-        });
+                    setTimeout(() => {
+                        bersihkanOverlay(); document.getElementById('view-login').style.display = 'none'; document.getElementById('app-wrapper').style.display = 'flex'; if(document.getElementById('mobile-bottom-nav')) document.getElementById('mobile-bottom-nav').style.display = ''; 
+                        terapkanRoleAkses(); pindahMenu('view-dashboard'); muatDashboard(false); 
+                    }, 300);
+                } catch(e) { window.location.reload(); }
+            } else Swal.fire('Gagal', 'Username/Password salah!', 'error'); 
+        }).catch(err => { btn.innerHTML = '<i class="fa-solid fa-right-to-bracket"></i> Masuk Aplikasi'; btn.disabled = false; Swal.fire('Error', err.message, 'error'); });
     }
     
-    function logout() { localStorage.removeItem('bukuLinkLoggedIn'); localStorage.removeItem('bukuLinkRole'); localStorage.removeItem('bukuLinkCabang'); document.getElementById('app-wrapper').style.display = 'none'; document.getElementById('view-login').style.display = 'flex'; if(document.getElementById('mobile-bottom-nav')) document.getElementById('mobile-bottom-nav').style.display = 'none'; bersihkanOverlay(); }
+    function logout() { localStorage.removeItem('bukuLinkLoggedIn'); localStorage.removeItem('bukuLinkRole'); localStorage.removeItem('bukuLinkCabang'); localStorage.removeItem('bukuLinkUser'); document.getElementById('app-wrapper').style.display = 'none'; document.getElementById('view-login').style.display = 'flex'; if(document.getElementById('mobile-bottom-nav')) document.getElementById('mobile-bottom-nav').style.display = 'none'; bersihkanOverlay(); }
     
     function terapkanRoleAkses() {
-      const userRole = localStorage.getItem('bukuLinkRole');
-      const userCabang = localStorage.getItem('bukuLinkCabang');
+      const userRole = localStorage.getItem('bukuLinkRole') || 'Cabang';
+      const userCabang = localStorage.getItem('bukuLinkCabang') || 'Pusat';
+      const userL = localStorage.getItem('bukuLinkUser') || '';
       
       const labelRole = document.getElementById('label-role');
       if(labelRole) labelRole.innerText = userRole === 'Superadmin' ? 'Superadmin' : `Cabang: ${userCabang}`;
       
       if(userRole !== 'Superadmin') {
-         document.querySelectorAll('.menu-atur-tarif, .menu-atur-profil, .btn-akun-mobile').forEach(el => el.style.display = 'none');
+         document.querySelectorAll('.menu-atur-tarif, .menu-atur-profil').forEach(el => el.style.display = 'none');
          document.querySelectorAll('.area-filter-cabang').forEach(el => el.style.display = 'none');
+         document.getElementById('akun-superadmin').style.display = 'none';
+         document.getElementById('akun-cabang').style.display = 'block';
+         
+         document.getElementById('cabang-saya-info').value = userCabang;
+         document.getElementById('username-saya-info').value = userL;
       } else {
-         document.querySelectorAll('.menu-atur-tarif, .menu-atur-profil, .btn-akun-mobile').forEach(el => el.style.display = 'block');
+         document.querySelectorAll('.menu-atur-tarif, .menu-atur-profil').forEach(el => el.style.display = 'block');
          document.querySelectorAll('.area-filter-cabang').forEach(el => el.style.display = 'block');
+         document.getElementById('akun-superadmin').style.display = 'block';
+         document.getElementById('akun-cabang').style.display = 'none';
       }
     }
 
@@ -574,11 +580,8 @@
         if(document.getElementById('set-url-lama')) document.getElementById('set-url-lama').value = data.profil.urlLogo; 
         if(document.getElementById('set-link-win')) document.getElementById('set-link-win').value = data.profil.linkWindows; 
         if(document.getElementById('set-link-and')) document.getElementById('set-link-and').value = data.profil.linkAndroid; 
-        if(document.getElementById('set-username')) document.getElementById('set-username').value = data.akun.username; 
-        if(document.getElementById('set-email')) document.getElementById('set-email').value = data.akun.email; 
-        if(document.getElementById('set-password')) document.getElementById('set-password').value = ''; 
         
-        dataSemua = data.riwayat; listTarifGlobal = data.listTarif; dataPiutang = data.piutang;
+        dataSemua = data.riwayat; listTarifGlobal = data.listTarif; dataPiutang = data.piutang; globalListAkun = data.listAkun || [];
         
         if(localStorage.getItem('bukuLinkRole') === 'Superadmin') {
            const cabangList = [...new Set(dataSemua.map(item => item.cabang))].filter(c => c && c !== 'undefined');
@@ -586,6 +589,7 @@
            cabangList.forEach(c => { optCabang += `<option value="${c}">${c}</option>`; });
            if(document.getElementById('filter-cabang')) document.getElementById('filter-cabang').innerHTML = optCabang;
            if(document.getElementById('lap-cabang')) document.getElementById('lap-cabang').innerHTML = optCabang;
+           renderTabelAkun();
         }
 
         const dataAktif = dataSemua.filter(x => x.sheetName === 'Transaksi');
@@ -599,6 +603,43 @@
         terapkanFilter(); renderTabelSetupTarif(); renderGrafik(dataAktif); renderTabelBon();
     }
 
+    // FUNGSI RENDER TABEL AKUN (SUPERADMIN)
+    function renderTabelAkun() {
+      let html = '';
+      if(globalListAkun.length === 0) html = '<tr><td colspan="5">Data kosong</td></tr>';
+      else {
+        globalListAkun.forEach(a => {
+          let stBadge = a.role === 'Superadmin' ? `<span class="badge bg-danger">Superadmin</span>` : `<span class="badge bg-info">Cabang</span>`;
+          html += `<tr><td class="fw-bold">${a.username}</td><td>${a.email}</td><td>${stBadge}</td><td>${a.cabang}</td><td><button class="btn btn-warning btn-sm py-0 px-1 mb-1 me-1" onclick="bukaModalAkunEdit('${a.username}')"><i class="fa-solid fa-pen"></i></button><button class="btn btn-danger btn-sm py-0 px-1 mb-1" onclick="hapusAkun('${a.username}')"><i class="fa-solid fa-trash"></i></button></td></tr>`;
+        });
+      }
+      document.getElementById('tabel-akun').innerHTML = html;
+    }
+    
+    function bukaModalAkunTambah() { document.getElementById('form-akun').reset(); document.getElementById('akun-user-lama').value = ""; document.getElementById('modal-akun-title').innerText = 'Tambah Akun Baru'; document.getElementById('akun-username').readOnly = false; document.getElementById('label-pass-akun').innerText = 'Password (Wajib)'; document.getElementById('akun-password').required = true; new bootstrap.Modal(document.getElementById('modalAkun')).show(); }
+    function bukaModalAkunEdit(username) { const data = globalListAkun.find(x => x.username === username); if(!data) return; document.getElementById('akun-user-lama').value = data.username; document.getElementById('akun-username').value = data.username; document.getElementById('akun-username').readOnly = true; document.getElementById('akun-email').value = data.email; document.getElementById('akun-role').value = data.role; document.getElementById('akun-cabang').value = data.cabang; document.getElementById('label-pass-akun').innerText = 'Ganti Password (Opsional)'; document.getElementById('akun-password').value = ''; document.getElementById('akun-password').required = false; document.getElementById('modal-akun-title').innerText = 'Edit Akun'; new bootstrap.Modal(document.getElementById('modalAkun')).show(); }
+    
+    function handleSimpanAkun() {
+      const btn = document.getElementById('btn-simpan-akun-form'); btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Menyimpan...'; btn.disabled = true;
+      const userLama = document.getElementById('akun-user-lama').value;
+      const dataA = { username: document.getElementById('akun-username').value, email: document.getElementById('akun-email').value, password: document.getElementById('akun-password').value, role: document.getElementById('akun-role').value, cabang: document.getElementById('akun-cabang').value };
+      const aksi = userLama === "" ? 'simpanAkun' : 'editAkun';
+      callAPI(aksi, { userLama: userLama, data: dataA }).then(() => { const modalObj = bootstrap.Modal.getInstance(document.getElementById('modalAkun')); if(modalObj) modalObj.hide(); setTimeout(bersihkanOverlay, 300); btn.innerHTML = '<i class="fa-solid fa-save"></i> Simpan Akun'; btn.disabled = false; Swal.fire('Tersimpan!', 'Data akun diperbarui.', 'success'); reloadDataApp(); }).catch(err => { btn.innerHTML = '<i class="fa-solid fa-save"></i> Simpan Akun'; btn.disabled = false; Swal.fire('Error', err.message, 'error'); });
+    }
+    
+    function hapusAkun(username) {
+      if(username === localStorage.getItem('bukuLinkUser')) return Swal.fire('Ditolak', 'Anda tidak bisa menghapus akun Anda sendiri saat sedang login!', 'error');
+      Swal.fire({ title: 'Hapus Akun?', text: "Akun ini tidak akan bisa login lagi.", icon: 'warning', showCancelButton: true, confirmButtonText: 'Ya, Hapus' }).then((res) => { if (res.isConfirmed) { Swal.fire({title:'Menghapus...', showConfirmButton: false, allowOutsideClick: false}); callAPI('hapusAkun', {username: username}).then(()=> { Swal.close(); reloadDataApp(); }); } });
+    }
+    
+    function simpanPasswordCabang() {
+      const pass = document.getElementById('set-password-cabang').value;
+      const userL = localStorage.getItem('bukuLinkUser');
+      if(!pass || pass.trim() === '') return Swal.fire('Oops', 'Password tidak boleh kosong!', 'warning');
+      const btn = document.getElementById('btn-simpan-pass-cabang'); btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Loading...'; btn.disabled = true;
+      callAPI('gantiPasswordCabang', { username: userL, passwordBaru: pass }).then(() => { btn.innerHTML = '<i class="fa-solid fa-save"></i> UPDATE PASSWORD'; btn.disabled = false; document.getElementById('set-password-cabang').value = ''; Swal.fire('Sukses', 'Password Anda berhasil diubah!', 'success'); }).catch(err => { btn.innerHTML = '<i class="fa-solid fa-save"></i> UPDATE PASSWORD'; btn.disabled = false; Swal.fire('Error', err.message, 'error'); });
+    }
+
     function renderGrafik(dataGrafik) { const ctx = document.getElementById('chartKeuntungan')?.getContext('2d'); if(!ctx) return; if(chartInstance) chartInstance.destroy(); const groupedData = {}; dataGrafik.forEach(r => { if(!groupedData[r.tanggal]) groupedData[r.tanggal] = 0; groupedData[r.tanggal] += r.untung; }); const sortedDates = Object.keys(groupedData).sort().slice(-7); const labels = sortedDates.map(d => formatTglPendek(d)); const chartData = sortedDates.map(d => groupedData[d]); chartInstance = new Chart(ctx, { type: 'line', data: { labels: labels, datasets: [{ label: 'Keuntungan (Rp)', data: chartData, backgroundColor: 'rgba(0, 82, 156, 0.2)', borderColor: '#00529C', borderWidth: 3, pointBackgroundColor: '#fff', pointBorderColor: '#00529C', pointRadius: 5, fill: true, tension: 0.3 }] }, options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } } }); }
 
     function terapkanFilter() { const jenis = document.getElementById('filter-jenis').value, start = document.getElementById('filter-start').value, end = document.getElementById('filter-end').value; const filterCabang = document.getElementById('filter-cabang') ? document.getElementById('filter-cabang').value : ''; const stTime = start ? new Date(start).setHours(0,0,0,0) : null, enTime = end ? new Date(end).setHours(23,59,59,999) : null; dataTampil = dataSemua.filter(r => { let pass = true; if (jenis && r.jenis !== jenis) pass = false; if (filterCabang && r.cabang !== filterCabang) pass = false; const rTime = new Date(r.tanggal).getTime(); if (stTime && rTime < stTime) pass = false; if (enTime && rTime > enTime) pass = false; return pass; }); currentPage = 1; renderTabel(); }
@@ -607,9 +648,7 @@
     function gantiHalaman(page) { currentPage = page; renderTabel(); }
 
     function cekAutoTarif() { const jenis = document.getElementById('trans-jenis').value; const nom = unformatUang(document.getElementById('trans-nominal').value); const inputBiaya = document.getElementById('trans-biaya-pelanggan'); const inputAdmBank = document.getElementById('trans-admin-bank'); const inputFeeBank = document.getElementById('trans-fee-bank'); if(!jenis || nom === 0) { inputBiaya.value = ''; inputAdmBank.value = ''; inputFeeBank.value = ''; return; } const match = listTarifGlobal.find(t => t.jenis === jenis && nom >= t.min && nom <= t.max); if (match) { inputBiaya.value = match.tarif.toLocaleString('id-ID'); inputAdmBank.value = match.admBank.toLocaleString('id-ID'); inputFeeBank.value = match.feeBank.toLocaleString('id-ID'); } else { inputBiaya.value = ''; inputAdmBank.value = ''; inputFeeBank.value = ''; } }
-    
     function bukaModalTambah() { document.getElementById('form-transaksi').reset(); document.getElementById('trans-id').value = ""; document.getElementById('trans-uid').value = ""; document.getElementById('trans-sheet').value = "Transaksi"; document.getElementById('modal-title-text').innerText = 'Tambah Transaksi'; document.getElementById('trans-tanggal').valueAsDate = new Date(); new bootstrap.Modal(document.getElementById('modalTransaksi')).show(); }
-    
     function bukaModalEdit(uid, idRow, sheetName) { const data = dataSemua.find(x => x.idRow === idRow && x.sheetName === sheetName); if(!data) return; document.getElementById('trans-id').value = data.idRow; document.getElementById('trans-uid').value = data.uid; document.getElementById('trans-sheet').value = data.sheetName; document.getElementById('modal-title-text').innerText = 'Edit Data (' + data.sheetName + ')'; document.getElementById('trans-tanggal').value = data.tanggal; document.getElementById('trans-jenis').value = data.jenis; document.getElementById('trans-nominal').value = data.nominal.toLocaleString('id-ID'); document.getElementById('trans-admin-bank').value = data.adminBank.toLocaleString('id-ID'); document.getElementById('trans-fee-bank').value = data.feeBank.toLocaleString('id-ID'); document.getElementById('trans-biaya-pelanggan').value = data.biayaPel.toLocaleString('id-ID'); new bootstrap.Modal(document.getElementById('modalTransaksi')).show(); }
     
     function handleTransaksi() { const btn = document.getElementById('btn-transaksi'); btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Menyimpan...'; btn.disabled = true; const idRow = document.getElementById('trans-id').value, uid = document.getElementById('trans-uid').value, sheetName = document.getElementById('trans-sheet').value; const userCabang = localStorage.getItem('bukuLinkCabang') || 'Pusat'; const dataTrans = { tanggal: document.getElementById('trans-tanggal').value, jenis: document.getElementById('trans-jenis').value, nominal: unformatUang(document.getElementById('trans-nominal').value), adminBank: unformatUang(document.getElementById('trans-admin-bank').value), feeBank: unformatUang(document.getElementById('trans-fee-bank').value), biayaPelanggan: unformatUang(document.getElementById('trans-biaya-pelanggan').value), cabang: userCabang }; const aksi = idRow === "" ? 'simpanTransaksi' : 'editTransaksi'; callAPI(aksi, { uid: uid, idRowLama: idRow, data: dataTrans, namaSheet: sheetName }).then(() => { selesaiSimpan(); }); }
@@ -636,7 +675,5 @@
     document.getElementById('upload-logo').addEventListener('change', function(e) { if (e.target.files[0]) { const reader = new FileReader(); reader.onload = function(evt) { document.getElementById('image-workspace').src = evt.target.result; document.getElementById('image-workspace').style.display = 'block'; document.getElementById('btn-crop').style.display = 'block'; if(cropper) cropper.destroy(); cropper = new Cropper(document.getElementById('image-workspace'), { aspectRatio: 1, viewMode: 1 }); }; reader.readAsDataURL(e.target.files[0]); } });
     function prosesCrop() { if(cropper) { croppedBase64 = cropper.getCroppedCanvas({ width: 150, height: 150 }).toDataURL('image/png'); document.getElementById('image-workspace').src = croppedBase64; cropper.destroy(); cropper = null; document.getElementById('btn-crop').style.display = 'none'; Swal.fire('Sip!', 'Logo dipotong. Klik Simpan Profil.', 'success'); } }
     
-    function simpanProfilKeServer() { const btn = document.getElementById('btn-simpan-profil'); btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Menyimpan...'; btn.disabled = true; const dataP = { namaToko: document.getElementById('set-nama').value, alamat: document.getElementById('set-alamat').value, kontak: document.getElementById('set-kontak').value, urlLogoLama: document.getElementById('set-url-lama').value, linkWindows: document.getElementById('set-link-win').value, linkAndroid: document.getElementById('set-link-and').value }; const dataA = { username: document.getElementById('set-username').value, password: document.getElementById('set-password').value, email: document.getElementById('set-email').value }; if(!dataA.username || !dataA.email) { btn.innerHTML = '<i class="fa-solid fa-save"></i> SIMPAN PERUBAHAN'; btn.disabled = false; return Swal.fire('Oops', 'Username dan Email tidak boleh kosong!', 'warning'); } callAPI('simpanProfil', {dataProfile: dataP, dataGambarBase64: croppedBase64, dataAkun: dataA}).then(() => { Swal.fire('Berhasil!', 'Profil dan Akun diperbarui.', 'success'); croppedBase64 = null; document.getElementById('image-workspace').style.display = 'none'; document.getElementById('upload-logo').value = ''; document.getElementById('set-password').value = ''; btn.innerHTML = '<i class="fa-solid fa-save"></i> SIMPAN PERUBAHAN'; btn.disabled = false; document.getElementById('sidebar-nama-toko').innerText = dataP.namaToko; document.getElementById('mobile-nama-toko').innerText = dataP.namaToko; document.getElementById('footer-nama-toko').innerText = dataP.namaToko; document.getElementById('pdf-nama-toko').innerText = dataP.namaToko; document.getElementById('pdf-alamat').innerText = dataP.alamat; }); }
+    function simpanProfilKeServer() { const btn = document.getElementById('btn-simpan-profil'); btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Menyimpan...'; btn.disabled = true; const dataP = { namaToko: document.getElementById('set-nama').value, alamat: document.getElementById('set-alamat').value, kontak: document.getElementById('set-kontak').value, urlLogoLama: document.getElementById('set-url-lama').value, linkWindows: document.getElementById('set-link-win').value, linkAndroid: document.getElementById('set-link-and').value }; callAPI('simpanProfil', {dataProfile: dataP, dataGambarBase64: croppedBase64}).then(() => { Swal.fire('Berhasil!', 'Profil Toko diperbarui.', 'success'); croppedBase64 = null; document.getElementById('image-workspace').style.display = 'none'; document.getElementById('upload-logo').value = ''; btn.innerHTML = '<i class="fa-solid fa-save"></i> SIMPAN PROFIL TOKO'; btn.disabled = false; document.getElementById('sidebar-nama-toko').innerText = dataP.namaToko; document.getElementById('mobile-nama-toko').innerText = dataP.namaToko; document.getElementById('footer-nama-toko').innerText = dataP.namaToko; document.getElementById('pdf-nama-toko').innerText = dataP.namaToko; document.getElementById('pdf-alamat').innerText = dataP.alamat; }); }
   </script>
-</body>
-</html>
