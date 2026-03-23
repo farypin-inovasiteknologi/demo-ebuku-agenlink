@@ -370,7 +370,7 @@
               <div class="input-group"><input type="password" id="akun-password" class="form-control" required><button class="btn btn-outline-secondary" type="button" onclick="togglePassword('akun-password', 'eye-icon-akun')"><i id="eye-icon-akun" class="fa-solid fa-eye"></i></button></div>
             </div>
             <div class="mb-3"><label class="form-label small fw-bold">Role Akses</label><select id="akun-role" class="form-select border-primary"><option value="Cabang">Kasir / Cabang (Akses Terbatas)</option><option value="Superadmin">Superadmin (Akses Penuh)</option></select></div>
-            <div class="mb-4"><label class="form-label small fw-bold">Nama Cabang (Cth: Cab. Sudirman)</label><input type="text" id="akun-cabang" class="form-control border-primary" required></div>
+            <div class="mb-4"><label class="form-label small fw-bold">Nama Cabang (Cth: Cab. Sudirman)</label><input type="text" id="form-akun-cabang" class="form-control border-primary" required></div>
             <button type="submit" class="btn w-100 py-2 fw-bold shadow-sm text-white" style="background-color:#00529C;" id="btn-simpan-akun-form"><i class="fa-solid fa-save"></i> Simpan Akun</button>
           </form>
         </div>
@@ -443,8 +443,6 @@
     // =========================================================================
     const API_URL = "https://script.google.com/a/macros/admin.sma.belajar.id/s/AKfycbwMfHVmg67rNOyTc5tCNdeG03S8LmQ_EKmBD5S__9bHQ5QmqAQ0Z23cGwgeVkkDoSMk1w/exec"; 
 
-
-
     function callAPI(actionName, payloadData) {
       return fetch(API_URL, {
         method: 'POST',
@@ -473,7 +471,6 @@
     const formatRp = (angka) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(angka);
     const formatTglPendek = (tglStr) => { const d = new Date(tglStr); return `${d.getDate().toString().padStart(2,'0')}/${(d.getMonth()+1).toString().padStart(2,'0')}/${d.getFullYear()}`; };
     
-    // PEMBARUAN: Hapus bayangan pop-up dan kembalikan scroll
     function bersihkanOverlay() { 
         document.body.className = ''; 
         document.body.style = ''; 
@@ -618,13 +615,43 @@
       document.getElementById('tabel-akun').innerHTML = html;
     }
     
-    function bukaModalAkunTambah() { document.getElementById('form-akun').reset(); document.getElementById('akun-user-lama').value = ""; document.getElementById('modal-akun-title').innerText = 'Tambah Akun Baru'; document.getElementById('akun-username').readOnly = false; document.getElementById('label-pass-akun').innerText = 'Password (Wajib)'; document.getElementById('akun-password').required = true; new bootstrap.Modal(document.getElementById('modalAkun')).show(); }
-    function bukaModalAkunEdit(username) { const data = globalListAkun.find(x => x.username === username); if(!data) return; document.getElementById('akun-user-lama').value = data.username; document.getElementById('akun-username').value = data.username; document.getElementById('akun-username').readOnly = true; document.getElementById('akun-email').value = data.email; document.getElementById('akun-role').value = data.role; document.getElementById('akun-cabang').value = data.cabang; document.getElementById('label-pass-akun').innerText = 'Ganti Password (Opsional)'; document.getElementById('akun-password').value = ''; document.getElementById('akun-password').required = false; document.getElementById('modal-akun-title').innerText = 'Edit Akun'; new bootstrap.Modal(document.getElementById('modalAkun')).show(); }
+    function bukaModalAkunTambah() { 
+      document.getElementById('form-akun').reset(); 
+      document.getElementById('akun-user-lama').value = ""; 
+      // PERBAIKAN: Bersihkan ID form-akun-cabang yang sempat bermasalah
+      document.getElementById('form-akun-cabang').value = ""; 
+      document.getElementById('modal-akun-title').innerText = 'Tambah Akun Baru'; 
+      document.getElementById('akun-username').readOnly = false; 
+      document.getElementById('label-pass-akun').innerText = 'Password (Wajib)'; 
+      document.getElementById('akun-password').required = true; 
+      new bootstrap.Modal(document.getElementById('modalAkun')).show(); 
+    }
+
+    function bukaModalAkunEdit(username) { 
+      const data = globalListAkun.find(x => x.username === username); if(!data) return; 
+      document.getElementById('akun-user-lama').value = data.username; 
+      document.getElementById('akun-username').value = data.username; 
+      document.getElementById('akun-username').readOnly = true; 
+      document.getElementById('akun-email').value = data.email; 
+      document.getElementById('akun-role').value = data.role; 
+      document.getElementById('form-akun-cabang').value = data.cabang; // PERBAIKAN: Menggunakan ID yang benar
+      document.getElementById('label-pass-akun').innerText = 'Ganti Password (Opsional)'; 
+      document.getElementById('akun-password').value = ''; 
+      document.getElementById('akun-password').required = false; 
+      document.getElementById('modal-akun-title').innerText = 'Edit Akun'; 
+      new bootstrap.Modal(document.getElementById('modalAkun')).show(); 
+    }
     
     function handleSimpanAkun() {
       const btn = document.getElementById('btn-simpan-akun-form'); btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Menyimpan...'; btn.disabled = true;
       const userLama = document.getElementById('akun-user-lama').value;
-      const dataA = { username: document.getElementById('akun-username').value, email: document.getElementById('akun-email').value, password: document.getElementById('akun-password').value, role: document.getElementById('akun-role').value, cabang: document.getElementById('akun-cabang').value };
+      const dataA = { 
+        username: document.getElementById('akun-username').value, 
+        email: document.getElementById('akun-email').value, 
+        password: document.getElementById('akun-password').value, 
+        role: document.getElementById('akun-role').value, 
+        cabang: document.getElementById('form-akun-cabang').value // PERBAIKAN: Menggunakan ID yang benar
+      };
       const aksi = userLama === "" ? 'simpanAkun' : 'editAkun';
       callAPI(aksi, { userLama: userLama, data: dataA }).then(() => { const modalObj = bootstrap.Modal.getInstance(document.getElementById('modalAkun')); if(modalObj) modalObj.hide(); setTimeout(bersihkanOverlay, 300); btn.innerHTML = '<i class="fa-solid fa-save"></i> Simpan Akun'; btn.disabled = false; Swal.fire('Tersimpan!', 'Data akun diperbarui.', 'success'); reloadDataApp(); }).catch(err => { btn.innerHTML = '<i class="fa-solid fa-save"></i> Simpan Akun'; btn.disabled = false; Swal.fire('Error', err.message, 'error'); });
     }
@@ -646,7 +673,7 @@
 
     function terapkanFilter() { const jenis = document.getElementById('filter-jenis').value, start = document.getElementById('filter-start').value, end = document.getElementById('filter-end').value; const filterCabang = document.getElementById('filter-cabang') ? document.getElementById('filter-cabang').value : ''; const stTime = start ? new Date(start).setHours(0,0,0,0) : null, enTime = end ? new Date(end).setHours(23,59,59,999) : null; dataTampil = dataSemua.filter(r => { let pass = true; if (jenis && r.jenis !== jenis) pass = false; if (filterCabang && r.cabang !== filterCabang) pass = false; const rTime = new Date(r.tanggal).getTime(); if (stTime && rTime < stTime) pass = false; if (enTime && rTime > enTime) pass = false; return pass; }); currentPage = 1; renderTabel(); }
 
-    function renderTabel() { const startIdx = (currentPage - 1) * rowsPerPage, endIdx = startIdx + rowsPerPage; const dataPage = dataTampil.slice(startIdx, endIdx); let htmlTabel = ''; const role = localStorage.getItem('bukuLinkRole'), cabangSaya = localStorage.getItem('bukuLinkCabang'); if(dataPage.length === 0) htmlTabel = '<tr><td colspan="8" class="text-muted">Data kosong</td></tr>'; else dataPage.forEach(r => { const badgeArsip = r.sheetName === 'Arsip' ? '<br><span class="badge-arsip">Arsip</span>' : ''; let tombolAksi = `<span class="badge bg-secondary" style="font-size:10px;">Akses Terbatas</span>`; if(role === 'Superadmin' || r.cabang === cabangSaya) { tombolAksi = `<button class="btn btn-warning btn-sm py-0 px-1 mb-1" onclick="bukaModalEdit('${r.uid}', ${r.idRow}, '${r.sheetName}')"><i class="fa-solid fa-pen"></i></button> <button class="btn btn-danger btn-sm py-0 px-1 mb-1" onclick="hapusData('${r.uid}', ${r.idRow}, '${r.sheetName}')"><i class="fa-solid fa-trash"></i></button>`; } htmlTabel += `<tr><td>${formatTglPendek(r.tanggal)}<br><small class="text-muted">${r.cabang}</small>${badgeArsip}</td><td class="text-truncate" style="max-width:80px;">${r.jenis}</td><td>${formatRp(r.nominal)}</td><td class="text-danger">-${formatRp(r.adminBank)}</td><td style="color:#764ba2 !important;">+${formatRp(r.feeBank)}</td><td class="text-success">+${formatRp(r.biayaPel)}</td><td class="fw-bold" style="color:#00529C;">${formatRp(r.untung)}</td><td>${tombolAksi}</td></tr>`; }); if(document.getElementById('tabel-riwayat')) document.getElementById('tabel-riwayat').innerHTML = htmlTabel; let pageHtml = ''; const totalPages = Math.ceil(dataTampil.length / rowsPerPage); for (let i = 1; i <= totalPages; i++) pageHtml += `<li class="page-item ${i === currentPage ? 'active' : ''}"><button class="page-link" onclick="gantiHalaman(${i})">${i}</button></li>`; if(document.getElementById('pagination-container')) document.getElementById('pagination-container').innerHTML = pageHtml; if(document.getElementById('sum-trx')) document.getElementById('sum-trx').innerText = dataTampil.length; if(document.getElementById('sum-adm')) document.getElementById('sum-adm').innerText = formatRp(dataTampil.reduce((a, c) => a + c.adminBank, 0)); if(document.getElementById('sum-fee-bank')) document.getElementById('sum-fee-bank').innerText = formatRp(dataTampil.reduce((a, c) => a + c.feeBank, 0)); if(document.getElementById('sum-biaya-pel')) document.getElementById('sum-biaya-pel').innerText = formatRp(dataTampil.reduce((a, c) => a + c.biayaPel, 0)); if(document.getElementById('sum-cuan')) document.getElementById('sum-cuan').innerText = formatRp(dataTampil.reduce((a, c) => a + c.untung, 0)); }
+    function renderTabel() { const startIdx = (currentPage - 1) * rowsPerPage, endIdx = startIdx + rowsPerPage; const dataPage = dataTampil.slice(startIdx, endIdx); let htmlTabel = ''; const role = localStorage.getItem('bukuLinkRole'), cabangSaya = localStorage.getItem('bukuLinkCabang'); if(dataPage.length === 0) htmlTabel = '<tr><td colspan="8" class="text-muted">Data kosong</td></tr>'; else dataPage.forEach(r => { const badgeArsip = r.sheetName === 'Arsip' ? '<br><span class="badge-arsip">Arsip</span>' : ''; let tombolAksi = `<span class="badge bg-secondary" style="font-size:10px;">Akses Terbatas</span>`; if(role === 'Superadmin' || r.cabang === cabangSaya) { tombolAksi = `<button class="btn btn-warning btn-sm py-0 px-1 mb-1" onclick="bukaModalEdit('${r.uid}', ${r.idRow}, '${r.sheetName}')"><i class="fa-solid fa-pen"></i></button> <button class="btn btn-danger btn-sm py-0 px-1 mb-1" onclick="hapusData('${r.uid}', ${r.idRow}, '${r.sheetName}')"><i class="fa-solid fa-trash"></i></button>`; } htmlTabel += `<tr><td>${formatTglPendek(r.tanggal)}<br><small class="text-muted">${r.cabang}</small>${badgeArsip}</td><td class="text-truncate" style="max-width:80px;">${r.jenis}</td><td>${formatRp(r.nominal)}</td><td class="text-danger">-${formatRp(r.adminBank)}</td><td style="color:#764ba2 !important;">+${formatRp(r.feeBank)}</td><td class="text-success">+${formatRp(r.biayaPel)}</td><td class="fw-bold" style="color:#00529C;">${formatRp(r.untung)}</td><td>${tombolAksi}</td></tr>`; }); if(document.getElementById('tabel-riwayat')) document.getElementById('tabel-riwayat').innerHTML = htmlTabel; let pageHtml = ''; const totalPages = Math.ceil(dataTampil.length / rowsPerPage); for (let i = 1; i <= totalPages; i++) pageHtml += `<li class="page-item ${i === currentPage ? 'active' : ''}"><button class="page-link" onclick="gantiHalaman(${i})">${i}</button></li>`; if(document.getElementById('pagination-container')) document.getElementById('pagination-container').innerHTML = pageHtml; }
     function gantiHalaman(page) { currentPage = page; renderTabel(); }
 
     function cekAutoTarif() { const jenis = document.getElementById('trans-jenis').value; const nom = unformatUang(document.getElementById('trans-nominal').value); const inputBiaya = document.getElementById('trans-biaya-pelanggan'); const inputAdmBank = document.getElementById('trans-admin-bank'); const inputFeeBank = document.getElementById('trans-fee-bank'); if(!jenis || nom === 0) { inputBiaya.value = ''; inputAdmBank.value = ''; inputFeeBank.value = ''; return; } const match = listTarifGlobal.find(t => t.jenis === jenis && nom >= t.min && nom <= t.max); if (match) { inputBiaya.value = match.tarif.toLocaleString('id-ID'); inputAdmBank.value = match.admBank.toLocaleString('id-ID'); inputFeeBank.value = match.feeBank.toLocaleString('id-ID'); } else { inputBiaya.value = ''; inputAdmBank.value = ''; inputFeeBank.value = ''; } }
