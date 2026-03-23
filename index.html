@@ -152,7 +152,6 @@
 
         <div id="view-akun" class="view-section">
           <h4 class="fw-bold mb-4 text-dark"><i class="fa-solid fa-users-cog" style="color:#F37021;"></i> Manajemen Akun</h4>
-          
           <div id="akun-superadmin" class="card border-0 shadow-sm rounded-3 w-100 mb-4" style="display:none;">
             <div class="card-body">
               <div class="d-flex justify-content-between align-items-center mb-3">
@@ -263,6 +262,7 @@
                 <div class="col-4 col-md text-center border-end p-1 pt-2">Bank<br><span id="sum-adm" class="text-danger">Rp 0</span></div>
                 <div class="col-4 col-md text-center border-end p-1 pt-2">Fee Bank<br><span id="sum-fee-bank" class="text-secondary" style="color: #764ba2 !important;">Rp 0</span></div>
                 <div class="col-4 col-md text-center p-1 pt-2">Pelanggan<br><span id="sum-biaya-pel" class="text-success">Rp 0</span></div>
+                <div id="sum-nom" style="display:none;"></div>
               </div>
             </div>
           </div>
@@ -441,7 +441,7 @@
     // =========================================================================
     // WAJIB: GANTI TULISAN DI BAWAH DENGAN URL WEB APP GOOGLE APPS SCRIPT ANDA
     // =========================================================================
-    const API_URL = "https://script.google.com/a/macros/admin.sma.belajar.id/s/AKfycbwMfHVmg67rNOyTc5tCNdeG03S8LmQ_EKmBD5S__9bHQ5QmqAQ0Z23cGwgeVkkDoSMk1w/exec"; 
+    const API_URL = "https://script.google.com/a/macros/admin.sma.belajar.id/s/AKfycbx92uB0uJfNk9-hCE7XpQqVraQ4nbISBgHQmaMzpDcCpNxj-LrsLPPDUHv0N111Nq9yyA/exec"; 
 
     function callAPI(actionName, payloadData) {
       return fetch(API_URL, {
@@ -471,40 +471,40 @@
     const formatRp = (angka) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(angka);
     const formatTglPendek = (tglStr) => { const d = new Date(tglStr); return `${d.getDate().toString().padStart(2,'0')}/${(d.getMonth()+1).toString().padStart(2,'0')}/${d.getFullYear()}`; };
     
-    function bersihkanOverlay() { 
-        document.body.className = ''; 
-        document.body.style = ''; 
-        document.querySelectorAll('.modal-backdrop').forEach(el => el.remove()); 
-        if (typeof Swal !== 'undefined') Swal.close(); 
-    }
+    function bersihkanOverlay() { document.body.className = ''; document.body.style = ''; document.querySelectorAll('.modal-backdrop').forEach(el => el.remove()); if (typeof Swal !== 'undefined') Swal.close(); }
+    function togglePassword(inputId, iconId) { const input = document.getElementById(inputId); const icon = document.getElementById(iconId); if(!input || !icon) return; if (input.type === "password") { input.type = "text"; icon.classList.remove("fa-eye"); icon.classList.add("fa-eye-slash"); } else { input.type = "password"; icon.classList.remove("fa-eye-slash"); icon.classList.add("fa-eye"); } }
 
-    function togglePassword(inputId, iconId) { 
-      const input = document.getElementById(inputId); const icon = document.getElementById(iconId); 
-      if(!input || !icon) return;
-      if (input.type === "password") { input.type = "text"; icon.classList.remove("fa-eye"); icon.classList.add("fa-eye-slash"); } 
-      else { input.type = "password"; icon.classList.remove("fa-eye-slash"); icon.classList.add("fa-eye"); } 
+    // FUNGSI LOADING TIMER
+    function tampilkanLoading(pesan) {
+      let timerInterval;
+      Swal.fire({
+        title: pesan, html: 'Memproses dalam <b>5</b> detik...', timer: 5000, timerProgressBar: true, allowOutsideClick: false,
+        didOpen: () => {
+          Swal.showLoading();
+          const b = Swal.getHtmlContainer().querySelector('b');
+          timerInterval = setInterval(() => {
+            const left = Math.ceil(Swal.getTimerLeft() / 1000);
+            if(b) b.textContent = left > 0 ? left : 0;
+          }, 1000);
+        },
+        willClose: () => { clearInterval(timerInterval); }
+      });
     }
 
     window.onload = function() {
       if(API_URL.includes("ISI_DENGAN_URL")) { document.getElementById('loading-screen').innerHTML = '<h5 class="text-danger p-4 text-center">ERROR: URL API belum dimasukkan di kode HTML.</h5>'; return; }
-      
       callAPI('getProfilApp', {}).then(data => {
         if(document.getElementById('login-nama-toko')) document.getElementById('login-nama-toko').innerText = data.namaToko || 'eBuku Agenlink'; 
         if(document.getElementById('login-footer-toko')) document.getElementById('login-footer-toko').innerText = data.namaToko || ''; 
         if(document.getElementById('login-logo')) document.getElementById('login-logo').src = data.urlLogo;
-        
         const btnWin = document.getElementById('btn-dl-win'), btnAnd = document.getElementById('btn-dl-and');
         if(data.linkWindows && btnWin) { btnWin.href = data.linkWindows; btnWin.style.display = 'inline-block'; document.getElementById('area-download').style.display = 'block'; }
         if(data.linkAndroid && btnAnd) { btnAnd.href = data.linkAndroid; btnAnd.style.display = 'inline-block'; document.getElementById('area-download').style.display = 'block'; }
-        
         document.getElementById('loading-screen').style.display = 'none'; 
-        
         if(localStorage.getItem('bukuLinkLoggedIn') === 'true') { 
             document.getElementById('view-login').style.display = 'none'; document.getElementById('app-wrapper').style.display = 'flex'; if(document.getElementById('mobile-bottom-nav')) document.getElementById('mobile-bottom-nav').style.display = ''; 
             terapkanRoleAkses(); pindahMenu('view-dashboard'); muatDashboard(false); 
-        } else { 
-            document.getElementById('view-login').style.display = 'flex'; if(document.getElementById('mobile-bottom-nav')) document.getElementById('mobile-bottom-nav').style.display = 'none'; 
-        }
+        } else { document.getElementById('view-login').style.display = 'flex'; if(document.getElementById('mobile-bottom-nav')) document.getElementById('mobile-bottom-nav').style.display = 'none'; }
       }).catch(err => { document.getElementById('loading-screen').style.display = 'none'; Swal.fire('Koneksi Terputus', err.message, 'error'); });
     };
 
@@ -512,17 +512,11 @@
         const u = document.getElementById('login-username').value, p = document.getElementById('login-password').value, btn = document.getElementById('btn-login'); 
         if(!u || !p) { Swal.fire('Perhatian', 'Username dan Password tidak boleh kosong!', 'warning'); return; } 
         btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Memeriksa...'; btn.disabled = true; 
-        
         callAPI('prosesLogin', { username: u, password: p }).then(res => {
             btn.innerHTML = '<i class="fa-solid fa-right-to-bracket"></i> Masuk Aplikasi'; btn.disabled = false; 
             if(res && res.valid) { 
                 localStorage.setItem('bukuLinkLoggedIn', 'true'); localStorage.setItem('bukuLinkRole', res.role); localStorage.setItem('bukuLinkCabang', res.cabang); localStorage.setItem('bukuLinkUser', res.username);
-                try {
-                    setTimeout(() => {
-                        bersihkanOverlay(); document.getElementById('view-login').style.display = 'none'; document.getElementById('app-wrapper').style.display = 'flex'; if(document.getElementById('mobile-bottom-nav')) document.getElementById('mobile-bottom-nav').style.display = ''; 
-                        terapkanRoleAkses(); pindahMenu('view-dashboard'); muatDashboard(false); 
-                    }, 300);
-                } catch(e) { window.location.reload(); }
+                try { setTimeout(() => { bersihkanOverlay(); document.getElementById('view-login').style.display = 'none'; document.getElementById('app-wrapper').style.display = 'flex'; if(document.getElementById('mobile-bottom-nav')) document.getElementById('mobile-bottom-nav').style.display = ''; terapkanRoleAkses(); pindahMenu('view-dashboard'); muatDashboard(false); }, 300); } catch(e) { window.location.reload(); }
             } else Swal.fire('Gagal', 'Username/Password salah!', 'error'); 
         }).catch(err => { btn.innerHTML = '<i class="fa-solid fa-right-to-bracket"></i> Masuk Aplikasi'; btn.disabled = false; Swal.fire('Error', err.message, 'error'); });
     }
@@ -530,30 +524,36 @@
     function logout() { localStorage.removeItem('bukuLinkLoggedIn'); localStorage.removeItem('bukuLinkRole'); localStorage.removeItem('bukuLinkCabang'); localStorage.removeItem('bukuLinkUser'); document.getElementById('app-wrapper').style.display = 'none'; document.getElementById('view-login').style.display = 'flex'; if(document.getElementById('mobile-bottom-nav')) document.getElementById('mobile-bottom-nav').style.display = 'none'; bersihkanOverlay(); }
     
     function terapkanRoleAkses() {
-      const userRole = localStorage.getItem('bukuLinkRole') || 'Cabang';
-      const userCabang = localStorage.getItem('bukuLinkCabang') || 'Pusat';
-      const userL = localStorage.getItem('bukuLinkUser') || '';
-      
+      const userRole = localStorage.getItem('bukuLinkRole') || 'Cabang', userCabang = localStorage.getItem('bukuLinkCabang') || 'Pusat', userL = localStorage.getItem('bukuLinkUser') || '';
       const labelRole = document.getElementById('label-role');
       if(labelRole) labelRole.innerText = userRole === 'Superadmin' ? 'Superadmin' : `Cabang: ${userCabang}`;
       
       if(userRole !== 'Superadmin') {
          document.querySelectorAll('.menu-atur-tarif, .menu-atur-profil, .btn-profil-mobile').forEach(el => el.style.display = 'none');
          document.querySelectorAll('.area-filter-cabang').forEach(el => el.style.display = 'none');
-         document.getElementById('akun-superadmin').style.display = 'none';
-         document.getElementById('akun-cabang').style.display = 'block';
-         
-         document.getElementById('cabang-saya-info').value = userCabang;
-         document.getElementById('username-saya-info').value = userL;
+         document.getElementById('akun-superadmin').style.display = 'none'; document.getElementById('akun-cabang').style.display = 'block';
+         document.getElementById('cabang-saya-info').value = userCabang; document.getElementById('username-saya-info').value = userL;
       } else {
          document.querySelectorAll('.menu-atur-tarif, .menu-atur-profil, .btn-profil-mobile').forEach(el => el.style.display = 'inline-block');
          document.querySelectorAll('.area-filter-cabang').forEach(el => el.style.display = 'block');
-         document.getElementById('akun-superadmin').style.display = 'block';
-         document.getElementById('akun-cabang').style.display = 'none';
+         document.getElementById('akun-superadmin').style.display = 'block'; document.getElementById('akun-cabang').style.display = 'none';
       }
     }
 
-    function reloadDataApp() { const icon = document.getElementById('ikon-reload'); icon.classList.add('fa-spin'); const statusArsip = document.getElementById('toggle-arsip') ? document.getElementById('toggle-arsip').checked : false; const role = localStorage.getItem('bukuLinkRole') || 'Cabang'; const cabang = localStorage.getItem('bukuLinkCabang') || 'Pusat'; callAPI('getDashboardData', { muatArsip: statusArsip, role: role, cabang: cabang }).then(data => { icon.classList.remove('fa-spin'); prosesTampilDashboard(data); Swal.fire({ title: 'Data Diperbarui!', icon: 'success', toast: true, position: 'top-end', showConfirmButton: false, timer: 1500 }); }).catch(err => { icon.classList.remove('fa-spin'); Swal.fire('Error', 'Gagal memuat ulang data', 'error'); }); }
+    function reloadDataApp() { 
+      const icon = document.getElementById('ikon-reload'); icon.classList.add('fa-spin'); 
+      const statusArsip = document.getElementById('toggle-arsip') ? document.getElementById('toggle-arsip').checked : false; 
+      const role = localStorage.getItem('bukuLinkRole') || 'Cabang'; const cabang = localStorage.getItem('bukuLinkCabang') || 'Pusat'; 
+      
+      tampilkanLoading('Memuat Data Terbaru...');
+      callAPI('getDashboardData', { muatArsip: statusArsip, role: role, cabang: cabang }).then(data => { 
+        icon.classList.remove('fa-spin'); 
+        Swal.close();
+        prosesTampilDashboard(data); 
+        Swal.fire({ title: 'Data Diperbarui!', icon: 'success', toast: true, position: 'top-end', showConfirmButton: false, timer: 1500 }); 
+      }).catch(err => { icon.classList.remove('fa-spin'); Swal.close(); Swal.fire('Error', 'Gagal memuat ulang data', 'error'); }); 
+    }
+    
     function modalLupaPassword() { Swal.fire({ title: 'Lupa Password?', text: "Masukkan Email Anda yang terdaftar.", input: 'email', inputPlaceholder: 'email@anda.com', showCancelButton: true, confirmButtonText: 'Kirim Sandi Baru', showLoaderOnConfirm: true, preConfirm: (email) => { return callAPI('lupaPassword', {emailInput: email}).then(res => { if(!res) Swal.showValidationMessage('Email tidak terdaftar di database!'); return res; }); }, allowOutsideClick: () => !Swal.isLoading() }).then((result) => { if (result.isConfirmed && result.value) { Swal.fire('Terkirim!', 'Cek Kotak Masuk atau Folder Spam di email Anda.', 'success'); } }); }
     function modalPrivasi() { const teksPrivasi = `<div style="text-align: left; font-size: 14px; line-height: 1.6; color: #333;"><p><strong>1. Pengumpulan Data</strong><br>Kami mengumpulkan data transaksi dan informasi profil yang Anda masukkan secara mandiri ke dalam aplikasi. Kami tidak mengambil data pribadi dari perangkat Anda secara diam-diam.</p><p><strong>2. Penggunaan Data</strong><br>Seluruh data yang tersimpan sepenuhnya digunakan untuk keperluan operasional Anda, termasuk pencatatan, kalkulasi keuangan, dan pembuatan laporan.</p><p><strong>3. Keamanan Data</strong><br>Kami menggunakan sistem keamanan enkripsi berstandar industri (SHA-256) untuk melindungi kata sandi Anda. Data mentah Anda tersimpan secara aman di dalam ekosistem Google Workspace milik Anda sendiri.</p><p><strong>4. Hak Pengguna</strong><br>Anda memegang kendali penuh atas data Anda. Anda dapat menambah, mengedit, menghapus, maupun mengunduh laporan data Anda kapan saja melalui fitur yang telah disediakan di dalam aplikasi.</p><hr><p class="text-muted text-center" style="font-size: 12px;"><em>Dengan menggunakan aplikasi ini, Anda menyetujui ketentuan pemrosesan data sebagaimana dijelaskan di atas.</em></p></div>`; Swal.fire({ title: 'Kebijakan Privasi', html: teksPrivasi, icon: 'info', confirmButtonText: 'Saya Mengerti', confirmButtonColor: '#00529C' }); }
 
@@ -561,11 +561,7 @@
     function toggleSidebar() { document.getElementById('sidebar').classList.toggle('show-sidebar'); }
     function toggleModeArsip(clickedId) { const isChecked = document.getElementById(clickedId).checked; document.getElementById('toggle-arsip').checked = isChecked; document.getElementById('toggle-arsip-lap').checked = isChecked; document.getElementById('tabel-riwayat').innerHTML = '<tr><td colspan="8">Memuat database...</td></tr>'; muatDashboard(isChecked); }
 
-    function muatDashboard(muatArsip = false) { 
-        const role = localStorage.getItem('bukuLinkRole') || 'Cabang'; 
-        const cabang = localStorage.getItem('bukuLinkCabang') || 'Pusat'; 
-        callAPI('getDashboardData', { muatArsip: muatArsip, role: role, cabang: cabang }).then(data => { prosesTampilDashboard(data); }); 
-    }
+    function muatDashboard(muatArsip = false) { const role = localStorage.getItem('bukuLinkRole') || 'Cabang'; const cabang = localStorage.getItem('bukuLinkCabang') || 'Pusat'; callAPI('getDashboardData', { muatArsip: muatArsip, role: role, cabang: cabang }).then(data => { prosesTampilDashboard(data); }); }
 
     function prosesTampilDashboard(data) {
         if(document.getElementById('sidebar-nama-toko')) document.getElementById('sidebar-nama-toko').innerText = data.profil.namaToko; 
@@ -600,74 +596,19 @@
         if(document.getElementById('dash-trx')) document.getElementById('dash-trx').innerText = data.totalTrx; 
         if(document.getElementById('dash-cuan')) document.getElementById('dash-cuan').innerText = formatRp(data.untungHariIni); 
         
+        // BUG FIX: KEMBALIKAN PENJUMLAHAN NOMINAL AGAR BERJALAN DI BACKGROUND
+        if(document.getElementById('sum-nom')) document.getElementById('sum-nom').innerText = formatRp(dataAktif.reduce((a,c)=>a+c.nominal,0)); 
+        
         terapkanFilter(); renderTabelSetupTarif(); renderGrafik(dataAktif); renderTabelBon();
     }
 
-    function renderTabelAkun() {
-      let html = '';
-      if(globalListAkun.length === 0) html = '<tr><td colspan="5">Data kosong</td></tr>';
-      else {
-        globalListAkun.forEach(a => {
-          let stBadge = a.role === 'Superadmin' ? `<span class="badge bg-danger">Superadmin</span>` : `<span class="badge bg-info">Cabang</span>`;
-          html += `<tr><td class="fw-bold">${a.username}</td><td>${a.email}</td><td>${stBadge}</td><td>${a.cabang}</td><td><button class="btn btn-warning btn-sm py-0 px-1 mb-1 me-1" onclick="bukaModalAkunEdit('${a.username}')"><i class="fa-solid fa-pen"></i></button><button class="btn btn-danger btn-sm py-0 px-1 mb-1" onclick="hapusAkun('${a.username}')"><i class="fa-solid fa-trash"></i></button></td></tr>`;
-        });
-      }
-      document.getElementById('tabel-akun').innerHTML = html;
-    }
+    function renderTabelAkun() { let html = ''; if(globalListAkun.length === 0) html = '<tr><td colspan="5">Data kosong</td></tr>'; else { globalListAkun.forEach(a => { let stBadge = a.role === 'Superadmin' ? `<span class="badge bg-danger">Superadmin</span>` : `<span class="badge bg-info">Cabang</span>`; html += `<tr><td class="fw-bold">${a.username}</td><td>${a.email}</td><td>${stBadge}</td><td>${a.cabang}</td><td><button class="btn btn-warning btn-sm py-0 px-1 mb-1 me-1" onclick="bukaModalAkunEdit('${a.username}')"><i class="fa-solid fa-pen"></i></button><button class="btn btn-danger btn-sm py-0 px-1 mb-1" onclick="hapusAkun('${a.username}')"><i class="fa-solid fa-trash"></i></button></td></tr>`; }); } document.getElementById('tabel-akun').innerHTML = html; }
+    function bukaModalAkunTambah() { document.getElementById('form-akun').reset(); document.getElementById('akun-user-lama').value = ""; document.getElementById('form-akun-cabang').value = ""; document.getElementById('modal-akun-title').innerText = 'Tambah Akun Baru'; document.getElementById('akun-username').readOnly = false; document.getElementById('label-pass-akun').innerText = 'Password (Wajib)'; document.getElementById('akun-password').required = true; new bootstrap.Modal(document.getElementById('modalAkun')).show(); }
+    function bukaModalAkunEdit(username) { const data = globalListAkun.find(x => x.username === username); if(!data) return; document.getElementById('akun-user-lama').value = data.username; document.getElementById('akun-username').value = data.username; document.getElementById('akun-username').readOnly = true; document.getElementById('akun-email').value = data.email; document.getElementById('akun-role').value = data.role; document.getElementById('form-akun-cabang').value = data.cabang; document.getElementById('label-pass-akun').innerText = 'Ganti Password (Opsional)'; document.getElementById('akun-password').value = ''; document.getElementById('akun-password').required = false; document.getElementById('modal-akun-title').innerText = 'Edit Akun'; new bootstrap.Modal(document.getElementById('modalAkun')).show(); }
     
-    function bukaModalAkunTambah() { 
-      document.getElementById('form-akun').reset(); 
-      document.getElementById('akun-user-lama').value = ""; 
-      // PERBAIKAN: Bersihkan ID form-akun-cabang yang sempat bermasalah
-      document.getElementById('form-akun-cabang').value = ""; 
-      document.getElementById('modal-akun-title').innerText = 'Tambah Akun Baru'; 
-      document.getElementById('akun-username').readOnly = false; 
-      document.getElementById('label-pass-akun').innerText = 'Password (Wajib)'; 
-      document.getElementById('akun-password').required = true; 
-      new bootstrap.Modal(document.getElementById('modalAkun')).show(); 
-    }
-
-    function bukaModalAkunEdit(username) { 
-      const data = globalListAkun.find(x => x.username === username); if(!data) return; 
-      document.getElementById('akun-user-lama').value = data.username; 
-      document.getElementById('akun-username').value = data.username; 
-      document.getElementById('akun-username').readOnly = true; 
-      document.getElementById('akun-email').value = data.email; 
-      document.getElementById('akun-role').value = data.role; 
-      document.getElementById('form-akun-cabang').value = data.cabang; // PERBAIKAN: Menggunakan ID yang benar
-      document.getElementById('label-pass-akun').innerText = 'Ganti Password (Opsional)'; 
-      document.getElementById('akun-password').value = ''; 
-      document.getElementById('akun-password').required = false; 
-      document.getElementById('modal-akun-title').innerText = 'Edit Akun'; 
-      new bootstrap.Modal(document.getElementById('modalAkun')).show(); 
-    }
-    
-    function handleSimpanAkun() {
-      const btn = document.getElementById('btn-simpan-akun-form'); btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Menyimpan...'; btn.disabled = true;
-      const userLama = document.getElementById('akun-user-lama').value;
-      const dataA = { 
-        username: document.getElementById('akun-username').value, 
-        email: document.getElementById('akun-email').value, 
-        password: document.getElementById('akun-password').value, 
-        role: document.getElementById('akun-role').value, 
-        cabang: document.getElementById('form-akun-cabang').value // PERBAIKAN: Menggunakan ID yang benar
-      };
-      const aksi = userLama === "" ? 'simpanAkun' : 'editAkun';
-      callAPI(aksi, { userLama: userLama, data: dataA }).then(() => { const modalObj = bootstrap.Modal.getInstance(document.getElementById('modalAkun')); if(modalObj) modalObj.hide(); setTimeout(bersihkanOverlay, 300); btn.innerHTML = '<i class="fa-solid fa-save"></i> Simpan Akun'; btn.disabled = false; Swal.fire('Tersimpan!', 'Data akun diperbarui.', 'success'); reloadDataApp(); }).catch(err => { btn.innerHTML = '<i class="fa-solid fa-save"></i> Simpan Akun'; btn.disabled = false; Swal.fire('Error', err.message, 'error'); });
-    }
-    
-    function hapusAkun(username) {
-      if(username === localStorage.getItem('bukuLinkUser')) return Swal.fire('Ditolak', 'Anda tidak bisa menghapus akun Anda sendiri saat sedang login!', 'error');
-      Swal.fire({ title: 'Hapus Akun?', text: "Akun ini tidak akan bisa login lagi.", icon: 'warning', showCancelButton: true, confirmButtonText: 'Ya, Hapus' }).then((res) => { if (res.isConfirmed) { Swal.fire({title:'Menghapus...', showConfirmButton: false, allowOutsideClick: false}); callAPI('hapusAkun', {username: username}).then(()=> { Swal.close(); reloadDataApp(); }); } });
-    }
-    
-    function simpanPasswordCabang() {
-      const pass = document.getElementById('set-password-cabang').value;
-      const userL = localStorage.getItem('bukuLinkUser');
-      if(!pass || pass.trim() === '') return Swal.fire('Oops', 'Password tidak boleh kosong!', 'warning');
-      const btn = document.getElementById('btn-simpan-pass-cabang'); btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Loading...'; btn.disabled = true;
-      callAPI('gantiPasswordCabang', { username: userL, passwordBaru: pass }).then(() => { btn.innerHTML = '<i class="fa-solid fa-save"></i> UPDATE PASSWORD'; btn.disabled = false; document.getElementById('set-password-cabang').value = ''; Swal.fire('Sukses', 'Password Anda berhasil diubah!', 'success'); }).catch(err => { btn.innerHTML = '<i class="fa-solid fa-save"></i> UPDATE PASSWORD'; btn.disabled = false; Swal.fire('Error', err.message, 'error'); });
-    }
+    function handleSimpanAkun() { const btn = document.getElementById('btn-simpan-akun-form'); btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Menyimpan...'; btn.disabled = true; const userLama = document.getElementById('akun-user-lama').value; const dataA = { username: document.getElementById('akun-username').value, email: document.getElementById('akun-email').value, password: document.getElementById('akun-password').value, role: document.getElementById('akun-role').value, cabang: document.getElementById('form-akun-cabang').value }; const aksi = userLama === "" ? 'simpanAkun' : 'editAkun'; callAPI(aksi, { userLama: userLama, data: dataA }).then(() => { const modalObj = bootstrap.Modal.getInstance(document.getElementById('modalAkun')); if(modalObj) modalObj.hide(); setTimeout(bersihkanOverlay, 300); btn.innerHTML = '<i class="fa-solid fa-save"></i> Simpan Akun'; btn.disabled = false; Swal.fire('Tersimpan!', 'Data akun diperbarui.', 'success'); reloadDataApp(); }).catch(err => { btn.innerHTML = '<i class="fa-solid fa-save"></i> Simpan Akun'; btn.disabled = false; Swal.fire('Error', err.message, 'error'); }); }
+    function hapusAkun(username) { if(username === localStorage.getItem('bukuLinkUser')) return Swal.fire('Ditolak', 'Anda tidak bisa menghapus akun Anda sendiri saat sedang login!', 'error'); Swal.fire({ title: 'Hapus Akun?', text: "Akun ini tidak akan bisa login lagi.", icon: 'warning', showCancelButton: true, confirmButtonText: 'Ya, Hapus' }).then((res) => { if (res.isConfirmed) { Swal.fire({title:'Menghapus...', showConfirmButton: false, allowOutsideClick: false}); callAPI('hapusAkun', {username: username}).then(()=> { Swal.close(); reloadDataApp(); }); } }); }
+    function simpanPasswordCabang() { const pass = document.getElementById('set-password-cabang').value; const userL = localStorage.getItem('bukuLinkUser'); if(!pass || pass.trim() === '') return Swal.fire('Oops', 'Password tidak boleh kosong!', 'warning'); const btn = document.getElementById('btn-simpan-pass-cabang'); btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Loading...'; btn.disabled = true; callAPI('gantiPasswordCabang', { username: userL, passwordBaru: pass }).then(() => { btn.innerHTML = '<i class="fa-solid fa-save"></i> UPDATE PASSWORD'; btn.disabled = false; document.getElementById('set-password-cabang').value = ''; Swal.fire('Sukses', 'Password Anda berhasil diubah!', 'success'); }).catch(err => { btn.innerHTML = '<i class="fa-solid fa-save"></i> UPDATE PASSWORD'; btn.disabled = false; Swal.fire('Error', err.message, 'error'); }); }
 
     function renderGrafik(dataGrafik) { const ctx = document.getElementById('chartKeuntungan')?.getContext('2d'); if(!ctx) return; if(chartInstance) chartInstance.destroy(); const groupedData = {}; dataGrafik.forEach(r => { if(!groupedData[r.tanggal]) groupedData[r.tanggal] = 0; groupedData[r.tanggal] += r.untung; }); const sortedDates = Object.keys(groupedData).sort().slice(-7); const labels = sortedDates.map(d => formatTglPendek(d)); const chartData = sortedDates.map(d => groupedData[d]); chartInstance = new Chart(ctx, { type: 'line', data: { labels: labels, datasets: [{ label: 'Keuntungan (Rp)', data: chartData, backgroundColor: 'rgba(0, 82, 156, 0.2)', borderColor: '#00529C', borderWidth: 3, pointBackgroundColor: '#fff', pointBorderColor: '#00529C', pointRadius: 5, fill: true, tension: 0.3 }] }, options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } } }); }
 
@@ -680,17 +621,42 @@
     function bukaModalTambah() { document.getElementById('form-transaksi').reset(); document.getElementById('trans-id').value = ""; document.getElementById('trans-uid').value = ""; document.getElementById('trans-sheet').value = "Transaksi"; document.getElementById('modal-title-text').innerText = 'Tambah Transaksi'; document.getElementById('trans-tanggal').valueAsDate = new Date(); new bootstrap.Modal(document.getElementById('modalTransaksi')).show(); }
     function bukaModalEdit(uid, idRow, sheetName) { const data = dataSemua.find(x => x.idRow === idRow && x.sheetName === sheetName); if(!data) return; document.getElementById('trans-id').value = data.idRow; document.getElementById('trans-uid').value = data.uid; document.getElementById('trans-sheet').value = data.sheetName; document.getElementById('modal-title-text').innerText = 'Edit Data (' + data.sheetName + ')'; document.getElementById('trans-tanggal').value = data.tanggal; document.getElementById('trans-jenis').value = data.jenis; document.getElementById('trans-nominal').value = data.nominal.toLocaleString('id-ID'); document.getElementById('trans-admin-bank').value = data.adminBank.toLocaleString('id-ID'); document.getElementById('trans-fee-bank').value = data.feeBank.toLocaleString('id-ID'); document.getElementById('trans-biaya-pelanggan').value = data.biayaPel.toLocaleString('id-ID'); new bootstrap.Modal(document.getElementById('modalTransaksi')).show(); }
     
-    function handleTransaksi() { const btn = document.getElementById('btn-transaksi'); btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Menyimpan...'; btn.disabled = true; const idRow = document.getElementById('trans-id').value, uid = document.getElementById('trans-uid').value, sheetName = document.getElementById('trans-sheet').value; const userCabang = localStorage.getItem('bukuLinkCabang') || 'Pusat'; const dataTrans = { tanggal: document.getElementById('trans-tanggal').value, jenis: document.getElementById('trans-jenis').value, nominal: unformatUang(document.getElementById('trans-nominal').value), adminBank: unformatUang(document.getElementById('trans-admin-bank').value), feeBank: unformatUang(document.getElementById('trans-fee-bank').value), biayaPelanggan: unformatUang(document.getElementById('trans-biaya-pelanggan').value), cabang: userCabang }; const aksi = idRow === "" ? 'simpanTransaksi' : 'editTransaksi'; callAPI(aksi, { uid: uid, idRowLama: idRow, data: dataTrans, namaSheet: sheetName }).then(() => { selesaiSimpan(); }); }
+    function handleTransaksi() { 
+      const btn = document.getElementById('btn-transaksi'); btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Menyimpan...'; btn.disabled = true; 
+      const idRow = document.getElementById('trans-id').value, uid = document.getElementById('trans-uid').value, sheetName = document.getElementById('trans-sheet').value; 
+      const userCabang = localStorage.getItem('bukuLinkCabang') || 'Pusat'; 
+      const dataTrans = { tanggal: document.getElementById('trans-tanggal').value, jenis: document.getElementById('trans-jenis').value, nominal: unformatUang(document.getElementById('trans-nominal').value), adminBank: unformatUang(document.getElementById('trans-admin-bank').value), feeBank: unformatUang(document.getElementById('trans-fee-bank').value), biayaPelanggan: unformatUang(document.getElementById('trans-biaya-pelanggan').value), cabang: userCabang }; 
+      const aksi = idRow === "" ? 'simpanTransaksi' : 'editTransaksi'; 
+      
+      tampilkanLoading('Menyimpan Transaksi...');
+      callAPI(aksi, { uid: uid, idRowLama: idRow, data: dataTrans, namaSheet: sheetName }).then(() => { 
+          Swal.close();
+          // FIRE AND FORGET ARSIP KE BELAKANG LAYAR
+          fetch(API_URL, { method: 'POST', headers: {'Content-Type': 'text/plain;charset=utf-8'}, body: JSON.stringify({action: 'jalankanArsip'})});
+          selesaiSimpan(); 
+      }).catch(err => { Swal.close(); btn.innerHTML = '<i class="fa-solid fa-check"></i> Simpan Data'; btn.disabled = false; Swal.fire('Error', err.message, 'error'); });
+    }
+    
     function selesaiSimpan() { const modalObj = bootstrap.Modal.getInstance(document.getElementById('modalTransaksi')); if(modalObj) modalObj.hide(); setTimeout(bersihkanOverlay, 300); document.getElementById('btn-transaksi').innerHTML = '<i class="fa-solid fa-check"></i> Simpan Data'; document.getElementById('btn-transaksi').disabled = false; Swal.fire({ icon: 'success', title: 'Tersimpan!', timer: 1500, showConfirmButton: false }); muatDashboard(document.getElementById('toggle-arsip').checked); }
-    function hapusData(uid, idRow, sheetName) { Swal.fire({ title: 'Hapus Data?', text: "Menghapus dari " + sheetName, icon: 'warning', showCancelButton: true, confirmButtonText: 'Ya, Hapus' }).then((res) => { if (res.isConfirmed) { Swal.fire({title:'Menghapus...', showConfirmButton: false, allowOutsideClick: false}); callAPI('hapusTransaksi', {uid: uid, idRowLama: idRow, namaSheet: sheetName}).then(()=> { muatDashboard(document.getElementById('toggle-arsip').checked); Swal.close(); }); } }); }
+    function hapusData(uid, idRow, sheetName) { Swal.fire({ title: 'Hapus Data?', text: "Menghapus dari " + sheetName, icon: 'warning', showCancelButton: true, confirmButtonText: 'Ya, Hapus' }).then((res) => { if (res.isConfirmed) { tampilkanLoading('Menghapus Data...'); callAPI('hapusTransaksi', {uid: uid, idRowLama: idRow, namaSheet: sheetName}).then(()=> { Swal.close(); muatDashboard(document.getElementById('toggle-arsip').checked); }); } }); }
 
     function renderTabelBon() { let html = ''; let htmlPDF = ''; let totalBelum = 0; if(dataPiutang.length === 0) { html = '<tr><td colspan="6">Belum ada bon</td></tr>'; htmlPDF = html; } else { dataPiutang.forEach(b => { let stBadge = b.status === 'Lunas' ? `<span class="badge bg-success">Lunas</span>` : `<span class="badge bg-danger">Belum Lunas</span>`; let btnLunas = b.status === 'Lunas' ? '' : `<button class="btn btn-success btn-sm py-0 px-1 mb-1 me-1" onclick="lunasiBon('${b.uid}', ${b.idRow})" title="Tandai Lunas"><i class="fa-solid fa-check"></i></button>`; let tglLnsStr = b.status === 'Lunas' ? formatTglPendek(b.tglLunas) : '-'; if(b.status !== 'Lunas') totalBelum += b.nominal; html += `<tr><td>${formatTglPendek(b.tanggal)}<br><small class="text-muted">${b.cabang || 'Pusat'}</small></td><td>${b.nama}</td><td class="fw-bold">${formatRp(b.nominal)}</td><td>${stBadge}</td><td>${tglLnsStr}</td><td>${btnLunas}<button class="btn btn-warning btn-sm py-0 px-1 mb-1 me-1" onclick="bukaModalBonEdit('${b.uid}', ${b.idRow})"><i class="fa-solid fa-pen"></i></button><button class="btn btn-danger btn-sm py-0 px-1 mb-1" onclick="hapusBon('${b.uid}', ${b.idRow})"><i class="fa-solid fa-trash"></i></button></td></tr>`; htmlPDF += `<tr><td>${formatTglPendek(b.tanggal)}<br><small class="text-muted">${b.cabang || 'Pusat'}</small></td><td>${b.nama}</td><td class="fw-bold">${formatRp(b.nominal)}</td><td>${b.status}</td><td>${tglLnsStr}</td></tr>`; }); } if(document.getElementById('tabel-bon')) document.getElementById('tabel-bon').innerHTML = html; if(document.getElementById('tabel-laporan-bon')) document.getElementById('tabel-laporan-bon').innerHTML = htmlPDF; if(document.getElementById('bon-sum-belum')) document.getElementById('bon-sum-belum').innerText = formatRp(totalBelum); }
     function bukaModalBonTambah() { document.getElementById('form-bon').reset(); document.getElementById('bon-id').value = ""; document.getElementById('bon-uid').value = ""; document.getElementById('modal-bon-title').innerHTML = '<i class="fa-solid fa-book-open"></i> Tambah Bon Baru'; document.getElementById('bon-tanggal').valueAsDate = new Date(); new bootstrap.Modal(document.getElementById('modalBon')).show(); }
     function bukaModalBonEdit(uid, idRow) { const data = dataPiutang.find(x => x.idRow === idRow); if(!data) return; document.getElementById('bon-id').value = data.idRow; document.getElementById('bon-uid').value = data.uid; document.getElementById('modal-bon-title').innerHTML = '<i class="fa-solid fa-pen"></i> Edit Bon'; document.getElementById('bon-tanggal').value = data.tanggal; document.getElementById('bon-nama').value = data.nama; document.getElementById('bon-nominal').value = data.nominal.toLocaleString('id-ID'); new bootstrap.Modal(document.getElementById('modalBon')).show(); }
-    function handleBon() { const btn = document.getElementById('btn-bon'); btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Menyimpan...'; btn.disabled = true; const idRow = document.getElementById('bon-id').value, uid = document.getElementById('bon-uid').value; const userCabang = localStorage.getItem('bukuLinkCabang') || 'Pusat'; const dataBon = { tanggal: document.getElementById('bon-tanggal').value, nama: document.getElementById('bon-nama').value, nominal: unformatUang(document.getElementById('bon-nominal').value), cabang: userCabang }; const aksi = idRow === "" ? 'simpanPiutang' : 'editPiutang'; callAPI(aksi, {uid: uid, idRowLama: idRow, data: dataBon}).then(() => { selesaiBon(); }); }
+    
+    function handleBon() { 
+      const btn = document.getElementById('btn-bon'); btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Menyimpan...'; btn.disabled = true; 
+      const idRow = document.getElementById('bon-id').value, uid = document.getElementById('bon-uid').value; 
+      const userCabang = localStorage.getItem('bukuLinkCabang') || 'Pusat'; 
+      const dataBon = { tanggal: document.getElementById('bon-tanggal').value, nama: document.getElementById('bon-nama').value, nominal: unformatUang(document.getElementById('bon-nominal').value), cabang: userCabang }; 
+      const aksi = idRow === "" ? 'simpanPiutang' : 'editPiutang'; 
+      tampilkanLoading('Menyimpan Bon...');
+      callAPI(aksi, {uid: uid, idRowLama: idRow, data: dataBon}).then(() => { Swal.close(); selesaiBon(); }).catch(err => { Swal.close(); btn.innerHTML = '<i class="fa-solid fa-save"></i> Simpan Bon'; btn.disabled = false; Swal.fire('Error', err.message, 'error'); }); 
+    }
+    
     function selesaiBon() { const modalObj = bootstrap.Modal.getInstance(document.getElementById('modalBon')); if(modalObj) modalObj.hide(); setTimeout(bersihkanOverlay, 300); document.getElementById('btn-bon').innerHTML = '<i class="fa-solid fa-save"></i> Simpan Bon'; document.getElementById('btn-bon').disabled = false; Swal.fire({ icon: 'success', title: 'Tersimpan!', timer: 1500, showConfirmButton: false }); muatDashboard(document.getElementById('toggle-arsip').checked); }
-    function hapusBon(uid, idRow) { Swal.fire({ title: 'Hapus Bon?', text: "Data ini akan dihapus permanen.", icon: 'warning', showCancelButton: true, confirmButtonText: 'Ya, Hapus' }).then((res) => { if (res.isConfirmed) { Swal.fire({title:'Menghapus...', showConfirmButton: false, allowOutsideClick: false}); callAPI('hapusPiutang', {uid: uid, idRowLama: idRow}).then(()=> { muatDashboard(document.getElementById('toggle-arsip').checked); Swal.close(); }); } }); }
-    function lunasiBon(uid, idRow) { Swal.fire({ title: 'Tandai Lunas?', text: "Bon ini akan dicatat sudah dibayar hari ini.", icon: 'info', showCancelButton: true, confirmButtonText: 'Ya, Lunas!' }).then((res) => { if (res.isConfirmed) { Swal.fire({title:'Memproses...', showConfirmButton: false, allowOutsideClick: false}); callAPI('lunasiPiutang', {uid: uid, idRowLama: idRow}).then(() => { muatDashboard(document.getElementById('toggle-arsip').checked); Swal.close(); }); } }); }
+    function hapusBon(uid, idRow) { Swal.fire({ title: 'Hapus Bon?', text: "Data ini akan dihapus permanen.", icon: 'warning', showCancelButton: true, confirmButtonText: 'Ya, Hapus' }).then((res) => { if (res.isConfirmed) { tampilkanLoading('Menghapus Data...'); callAPI('hapusPiutang', {uid: uid, idRowLama: idRow}).then(()=> { Swal.close(); muatDashboard(document.getElementById('toggle-arsip').checked); }); } }); }
+    function lunasiBon(uid, idRow) { Swal.fire({ title: 'Tandai Lunas?', text: "Bon ini akan dicatat sudah dibayar hari ini.", icon: 'info', showCancelButton: true, confirmButtonText: 'Ya, Lunas!' }).then((res) => { if (res.isConfirmed) { tampilkanLoading('Mencatat Pelunasan...'); callAPI('lunasiPiutang', {uid: uid, idRowLama: idRow}).then(() => { Swal.close(); muatDashboard(document.getElementById('toggle-arsip').checked); }); } }); }
     function unduhPDFBon() { document.getElementById('area-cetak-bon').style.display = 'block'; const element = document.getElementById('area-cetak-bon'); const namaFile = 'Laporan_Bon_' + new Date().getTime() + '.pdf'; const opt = { margin: 0.5, filename: namaFile, image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2, scrollX: 0, scrollY: 0 }, jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' } }; Swal.fire({title: 'Memproses PDF...', text: 'File akan segera diunduh.', allowOutsideClick: false, didOpen: () => { Swal.showLoading() }}); html2pdf().set(opt).from(element).save().then(() => { Swal.close(); document.getElementById('area-cetak-bon').style.display = 'none'; Swal.fire('Berhasil!', 'PDF Bon diunduh.', 'success'); }); }
 
     function prosesLaporan() { const start = document.getElementById('lap-start').value, end = document.getElementById('lap-end').value, jenis = document.getElementById('lap-jenis').value, filterCabang = document.getElementById('lap-cabang') ? document.getElementById('lap-cabang').value : ''; let dataLap = dataSemua; if (start || end || jenis || filterCabang) { document.getElementById('kop-periode').innerText = `Periode: ${start ? formatTglPendek(start) : 'Awal'} s.d ${end ? formatTglPendek(end) : 'Akhir'} ${jenis ? '('+jenis+')' : ''}`; const stTime = start ? new Date(start).setHours(0,0,0,0) : null, enTime = end ? new Date(end).setHours(23,59,59,999) : null; dataLap = dataSemua.filter(r => { let pass = true; if (jenis && r.jenis !== jenis) pass = false; if(filterCabang && r.cabang !== filterCabang) pass = false; const rTime = new Date(r.tanggal).getTime(); if (stTime && rTime < stTime) pass = false; if (enTime && rTime > enTime) pass = false; return pass; }); } else { document.getElementById('kop-periode').innerText = `Periode: Semua Data`; } let html = ''; let sBank=0, sFee=0, sPel=0, sCuan=0; dataLap.forEach(r => { sBank += r.adminBank; sFee += r.feeBank; sPel += r.biayaPel; sCuan += r.untung; html += `<tr><td>${formatTglPendek(r.tanggal)}<br><small class="text-muted">${r.cabang}</small></td><td>${r.jenis}</td><td>${formatRp(r.nominal)}</td><td class="text-danger">${formatRp(r.adminBank)}</td><td style="color:#764ba2;">${formatRp(r.feeBank)}</td><td class="text-success">${formatRp(r.biayaPel)}</td><td class="fw-bold" style="color:#00529C;">${formatRp(r.untung)}</td></tr>`; }); if(dataLap.length===0) html='<tr><td colspan="7">Data kosong</td></tr>'; if(document.getElementById('tabel-laporan')) document.getElementById('tabel-laporan').innerHTML = html; if(document.getElementById('lap-sum-bank')) document.getElementById('lap-sum-bank').innerText = formatRp(sBank); if(document.getElementById('lap-sum-fee')) document.getElementById('lap-sum-fee').innerText = formatRp(sFee); if(document.getElementById('lap-sum-biaya-pel')) document.getElementById('lap-sum-biaya-pel').innerText = formatRp(sPel); if(document.getElementById('lap-sum-cuan')) document.getElementById('lap-sum-cuan').innerText = formatRp(sCuan); }
@@ -699,12 +665,10 @@
     function renderTabelSetupTarif() { const jenisFilter = document.getElementById('tarif-jenis-filter').value; let html = ''; const tarifFiltered = listTarifGlobal.filter(t => t.jenis === jenisFilter).sort((a,b) => a.min - b.min); let maxTertinggi = 0; tarifFiltered.forEach(t => { const realIdx = listTarifGlobal.indexOf(t); html += `<tr><td>${formatRp(t.min)}</td><td>${formatRp(t.max)}</td><td class="fw-bold text-success">${formatRp(t.tarif)}</td><td class="text-danger">${formatRp(t.admBank)}</td><td style="color:#764ba2 !important;">${formatRp(t.feeBank)}</td><td><button class="btn btn-sm btn-danger py-0" onclick="hapusTarif(${realIdx})"><i class="fa-solid fa-xmark"></i></button></td></tr>`; if(t.max > maxTertinggi) maxTertinggi = t.max; }); if(tarifFiltered.length === 0) html='<tr><td colspan="6" class="text-muted small">Belum ada aturan untuk jenis ini</td></tr>'; if(document.getElementById('tabel-setup-tarif')) document.getElementById('tabel-setup-tarif').innerHTML = html; if(tarifFiltered.length > 0) { if(document.getElementById('tarif-min')) document.getElementById('tarif-min').value = (maxTertinggi + 1).toLocaleString('id-ID'); } else { if(document.getElementById('tarif-min')) document.getElementById('tarif-min').value = '0'; } }
     function tambahTarif() { const jenis = document.getElementById('tarif-jenis-filter').value; const min=unformatUang(document.getElementById('tarif-min').value), max=unformatUang(document.getElementById('tarif-max').value); const adm=unformatUang(document.getElementById('tarif-adm').value), admBank=unformatUang(document.getElementById('tarif-adm-bank').value), feeBank=unformatUang(document.getElementById('tarif-fee-bank').value); if(isNaN(min) || isNaN(max) || isNaN(adm) || min >= max) { return Swal.fire('Rentang Tidak Logis', 'Harap periksa kembali rentang tarif Anda. Pastikan Minimal lebih kecil dari Maksimal.', 'error'); } const tarifJenisIni = listTarifGlobal.filter(t => t.jenis === jenis); let isOverlap = false; for(let i = 0; i < tarifJenisIni.length; i++) { const t = tarifJenisIni[i]; if(min <= t.max && max >= t.min) { isOverlap = true; break; } } if(isOverlap) { return Swal.fire('Rentang Bertabrakan', 'Rentang tarif ini bentrok dengan rentang yang sudah ada. Harap periksa kembali!', 'error'); } listTarifGlobal.push({jenis: jenis, min: min, max: max, tarif: adm, admBank: admBank, feeBank: feeBank}); document.getElementById('tarif-max').value=''; document.getElementById('tarif-adm').value=''; document.getElementById('tarif-adm-bank').value=''; document.getElementById('tarif-fee-bank').value=''; renderTabelSetupTarif(); Swal.fire({ title: 'Ditambahkan ke Antrean!', text: 'Jangan lupa klik tombol "Simpan Tarif" di bawah agar data tersimpan permanen ke server.', icon: 'info', timer: 3000, showConfirmButton: false }); }
     function hapusTarif(idx) { listTarifGlobal.splice(idx, 1); renderTabelSetupTarif(); }
-    function simpanTarifKeServer() { const btn = document.getElementById('btn-simpan-tarif'); btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Menyimpan...'; btn.disabled = true; callAPI('simpanTarif', {dataTarif: listTarifGlobal}).then(() => { Swal.fire('Berhasil!', 'Aturan Tarif baru sudah disimpan.', 'success'); btn.innerHTML = '<i class="fa-solid fa-cloud-arrow-up"></i> Simpan Tarif'; btn.disabled = false; }); }
+    function simpanTarifKeServer() { const btn = document.getElementById('btn-simpan-tarif'); btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Menyimpan...'; btn.disabled = true; tampilkanLoading('Menyimpan Tarif...'); callAPI('simpanTarif', {dataTarif: listTarifGlobal}).then(() => { Swal.close(); Swal.fire('Berhasil!', 'Aturan Tarif baru sudah disimpan.', 'success'); btn.innerHTML = '<i class="fa-solid fa-cloud-arrow-up"></i> Simpan Tarif'; btn.disabled = false; }).catch(err => { Swal.close(); btn.innerHTML = '<i class="fa-solid fa-cloud-arrow-up"></i> Simpan Tarif'; btn.disabled = false; Swal.fire('Error', err.message, 'error');}); }
 
     document.getElementById('upload-logo').addEventListener('change', function(e) { if (e.target.files[0]) { const reader = new FileReader(); reader.onload = function(evt) { document.getElementById('image-workspace').src = evt.target.result; document.getElementById('image-workspace').style.display = 'block'; document.getElementById('btn-crop').style.display = 'block'; if(cropper) cropper.destroy(); cropper = new Cropper(document.getElementById('image-workspace'), { aspectRatio: 1, viewMode: 1 }); }; reader.readAsDataURL(e.target.files[0]); } });
     function prosesCrop() { if(cropper) { croppedBase64 = cropper.getCroppedCanvas({ width: 150, height: 150 }).toDataURL('image/png'); document.getElementById('image-workspace').src = croppedBase64; cropper.destroy(); cropper = null; document.getElementById('btn-crop').style.display = 'none'; Swal.fire('Sip!', 'Logo dipotong. Klik Simpan Profil.', 'success'); } }
     
-    function simpanProfilKeServer() { const btn = document.getElementById('btn-simpan-profil'); btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Menyimpan...'; btn.disabled = true; const dataP = { namaToko: document.getElementById('set-nama').value, alamat: document.getElementById('set-alamat').value, kontak: document.getElementById('set-kontak').value, urlLogoLama: document.getElementById('set-url-lama').value, linkWindows: document.getElementById('set-link-win').value, linkAndroid: document.getElementById('set-link-and').value }; callAPI('simpanProfil', {dataProfile: dataP, dataGambarBase64: croppedBase64}).then(() => { Swal.fire('Berhasil!', 'Profil Toko diperbarui.', 'success'); croppedBase64 = null; document.getElementById('image-workspace').style.display = 'none'; document.getElementById('upload-logo').value = ''; btn.innerHTML = '<i class="fa-solid fa-save"></i> SIMPAN PROFIL TOKO'; btn.disabled = false; document.getElementById('sidebar-nama-toko').innerText = dataP.namaToko; document.getElementById('mobile-nama-toko').innerText = dataP.namaToko; document.getElementById('footer-nama-toko').innerText = dataP.namaToko; document.getElementById('pdf-nama-toko').innerText = dataP.namaToko; document.getElementById('pdf-alamat').innerText = dataP.alamat; }); }
+    function simpanProfilKeServer() { const btn = document.getElementById('btn-simpan-profil'); btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Menyimpan...'; btn.disabled = true; const dataP = { namaToko: document.getElementById('set-nama').value, alamat: document.getElementById('set-alamat').value, kontak: document.getElementById('set-kontak').value, urlLogoLama: document.getElementById('set-url-lama').value, linkWindows: document.getElementById('set-link-win').value, linkAndroid: document.getElementById('set-link-and').value }; tampilkanLoading('Menyimpan Profil...'); callAPI('simpanProfil', {dataProfile: dataP, dataGambarBase64: croppedBase64}).then(() => { Swal.close(); Swal.fire('Berhasil!', 'Profil Toko diperbarui.', 'success'); croppedBase64 = null; document.getElementById('image-workspace').style.display = 'none'; document.getElementById('upload-logo').value = ''; btn.innerHTML = '<i class="fa-solid fa-save"></i> SIMPAN PROFIL TOKO'; btn.disabled = false; document.getElementById('sidebar-nama-toko').innerText = dataP.namaToko; document.getElementById('mobile-nama-toko').innerText = dataP.namaToko; document.getElementById('footer-nama-toko').innerText = dataP.namaToko; document.getElementById('pdf-nama-toko').innerText = dataP.namaToko; document.getElementById('pdf-alamat').innerText = dataP.alamat; }).catch(err => { Swal.close(); btn.innerHTML = '<i class="fa-solid fa-save"></i> SIMPAN PROFIL TOKO'; btn.disabled = false; Swal.fire('Error', err.message, 'error');}); }
   </script>
-</body>
-</html>
