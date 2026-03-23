@@ -430,9 +430,18 @@
       }
       
       callAPI('getProfilApp', {}).then(data => {
-        document.getElementById('login-nama-toko').innerText = data.namaToko; document.getElementById('login-footer-toko').innerText = data.namaToko; document.getElementById('login-logo').src = data.urlLogo;
-        if(data.linkWindows) { document.getElementById('btn-dl-win').href = data.linkWindows; document.getElementById('btn-dl-win').style.display = 'inline-block'; document.getElementById('area-download').style.display = 'block'; }
-        if(data.linkAndroid) { document.getElementById('btn-dl-and').href = data.linkAndroid; document.getElementById('btn-dl-and').style.display = 'inline-block'; document.getElementById('area-download').style.display = 'block'; }
+        // Gunakan tanda tanya (?.) agar kebal (tidak error/crash) jika elemen HTML-nya tidak sengaja terhapus
+        if(document.getElementById('login-nama-toko')) document.getElementById('login-nama-toko').innerText = data.namaToko; 
+        if(document.getElementById('login-footer-toko')) document.getElementById('login-footer-toko').innerText = data.namaToko; 
+        if(document.getElementById('login-logo')) document.getElementById('login-logo').src = data.urlLogo;
+        
+        // Cek dulu apakah tombolnya ada sebelum diisi link
+        const btnWin = document.getElementById('btn-dl-win');
+        const btnAnd = document.getElementById('btn-dl-and');
+        const areaDl = document.getElementById('area-download');
+
+        if(data.linkWindows && btnWin) { btnWin.href = data.linkWindows; btnWin.style.display = 'inline-block'; if(areaDl) areaDl.style.display = 'block'; }
+        if(data.linkAndroid && btnAnd) { btnAnd.href = data.linkAndroid; btnAnd.style.display = 'inline-block'; if(areaDl) areaDl.style.display = 'block'; }
         
         document.getElementById('loading-screen').style.display = 'none'; // Matikan loading jika sukses
         
@@ -443,7 +452,6 @@
             document.getElementById('view-login').style.display = 'flex'; document.getElementById('mobile-bottom-nav').style.display = 'none'; 
         }
       }).catch(err => { 
-        // PAKSA LOADING BERHENTI LALU MUNCULKAN ERROR
         document.getElementById('loading-screen').style.display = 'none';
         Swal.fire('Koneksi Terputus!', err.message, 'error'); 
       });
